@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, Phone, ChevronDown, Search } from "lucide-react";
 
 interface MenuItem {
@@ -114,6 +115,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isRegisterDropdownOpen, setIsRegisterDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -166,7 +168,11 @@ const Header = () => {
                 className="text-gray-700 hover:text-primary-red transition-colors"
                 onClick={handleMenuIconClick}
               >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {isMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
               </button>
               <div className="flex items-center space-x-2">
                 <div className="w-10 h-10 bg-gradient-to-br from-primary-red to-primary-orange rounded-lg flex items-center justify-center">
@@ -186,22 +192,39 @@ const Header = () => {
               >
                 Trang chủ
               </button>
-              <div className="relative group">
+
+              <div className="relative">
                 <button
-                  onMouseEnter={() => handleMenuMouseEnter("services")}
+                  onClick={() =>
+                    setIsRegisterDropdownOpen(!isRegisterDropdownOpen)
+                  }
                   className="text-gray-700 hover:text-primary-red transition-colors font-medium flex items-center gap-1"
                 >
-                  Dịch vụ
-                  <ChevronDown className="w-4 h-4" />
+                  Đăng ký Đội cứu hộ
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      isRegisterDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
+                {isRegisterDropdownOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setIsRegisterDropdownOpen(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                      <Link
+                        to="/register"
+                        onClick={() => setIsRegisterDropdownOpen(false)}
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-red transition-colors"
+                      >
+                        Đăng ký làm cứu hộ
+                      </Link>
+                    </div>
+                  </>
+                )}
               </div>
-              <button
-                onClick={() => scrollToSection("register")}
-                className="text-gray-700 hover:text-primary-red transition-colors font-medium flex items-center gap-1"
-              >
-                Đăng ký Đội cứu hộ
-                <ChevronDown className="w-4 h-4" />
-              </button>
               <button
                 onClick={() => scrollToSection("features")}
                 className="text-gray-700 hover:text-primary-red transition-colors font-medium"
@@ -235,17 +258,17 @@ const Header = () => {
           onMouseLeave={handleMenuMouseLeave}
         >
           {/* Blurred Background */}
-          <div 
+          <div
             className="absolute inset-0 bg-black/20 backdrop-blur-sm"
             onClick={handleMenuMouseLeave}
           />
-          
+
           {/* Menu Content */}
           <div className="relative bg-white shadow-2xl">
             <div className="container mx-auto px-4 py-8">
               <div className="flex gap-12">
                 {/* Left Panel: Main Categories */}
-                <div className="w-64 flex-shrink-0 border-r border-gray-200 pr-8">
+                <div className="w-64 shrink-0 border-r border-gray-200 pr-8">
                   <ul className="space-y-1">
                     {menuItems.map((item) => (
                       <li key={item.id}>
@@ -303,9 +326,7 @@ const Header = () => {
                 <button
                   onClick={() => {
                     if (item.subItems?.[0]?.link) {
-                      scrollToSection(
-                        item.subItems[0].link.replace("#", "")
-                      );
+                      scrollToSection(item.subItems[0].link.replace("#", ""));
                     }
                   }}
                   className="w-full text-left text-gray-700 hover:text-primary-red py-2 font-medium"

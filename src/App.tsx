@@ -1,10 +1,12 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
 import Contributions from "./components/Contributions";
 import Newsroom from "./components/Newsroom";
+import RegisterPage from "./components/RegisterPage";
 import MainLayout from "./layouts/MainLayout";
 
-function App() {
+function HomePage() {
   return (
     <MainLayout>
       <Hero />
@@ -15,6 +17,17 @@ function App() {
       <Features />
       <RescuerForm /> */}
     </MainLayout>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
