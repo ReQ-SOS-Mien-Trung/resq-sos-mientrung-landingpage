@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@import "./styles/fonts.css";
+
+:root {
+  --font-sf-ui-display: "SF UI Display", "Inter", "Roboto", system-ui, sans-serif;
+}
 
 html {
   scroll-behavior: smooth;
@@ -6,7 +11,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Inter", "Roboto", system-ui, sans-serif;
+  font-family: var(--font-sf-ui-display);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
