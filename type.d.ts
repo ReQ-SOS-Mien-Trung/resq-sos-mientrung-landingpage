@@ -7,5 +7,5 @@ export type ContributionCard = {
 };
 
 export type ContributionCardProps = {
-  contribution: ContributionCardProps;
+  contribution: ContributionCard;
 };

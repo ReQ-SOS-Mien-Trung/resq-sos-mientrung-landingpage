@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { testimonials } from "../constants";
+import { testimonials } from "@/constants";
 
 const WhyUseUs = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);

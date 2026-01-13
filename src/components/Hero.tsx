@@ -38,6 +38,72 @@ const generateWaterDroplets = (width: number, height: number) =>
     delay: Math.random() * 2,
   }));
 
+const generateLightningFlashes = () =>
+  Array.from({ length: 3 }).map(() => {
+    const x = Math.random() * 100;
+    const y = Math.random() * 30;
+    const r1 = Math.random();
+    const r2 = Math.random();
+    const r3 = Math.random();
+    const r4 = Math.random();
+    const r5 = Math.random();
+    const r6 = Math.random();
+    const r7 = Math.random();
+    const r8 = Math.random();
+    const r9 = Math.random();
+    const r10 = Math.random();
+
+    // Main lightning bolt path with more zigzag points
+    const mainPoints = [
+      { x: 100, y: 0 },
+      { x: 80 + r1 * 40, y: 40 },
+      { x: 90 + r2 * 20, y: 80 },
+      { x: 70 + r3 * 60, y: 120 },
+      { x: 85 + r4 * 30, y: 160 },
+      { x: 75 + r5 * 50, y: 200 },
+      { x: 90 + r6 * 20, y: 240 },
+      { x: 100, y: 300 },
+    ];
+
+    // Branch 1 - splits from main bolt
+    const branch1Points = [
+      { x: 70 + r3 * 60, y: 120 },
+      { x: 50 + r7 * 40, y: 140 },
+      { x: 40 + r8 * 30, y: 180 },
+    ];
+
+    // Branch 2 - splits from main bolt
+    const branch2Points = [
+      { x: 85 + r4 * 30, y: 160 },
+      { x: 110 + r9 * 30, y: 180 },
+      { x: 120 + r10 * 20, y: 220 },
+    ];
+
+    const mainPath = mainPoints
+      .map((p, idx) => (idx === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
+      .join(" ");
+
+    const branch1Path = branch1Points
+      .map((p, idx) => (idx === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
+      .join(" ");
+
+    const branch2Path = branch2Points
+      .map((p, idx) => (idx === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`))
+      .join(" ");
+
+    return {
+      delay: Math.random() * 8 + 3,
+      duration: Math.random() * 0.15 + 0.1,
+      intensity: Math.random() * 0.3 + 0.2,
+      repeatDelay: Math.random() * 5 + 3,
+      x,
+      y,
+      mainPath,
+      branch1Path,
+      branch2Path,
+    };
+  });
+
 const Hero = () => {
   const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
   const [rainDrops] = useState(() => generateRainDrops());
@@ -61,6 +127,7 @@ const Hero = () => {
       delay: number;
     }>
   >([]);
+  const [lightningFlashes] = useState(() => generateLightningFlashes());
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -351,6 +418,141 @@ const Hero = () => {
             }}
           >
             <Droplets className="w-4 h-4 text-blue-400" />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Lightning Flashes */}
+      <div className="absolute inset-0 z-18 pointer-events-none">
+        {lightningFlashes.map((flash, i) => (
+          <motion.div
+            key={`lightning-${i}`}
+            className="absolute inset-0 bg-white"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, flash.intensity, 0],
+            }}
+            transition={{
+              duration: flash.duration,
+              repeat: Infinity,
+              delay: flash.delay,
+              ease: "easeInOut",
+              repeatDelay: flash.repeatDelay,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Lightning Bolts - Main bolts with branches */}
+      <div className="absolute inset-0 z-19 pointer-events-none overflow-hidden">
+        {lightningFlashes.map((flash, i) => (
+          <motion.div
+            key={`bolt-${i}`}
+            className="absolute"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, 1, 0.8, 0],
+            }}
+            transition={{
+              duration: flash.duration * 0.8,
+              repeat: Infinity,
+              delay: flash.delay,
+              ease: "easeInOut",
+              repeatDelay: flash.repeatDelay,
+            }}
+            style={{
+              left: `${flash.x}%`,
+              top: `${flash.y}%`,
+            }}
+          >
+            <svg
+              width="200"
+              height="300"
+              viewBox="0 0 200 300"
+              className="text-yellow-300"
+              style={{
+                filter:
+                  "drop-shadow(0 0 15px rgba(255, 255, 100, 1)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.8))",
+              }}
+            >
+              <defs>
+                <filter id={`lightning-glow-${i}`}>
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient
+                  id={`lightning-gradient-main-${i}`}
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stopColor="#ffff00" stopOpacity="1" />
+                  <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#ffffcc" stopOpacity="0.9" />
+                </linearGradient>
+                <linearGradient
+                  id={`lightning-gradient-branch-${i}`}
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stopColor="#ffffaa" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#ffffcc" stopOpacity="0.7" />
+                </linearGradient>
+              </defs>
+
+              {/* Main lightning bolt - thick white/yellow core */}
+              <path
+                d={flash.mainPath}
+                stroke={`url(#lightning-gradient-main-${i})`}
+                strokeWidth="4"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity="1"
+                filter={`url(#lightning-glow-${i})`}
+              />
+
+              {/* Branch 1 */}
+              <path
+                d={flash.branch1Path}
+                stroke={`url(#lightning-gradient-branch-${i})`}
+                strokeWidth="2.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity="0.9"
+                filter={`url(#lightning-glow-${i})`}
+              />
+
+              {/* Branch 2 */}
+              <path
+                d={flash.branch2Path}
+                stroke={`url(#lightning-gradient-branch-${i})`}
+                strokeWidth="2.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity="0.9"
+                filter={`url(#lightning-glow-${i})`}
+              />
+
+              {/* Inner bright core */}
+              <path
+                d={flash.mainPath}
+                stroke="#ffffff"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity="1"
+              />
+            </svg>
           </motion.div>
         ))}
       </div>

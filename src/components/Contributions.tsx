@@ -5,11 +5,8 @@ import {
   ArrowRight,
   Image as ImageIcon,
 } from "lucide-react";
-import { contributions } from "../constants";
-
-type ContributionCardProps = {
-  contribution: ContributionCard;
-};
+import { contributions } from "@/constants";
+import type { ContributionCardProps } from "@type";
 
 const ContributionCard = ({ contribution }: ContributionCardProps) => {
   const [imageError, setImageError] = useState(false);

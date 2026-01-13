@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
-import { faqs } from "../constants";
+import { faqs } from "@/constants";
 
 const FAQs = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);

@@ -1,3 +1,5 @@
+import type { ContributionCard } from "@type";
+
 type Testimonial = {
   id: number;
   name: string;
@@ -10,14 +12,6 @@ type FAQ = {
   id: number;
   question: string;
   answer: string;
-};
-
-type ContributionCard = {
-  id: number;
-  image: string;
-  title: string;
-  description: string;
-  link: string;
 };
 
 export const testimonials: Testimonial[] = [
