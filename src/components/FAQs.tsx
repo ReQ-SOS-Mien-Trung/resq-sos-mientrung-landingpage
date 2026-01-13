@@ -1,44 +1,6 @@
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
-
-type FAQ = {
-  id: number;
-  question: string;
-  answer: string;
-};
-
-const faqs: FAQ[] = [
-  {
-    id: 1,
-    question: "Tôi có thể rút tiền thu nhập bao lâu một lần?",
-    answer:
-      "Bạn có thể rút tiền thu nhập của mình bất cứ lúc nào thông qua ứng dụng ResQ. Chúng tôi hỗ trợ rút tiền tức thì vào tài khoản ngân hàng của bạn.",
-  },
-  {
-    id: 2,
-    question: "Những phương tiện nào được phép cho ResQ?",
-    answer:
-      "ResQ chấp nhận nhiều loại phương tiện bao gồm xe ô tô, taxi, thuyền máy, ghe nhỏ, và xe gầm cao. Mỗi loại phương tiện phù hợp với các tình huống cứu hộ khác nhau.",
-  },
-  {
-    id: 3,
-    question: "Tôi có thể thực hiện nhiều điểm dừng trong một yêu cầu cứu hộ không?",
-    answer:
-      "Có, bạn có thể thực hiện nhiều điểm dừng trong một yêu cầu cứu hộ nếu cần thiết. Ứng dụng sẽ hỗ trợ bạn điều hướng đến từng điểm một cách hiệu quả.",
-  },
-  {
-    id: 4,
-    question: "Trẻ em có được phép trên phương tiện cứu hộ không?",
-    answer:
-      "Có, trẻ em hoàn toàn được phép trên phương tiện cứu hộ. Chúng tôi khuyến khích các gia đình có trẻ em sử dụng dịch vụ cứu hộ của ResQ trong các tình huống khẩn cấp.",
-  },
-  {
-    id: 5,
-    question: "Hành khách có thể đứng trên phương tiện cứu hộ không?",
-    answer:
-      "Để đảm bảo an toàn, chúng tôi khuyến khích tất cả hành khách ngồi xuống trong quá trình cứu hộ. Tuy nhiên, trong các tình huống đặc biệt, hành khách có thể đứng nếu phương tiện cho phép và điều kiện an toàn.",
-  },
-];
+import { faqs } from "../constants";
 
 const FAQs = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
@@ -50,10 +12,10 @@ const FAQs = () => {
   };
 
   return (
-    <section className="bg-white py-16 md:py-20">
+    <section className="bg-white ">
       <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
         {/* Top Border Line */}
-        <div className="border-t border-gray-200 mb-12 md:mb-16"></div>
+        <div className="border-t border-gray-500 mb-12 md:mb-12"></div>
 
         {/* FAQs Label */}
         <div className="mb-8 md:mb-12">
@@ -86,7 +48,7 @@ const FAQs = () => {
 
           {/* Right Column - FAQ List */}
           <div className="space-y-0">
-            {faqs.map((faq, index) => {
+            {faqs.map((faq) => {
               const isOpen = openItems.includes(faq.id);
               return (
                 <div key={faq.id}>

@@ -5,42 +5,7 @@ import {
   ArrowRight,
   Image as ImageIcon,
 } from "lucide-react";
-
-type ContributionCard = {
-  id: number;
-  image: string;
-  title: string;
-  description: string;
-  link: string;
-};
-
-const contributions: ContributionCard[] = [
-  {
-    id: 1,
-    image: "/images/rescuer_flood.jpg",
-    title: "Tác động của ResQ Mientrung SOS đến cộng đồng",
-    description:
-      "Dịch vụ cứu hộ và hỗ trợ khẩn cấp của ResQ đã hỗ trợ hơn 50,000 trường hợp khẩn cấp tại miền Trung trong năm 2024, tạo ra hơn 5,000 cơ hội việc làm cho các nhân viên cứu hộ và tình nguyện viên, đồng thời góp phần nâng cao nhận thức về an toàn và ứng phó khẩn cấp trong cộng đồng.",
-    link: "#",
-  },
-  {
-    id: 2,
-    image: "/images/noodle_flood.jpg",
-    title: "ResQ ra mắt Trung tâm Đào tạo Cứu hộ và Ứng phó Khẩn cấp",
-    description:
-      "ResQ chính thức khai trương Trung tâm Đào tạo Cứu hộ và Ứng phó Khẩn cấp đầu tiên với sự hỗ trợ từ các tổ chức địa phương. Trung tâm nhằm mục tiêu đẩy nhanh các giải pháp cứu hộ hiện đại, nâng cao khả năng ứng phó khẩn cấp, và đóng góp vào việc xây dựng cộng đồng an toàn hơn tại miền Trung Việt Nam.",
-    link: "#",
-  },
-  {
-    id: 3,
-    image: "/images/ghe_flood.jpg",
-    title:
-      "ResQ Mientrung SOS đạt chứng nhận An toàn Thông tin và Bảo mật Dữ liệu",
-    description:
-      "ResQ Mientrung SOS đã được chính thức công nhận đạt tiêu chuẩn An toàn Thông tin và Bảo mật Dữ liệu. Chứng nhận này phản ánh cam kết của ResQ trong việc tăng cường niềm tin số và đảm bảo dữ liệu cá nhân luôn được bảo vệ an toàn cho tất cả người dùng trên nền tảng.",
-    link: "#",
-  },
-];
+import { contributions } from "../constants";
 
 type ContributionCardProps = {
   contribution: ContributionCard;

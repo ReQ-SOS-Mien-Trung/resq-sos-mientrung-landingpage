@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Phone, ChevronDown, Search } from "lucide-react";
 
 interface MenuItem {
@@ -111,6 +111,8 @@ const menuItems: MenuItem[] = [
 ];
 
 const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -126,12 +128,30 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
-      setIsMenuOpen(false);
+    // Nếu đang ở trang khác, navigate về trang chủ trước
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Đợi một chút để trang load xong rồi mới scroll
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
+  };
+
+  const handleHomeClick = () => {
+    navigate("/");
+    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
   };
 
   const handleMenuMouseEnter = (menuId: string) => {
@@ -174,20 +194,27 @@ const Header = () => {
                   <Menu className="w-6 h-6" />
                 )}
               </button>
-              <div className="flex items-center space-x-2">
+              <Link
+                to="/"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsMenuOpen(false);
+                }}
+                className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              >
                 <div className="w-10 h-10 bg-gradient-to-br from-primary-red to-primary-orange rounded-lg flex items-center justify-center">
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-xl font-bold text-gray-900">
                   ResQ Mientrung SOS
                 </span>
-              </div>
+              </Link>
             </div>
 
             {/* Right: Navigation Links */}
             <div className="hidden lg:flex items-center gap-6">
               <button
-                onClick={() => scrollToSection("hero")}
+                onClick={handleHomeClick}
                 className="text-gray-700 hover:text-primary-red transition-colors font-medium"
               >
                 Trang chủ
@@ -352,12 +379,13 @@ const Header = () => {
                 )}
               </div>
             ))}
-            <button
-              onClick={() => scrollToSection("register")}
-              className="w-full bg-primary-red text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium mt-4"
+            <Link
+              to="/register"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full bg-primary-red text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium mt-4 text-center"
             >
               Đăng ký Đội cứu hộ
-            </button>
+            </Link>
           </div>
         </div>
       )}

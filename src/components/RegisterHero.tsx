@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const RegisterHero = () => {
   return (
-    <section className="min-h-screen flex">
+    <section className="min-h-screen flex pb-16 md:pb-20">
       {/* Left Section - Text Content */}
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-4 md:px-8 lg:px-12">
         <motion.div

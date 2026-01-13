@@ -194,9 +194,6 @@ const WaysToBePartner = () => {
             </a>
           </div>
         </div>
-
-        {/* Bottom Border Lines */}
-        <div className="border-t border-gray-200 mt-12 md:mt-16"></div>
       </div>
     </section>
   );

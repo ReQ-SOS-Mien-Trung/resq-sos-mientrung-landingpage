@@ -1,7 +1,87 @@
-import { Download, ArrowRight, Shield, Users } from "lucide-react";
+import {
+  Download,
+  ArrowRight,
+  Droplets,
+  Waves,
+  CloudRain,
+  LifeBuoy,
+} from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+// Helper function to generate random values
+const generateRainDrops = () =>
+  Array.from({ length: 50 }).map(() => ({
+    opacity: Math.random() * 0.5 + 0.3,
+    duration: Math.random() * 2 + 1,
+    delay: Math.random() * 2,
+    left: Math.random() * 100,
+  }));
+
+const generateDebrisItems = (width: number, height: number) =>
+  Array.from({ length: 8 }).map(() => ({
+    initialX: Math.random() * width,
+    initialY: height + 50,
+    size: Math.random() * 30 + 20,
+    duration: Math.random() * 10 + 15,
+    delay: Math.random() * 5,
+    animateX: Math.random() * width,
+  }));
+
+const generateWaterDroplets = (width: number, height: number) =>
+  Array.from({ length: 20 }).map(() => ({
+    initialY: Math.random() * height,
+    initialX: Math.random() * width,
+    animateY: Math.random() * height,
+    animateX: Math.random() * width,
+    duration: Math.random() * 3 + 2,
+    delay: Math.random() * 2,
+  }));
 
 const Hero = () => {
+  const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
+  const [rainDrops] = useState(() => generateRainDrops());
+  const [debrisItems, setDebrisItems] = useState<
+    Array<{
+      initialX: number;
+      initialY: number;
+      size: number;
+      duration: number;
+      delay: number;
+      animateX: number;
+    }>
+  >([]);
+  const [waterDroplets, setWaterDroplets] = useState<
+    Array<{
+      initialY: number;
+      initialX: number;
+      animateY: number;
+      animateX: number;
+      duration: number;
+      delay: number;
+    }>
+  >([]);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      const newDimensions = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+      setDimensions(newDimensions);
+      setDebrisItems(
+        generateDebrisItems(newDimensions.width, newDimensions.height)
+      );
+      setWaterDroplets(
+        generateWaterDroplets(newDimensions.width, newDimensions.height)
+      );
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -12,107 +92,374 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col pt-20 overflow-hidden"
+      className="relative min-h-screen flex flex-col pt-20 overflow-hidden bg-gradient-to-b from-slate-800 via-slate-700 to-slate-900"
     >
-      {/* Background Image Scene */}
-      <div className="absolute inset-0 z-0">
-        {/* Background with realistic scene elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600">
-          {/* Sky gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-400/30 via-transparent to-emerald-500/50" />
-
-          {/* Scene elements - simulating rescue scene */}
-          <div className="absolute inset-0">
-            {/* Left side - Building/Wall */}
-            <div className="absolute left-0 bottom-0 w-1/3 h-2/3 bg-gradient-to-t from-amber-800/40 to-amber-700/20">
-              <div className="absolute bottom-0 left-0 w-full h-1/3 bg-amber-900/30" />
-            </div>
-
-            {/* Center - People/Rescue scene representation */}
-            <div className="absolute bottom-0 left-1/3 right-1/3 h-3/4 flex items-end justify-center">
-              {/* Rescuer representation */}
-              <div className="relative mb-8">
-                {/* Helmet */}
-                <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full shadow-2xl flex items-center justify-center border-4 border-white/30">
-                  <Shield className="w-12 h-12 text-white" />
-                </div>
-                {/* Uniform */}
-                <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-20 h-16 bg-emerald-600/80 rounded-b-lg" />
-              </div>
-
-              {/* Person being rescued */}
-              <div className="relative ml-8 mb-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full shadow-xl flex items-center justify-center">
-                  <Users className="w-10 h-10 text-white" />
-                </div>
-              </div>
-            </div>
-
-            {/* Right side - Nature/Greenery */}
-            <div className="absolute right-0 bottom-0 w-1/3 h-2/3">
-              <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-emerald-600/40 to-transparent">
-                {/* Trees/bushes representation */}
-                <div className="absolute bottom-20 right-10 w-32 h-32 bg-emerald-700/50 rounded-full blur-xl" />
-                <div className="absolute bottom-32 right-20 w-24 h-24 bg-emerald-600/40 rounded-full blur-lg" />
-              </div>
-            </div>
-
-            {/* Foreground elements */}
-            <div className="absolute bottom-0 left-1/4 w-16 h-16 bg-amber-700/30 rounded-lg transform rotate-12" />
-            <div className="absolute bottom-8 right-1/4 w-12 h-12 bg-blue-500/30 rounded-lg transform -rotate-12" />
-          </div>
-
-          {/* Overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
-        </div>
+      {/* Animated Rain Drops */}
+      <div className="absolute inset-0 z-10 overflow-hidden">
+        {rainDrops.map((drop, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-8 bg-blue-400/30 rounded-full"
+            initial={{
+              y: -50,
+              opacity: drop.opacity,
+            }}
+            animate={{
+              y: dimensions.height + 100,
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: drop.duration,
+              repeat: Infinity,
+              delay: drop.delay,
+              ease: "linear",
+            }}
+            style={{
+              left: `${drop.left}%`,
+            }}
+          />
+        ))}
       </div>
 
-      {/* Text Overlay - Bottom Left */}
-      <div className="relative z-10 flex-1 flex items-end pb-24 md:pb-28 lg:pb-32">
-        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-full"
+      {/* Animated Water Waves */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 h-1/2 overflow-hidden">
+        {/* Wave Layer 1 - Deep Blue */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-full"
+          animate={{
+            x: [0, -100, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          <svg
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 1200 400"
+            preserveAspectRatio="none"
           >
+            <path
+              d="M0,200 Q300,150 600,200 T1200,200 L1200,400 L0,400 Z"
+              fill="url(#waveGradient1)"
+              opacity="0.8"
+            />
+            <defs>
+              <linearGradient
+                id="waveGradient1"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.8" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </motion.div>
+
+        {/* Wave Layer 2 - Medium Blue */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-full"
+          animate={{
+            x: [0, 100, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          <svg
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 1200 400"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,250 Q300,200 600,250 T1200,250 L1200,400 L0,400 Z"
+              fill="url(#waveGradient2)"
+              opacity="0.7"
+            />
+            <defs>
+              <linearGradient
+                id="waveGradient2"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.7" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </motion.div>
+
+        {/* Wave Layer 3 - Light Blue */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-full"
+          animate={{
+            x: [0, -80, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          <svg
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 1200 400"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,300 Q300,250 600,300 T1200,300 L1200,400 L0,400 Z"
+              fill="url(#waveGradient3)"
+              opacity="0.6"
+            />
+            <defs>
+              <linearGradient
+                id="waveGradient3"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.6" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </motion.div>
+      </div>
+
+      {/* Floating Debris/Objects */}
+      <div className="absolute inset-0 z-15">
+        {debrisItems.map((debris, i) => (
+          <motion.div
+            key={`debris-${i}`}
+            className="absolute"
+            initial={{
+              x: debris.initialX,
+              y: debris.initialY,
+              rotate: 0,
+              opacity: 0.3,
+            }}
+            animate={{
+              y: -100,
+              rotate: 360,
+              x: debris.animateX,
+            }}
+            transition={{
+              duration: debris.duration,
+              repeat: Infinity,
+              delay: debris.delay,
+              ease: "linear",
+            }}
+          >
+            <div
+              className="bg-amber-600/40 rounded"
+              style={{
+                width: `${debris.size}px`,
+                height: `${debris.size}px`,
+              }}
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Rescue Boat Animation */}
+      <motion.div
+        className="absolute bottom-1/3 left-1/4 z-30"
+        initial={{ x: -200, opacity: 0 }}
+        animate={{
+          x: [0, 50, 0],
+          y: [0, -10, 0],
+        }}
+        transition={{
+          x: {
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          y: {
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+        }}
+      >
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
+          {/* Boat */}
+          <div className="relative w-32 h-20 md:w-40 md:h-24">
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-b from-amber-700 to-amber-800 rounded-t-lg shadow-xl">
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-16 bg-amber-600 rounded-t-sm" />
+            </div>
+            <LifeBuoy className="absolute top-2 right-2 w-6 h-6 text-white" />
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Floating Rescue Icons */}
+      <motion.div
+        className="absolute top-1/4 right-1/4 z-25"
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 5, 0],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/80 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-4 border-white/30">
+          <LifeBuoy className="w-8 h-8 md:w-10 md:h-10 text-white" />
+        </div>
+      </motion.div>
+
+      {/* Water Droplets Effect */}
+      <div className="absolute inset-0 z-15 pointer-events-none">
+        {waterDroplets.map((droplet, i) => (
+          <motion.div
+            key={`droplet-${i}`}
+            className="absolute"
+            initial={{
+              y: droplet.initialY,
+              x: droplet.initialX,
+              scale: 0,
+              opacity: 0.6,
+            }}
+            animate={{
+              y: droplet.animateY,
+              x: droplet.animateX,
+              scale: [0, 1, 0],
+              opacity: [0.6, 1, 0.6],
+            }}
+            transition={{
+              duration: droplet.duration,
+              repeat: Infinity,
+              delay: droplet.delay,
+              ease: "easeInOut",
+            }}
+          >
+            <Droplets className="w-4 h-4 text-blue-400" />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Dark Overlay for Text Readability */}
+      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/60 via-black/30 to-transparent pointer-events-none" />
+
+      {/* Main Content */}
+      <div className="relative z-30 flex-1 flex flex-col justify-end pb-24 md:pb-32">
+        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
+          {/* Main Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="mb-8"
+          >
+            <motion.div
+              className="flex items-center gap-3 mb-4"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+            >
+              <Waves className="w-8 h-8 md:w-10 md:h-10 text-emerald-400" />
+              <span className="text-emerald-400 font-semibold text-sm md:text-base uppercase tracking-wider">
+                Cứu hộ khẩn cấp
+              </span>
+            </motion.div>
             <h1
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold text-white leading-tight mb-2"
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold text-white leading-tight mb-4"
               style={{ fontFamily: "var(--font-sf-ui-display)" }}
             >
-              ResQ Mientrung SOS.
-              <br />
-              <span className="block mt-2">Làm cho mỗi</span>
-              <span className="text-yellow-300">ngày tốt hơn.</span>
+              <motion.span
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="block"
+              >
+                ResQ Mientrung
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="block text-emerald-400"
+              >
+                SOS.
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="block mt-4 text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-normal"
+              >
+                Khi lũ lụt ập đến,
+                <br />
+                <span className="text-yellow-300 font-bold">
+                  chúng tôi có mặt.
+                </span>
+              </motion.span>
             </h1>
+          </motion.div>
+
+          {/* Stats or Tagline */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="flex flex-wrap gap-6 mb-8"
+          >
+            <div className="flex items-center gap-2 text-white/90">
+              <CloudRain className="w-5 h-5 text-emerald-400" />
+              <span className="text-sm md:text-base">24/7 Sẵn sàng cứu hộ</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <LifeBuoy className="w-5 h-5 text-emerald-400" />
+              <span className="text-sm md:text-base">
+                Mạng lưới cứu hộ rộng khắp
+              </span>
+            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* CTA Bars - Aligned Left with Text */}
-      <div className="relative z-20">
-        {/* First CTA Bar - Dark Green */}
+      {/* CTA Buttons */}
+      <div className="relative z-30">
+        {/* First CTA - Emergency Button */}
         <motion.button
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 1.4 }}
           onClick={() => scrollToSection("features")}
-          className="w-full bg-[#0D7377] hover:bg-[#0a5d61] text-white py-5 md:py-6 font-semibold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 group px-4 md:px-8 lg:px-12 xl:px-16"
+          className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-5 md:py-6 font-bold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 group px-4 md:px-8 lg:px-12 xl:px-16 shadow-2xl"
         >
+          <LifeBuoy className="w-6 h-6 group-hover:rotate-12 transition-transform" />
           <span>Tìm hiểu thêm về chúng tôi</span>
-          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform ml-auto" />
         </motion.button>
 
-        {/* Second CTA Bar - Bright Green */}
+        {/* Second CTA - Download App */}
         <motion.button
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 1.6 }}
           onClick={() => {}}
-          className="w-full bg-[#14B8A6] hover:bg-[#0d9488] text-white py-5 md:py-6 font-semibold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 px-4 md:px-8 lg:px-12 xl:px-16"
+          className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-5 md:py-6 font-bold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 px-4 md:px-8 lg:px-12 xl:px-16 shadow-2xl"
         >
-          <Download className="w-5 h-5" />
-          <span>Tải App</span>
+          <Download className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          <span>Tải App ngay</span>
         </motion.button>
       </div>
     </section>
