@@ -337,13 +337,15 @@ const Hero = () => {
         ))}
       </div>
 
-      {/* Rescue Boat Animation */}
+      {/* Rescue Boat with 2 Rescuers */}
       <motion.div
-        className="absolute bottom-1/3 left-1/4 z-30"
-        initial={{ x: -200, opacity: 0 }}
+        className="absolute bottom-[22%] left-1/2 z-[28]"
+        style={{ x: "-50%" }}
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={{
-          x: [0, 50, 0],
+          x: ["-50%", "calc(-50% + 30px)", "-50%"],
           y: [0, -10, 0],
+          opacity: 1,
         }}
         transition={{
           x: {
@@ -356,6 +358,10 @@ const Hero = () => {
             repeat: Infinity,
             ease: "easeInOut",
           },
+          opacity: {
+            duration: 1,
+            delay: 0.5,
+          },
         }}
       >
         <motion.div
@@ -365,13 +371,363 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.5 }}
         >
           {/* Boat */}
-          <div className="relative w-32 h-20 md:w-40 md:h-24">
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-b from-amber-700 to-amber-800 rounded-t-lg shadow-xl">
+          <div className="relative w-48 h-28 md:w-56 md:h-32">
+            <div className="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-b from-amber-700 to-amber-800 rounded-t-lg shadow-xl">
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-16 bg-amber-600 rounded-t-sm" />
             </div>
             <LifeBuoy className="absolute top-2 right-2 w-6 h-6 text-white" />
+
+            {/* Rescuer 1 - Left side */}
+            <motion.div
+              className="absolute -top-8 left-4 md:left-6"
+              animate={{
+                y: [0, -5, 0],
+                rotate: [0, 2, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <div className="relative">
+                {/* Avatar placeholder */}
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
+                  <img
+                    src="/images/cuong.jpg"
+                    alt="Rescuer 1"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </div>
+                {/* Paddle animation */}
+                <motion.div
+                  className="absolute -right-2 top-1/2 transform -translate-y-1/2"
+                  animate={{
+                    rotate: [-20, 20, -20],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <div className="w-1 h-8 bg-amber-800 rounded"></div>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Rescuer 2 - Right side */}
+            <motion.div
+              className="absolute -top-8 right-4 md:right-6"
+              animate={{
+                y: [0, -5, 0],
+                rotate: [0, -2, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5,
+              }}
+            >
+              <div className="relative">
+                {/* Avatar placeholder */}
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
+                  <img
+                    src="/images/thao.jpg"
+                    alt="Rescuer 2"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </div>
+                {/* Paddle animation */}
+                <motion.div
+                  className="absolute -left-2 top-1/2 transform -translate-y-1/2"
+                  animate={{
+                    rotate: [20, -20, 20],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.75,
+                  }}
+                >
+                  <div className="w-1 h-8 bg-amber-800 rounded"></div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
+      </motion.div>
+
+      {/* Victim 1 - Floating in water */}
+      <motion.div
+        className="absolute bottom-[25%] right-[30%] z-[28]"
+        initial={{ x: 100, opacity: 0 }}
+        animate={{
+          x: [0, 30, 0],
+          y: [0, 15, 0],
+          rotate: [0, 5, -5, 0],
+          opacity: 1,
+        }}
+        transition={{
+          x: {
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          y: {
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          rotate: {
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          opacity: {
+            duration: 1,
+            delay: 0.7,
+          },
+        }}
+      >
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.7 }}
+        >
+          {/* Avatar placeholder */}
+          <div className="relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white shadow-2xl bg-gradient-to-br from-slate-400 to-slate-600 overflow-hidden ring-4 ring-yellow-300/30">
+            <img
+              src="/images/chu.jpg"
+              alt="Victim 1"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          </div>
+          {/* Life jacket indicator */}
+          <div className="absolute -bottom-3 md:-bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-10 md:w-28 md:h-12 bg-orange-500 rounded-full border-2 border-white shadow-lg z-0"></div>
+          {/* Help signal */}
+          <motion.div
+            className="absolute -top-8 left-1/2 transform -translate-x-1/2"
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white text-xs font-bold">!</span>
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+
+      {/* Victim 2 - Floating in water */}
+      <motion.div
+        className="absolute bottom-[20%] left-[30%] z-[28]"
+        initial={{ x: -100, opacity: 0 }}
+        animate={{
+          x: [0, -25, 0],
+          y: [0, 20, 0],
+          rotate: [0, -5, 5, 0],
+          opacity: 1,
+        }}
+        transition={{
+          x: {
+            duration: 3.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          y: {
+            duration: 2.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          rotate: {
+            duration: 3.2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          opacity: {
+            duration: 1,
+            delay: 0.9,
+          },
+        }}
+      >
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.9 }}
+        >
+          {/* Avatar placeholder */}
+          <div className="relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white shadow-2xl bg-gradient-to-br from-slate-400 to-slate-600 overflow-hidden ring-4 ring-yellow-300/30">
+            <img
+              src="/images/an.png"
+              alt="Victim 2"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          </div>
+          {/* Life jacket indicator */}
+          <div className="absolute -bottom-3 md:-bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-10 md:w-28 md:h-12 bg-orange-500 rounded-full border-2 border-white shadow-lg z-0"></div>
+          {/* Help signal */}
+          <motion.div
+            className="absolute -top-8 left-1/2 transform -translate-x-1/2"
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5,
+            }}
+          >
+            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white text-xs font-bold">!</span>
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+
+      {/* Rescue Helicopter */}
+      <motion.div
+        className="absolute top-[15%] right-[15%] z-[28]"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{
+          y: [0, -15, 0],
+          opacity: 1,
+        }}
+        transition={{
+          y: {
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+          opacity: {
+            duration: 1,
+            delay: 1,
+          },
+        }}
+      >
+        <div className="relative">
+          {/* Rotor blades - spinning */}
+          <motion.div
+            className="absolute -top-8 left-1/2 transform -translate-x-1/2"
+            animate={{
+              rotate: 360,
+            }}
+            transition={{
+              duration: 0.3,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            <div className="relative w-24 h-2 md:w-32 md:h-3">
+              <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300/60 rounded-full transform -translate-y-1/2"></div>
+              <div className="absolute top-1/2 left-1/2 w-full h-1 bg-gray-300/60 rounded-full transform -translate-y-1/2 -translate-x-1/2 rotate-90"></div>
+            </div>
+          </motion.div>
+
+          {/* Helicopter body */}
+          <div className="relative w-32 h-20 md:w-40 md:h-24 bg-gradient-to-b from-gray-700 to-gray-800 rounded-lg shadow-2xl border-2 border-gray-600">
+            {/* Cockpit window */}
+            <div className="absolute top-2 left-2 right-2 h-8 bg-blue-900/40 rounded-t-lg border border-blue-300/30">
+              {/* Rescuer avatar in cockpit */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50 z-10">
+                <img
+                  src="/images/khoa.jpg"
+                  alt="Helicopter Rescuer"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Tail */}
+            <div className="absolute top-4 -right-6 w-12 h-3 bg-gradient-to-b from-gray-700 to-gray-800 rounded-r-lg border-r-2 border-gray-600"></div>
+
+            {/* Landing skids */}
+            <div className="absolute -bottom-2 left-2 right-2 h-2 flex justify-between">
+              <div className="w-8 h-2 bg-gray-600 rounded-full"></div>
+              <div className="w-8 h-2 bg-gray-600 rounded-full"></div>
+            </div>
+          </div>
+
+          {/* Rescue rope/cable */}
+          <motion.div
+            className="absolute top-full left-1/2 transform -translate-x-1/2 w-1 bg-yellow-400 origin-top"
+            initial={{ height: 0 }}
+            animate={{
+              height: [0, 150, 150],
+            }}
+            transition={{
+              height: {
+                duration: 2,
+                delay: 1.5,
+                ease: "easeOut",
+              },
+            }}
+          >
+            <motion.div
+              className="w-full h-full bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 shadow-lg"
+              animate={{
+                x: [0, 5, -5, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 3.5,
+              }}
+            />
+          </motion.div>
+
+          {/* Rescue hook at end of rope */}
+          <motion.div
+            className="absolute top-[calc(100%+150px)] left-1/2 transform -translate-x-1/2"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, 1],
+              y: [10, 0],
+            }}
+            transition={{
+              opacity: {
+                duration: 0.5,
+                delay: 3.5,
+              },
+              y: {
+                duration: 0.5,
+                delay: 3.5,
+              },
+            }}
+          >
+            <div className="w-6 h-8 bg-gray-700 rounded-b-lg border-2 border-gray-600 shadow-xl">
+              <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 border-2 border-yellow-400 rounded-full bg-gray-800"></div>
+            </div>
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Floating Rescue Icons */}
