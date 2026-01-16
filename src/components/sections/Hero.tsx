@@ -191,26 +191,30 @@ const Hero = () => {
       <div className="absolute bottom-0 left-0 right-0 z-20 h-1/2 overflow-hidden">
         {/* Wave Layer 1 - Deep Blue */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-full"
+          className="absolute bottom-0 h-full"
+          style={{ width: "300%" }}
           animate={{
-            x: [0, -100, 0],
+            x: [0, "-66.666%"],
+            opacity: [0.75, 0.85, 0.75],
           }}
           transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear",
+            x: {
+              duration: 12,
+              repeat: Infinity,
+              ease: "linear",
+            },
+            opacity: {
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
           }}
         >
           <svg
             className="absolute bottom-0 w-full h-full"
-            viewBox="0 0 1200 400"
+            viewBox="0 0 3600 400"
             preserveAspectRatio="none"
           >
-            <path
-              d="M0,200 Q300,150 600,200 T1200,200 L1200,400 L0,400 Z"
-              fill="url(#waveGradient1)"
-              opacity="0.8"
-            />
             <defs>
               <linearGradient
                 id="waveGradient1"
@@ -223,31 +227,87 @@ const Hero = () => {
                 <stop offset="100%" stopColor="#0284c7" stopOpacity="0.8" />
               </linearGradient>
             </defs>
+            {/* Pattern repeats 3 times for seamless loop */}
+            <motion.path
+              fill="url(#waveGradient1)"
+              opacity="0.8"
+              d="M0,200 Q150,140 300,180 Q450,160 600,200 Q750,180 900,190 Q1050,200 1200,200 L1200,400 L0,400 Z"
+              animate={{
+                d: [
+                  "M0,200 Q150,140 300,180 Q450,160 600,200 Q750,180 900,190 Q1050,200 1200,200 L1200,400 L0,400 Z",
+                  "M0,200 Q150,160 300,200 Q450,180 600,220 Q750,200 900,210 Q1050,220 1200,200 L1200,400 L0,400 Z",
+                  "M0,200 Q150,140 300,180 Q450,160 600,200 Q750,180 900,190 Q1050,200 1200,200 L1200,400 L0,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient1)"
+              opacity="0.8"
+              d="M1200,200 Q1350,140 1500,180 Q1650,160 1800,200 Q1950,180 2100,190 Q2250,200 2400,200 L2400,400 L1200,400 Z"
+              animate={{
+                d: [
+                  "M1200,200 Q1350,140 1500,180 Q1650,160 1800,200 Q1950,180 2100,190 Q2250,200 2400,200 L2400,400 L1200,400 Z",
+                  "M1200,200 Q1350,160 1500,200 Q1650,180 1800,220 Q1950,200 2100,210 Q2250,220 2400,200 L2400,400 L1200,400 Z",
+                  "M1200,200 Q1350,140 1500,180 Q1650,160 1800,200 Q1950,180 2100,190 Q2250,200 2400,200 L2400,400 L1200,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient1)"
+              opacity="0.8"
+              d="M2400,200 Q2550,140 2700,180 Q2850,160 3000,200 Q3150,180 3300,190 Q3450,200 3600,200 L3600,400 L2400,400 Z"
+              animate={{
+                d: [
+                  "M2400,200 Q2550,140 2700,180 Q2850,160 3000,200 Q3150,180 3300,190 Q3450,200 3600,200 L3600,400 L2400,400 Z",
+                  "M2400,200 Q2550,160 2700,200 Q2850,180 3000,220 Q3150,200 3300,210 Q3450,220 3600,200 L3600,400 L2400,400 Z",
+                  "M2400,200 Q2550,140 2700,180 Q2850,160 3000,200 Q3150,180 3300,190 Q3450,200 3600,200 L3600,400 L2400,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
           </svg>
         </motion.div>
 
         {/* Wave Layer 2 - Medium Blue */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-full"
+          className="absolute bottom-0 h-full"
+          style={{ width: "300%" }}
           animate={{
-            x: [0, 100, 0],
+            x: [0, "-66.666%"],
+            opacity: [0.65, 0.75, 0.65],
           }}
           transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "linear",
+            x: {
+              duration: 10,
+              repeat: Infinity,
+              ease: "linear",
+            },
+            opacity: {
+              duration: 3.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
           }}
         >
           <svg
             className="absolute bottom-0 w-full h-full"
-            viewBox="0 0 1200 400"
+            viewBox="0 0 3600 400"
             preserveAspectRatio="none"
           >
-            <path
-              d="M0,250 Q300,200 600,250 T1200,250 L1200,400 L0,400 Z"
-              fill="url(#waveGradient2)"
-              opacity="0.7"
-            />
             <defs>
               <linearGradient
                 id="waveGradient2"
@@ -260,31 +320,86 @@ const Hero = () => {
                 <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.7" />
               </linearGradient>
             </defs>
+            <motion.path
+              fill="url(#waveGradient2)"
+              opacity="0.7"
+              d="M0,250 Q200,200 400,240 Q600,220 800,250 Q1000,240 1200,250 L1200,400 L0,400 Z"
+              animate={{
+                d: [
+                  "M0,250 Q200,200 400,240 Q600,220 800,250 Q1000,240 1200,250 L1200,400 L0,400 Z",
+                  "M0,250 Q200,220 400,260 Q600,240 800,270 Q1000,260 1200,250 L1200,400 L0,400 Z",
+                  "M0,250 Q200,200 400,240 Q600,220 800,250 Q1000,240 1200,250 L1200,400 L0,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient2)"
+              opacity="0.7"
+              d="M1200,250 Q1400,200 1600,240 Q1800,220 2000,250 Q2200,240 2400,250 L2400,400 L1200,400 Z"
+              animate={{
+                d: [
+                  "M1200,250 Q1400,200 1600,240 Q1800,220 2000,250 Q2200,240 2400,250 L2400,400 L1200,400 Z",
+                  "M1200,250 Q1400,220 1600,260 Q1800,240 2000,270 Q2200,260 2400,250 L2400,400 L1200,400 Z",
+                  "M1200,250 Q1400,200 1600,240 Q1800,220 2000,250 Q2200,240 2400,250 L2400,400 L1200,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient2)"
+              opacity="0.7"
+              d="M2400,250 Q2600,200 2800,240 Q3000,220 3200,250 Q3400,240 3600,250 L3600,400 L2400,400 Z"
+              animate={{
+                d: [
+                  "M2400,250 Q2600,200 2800,240 Q3000,220 3200,250 Q3400,240 3600,250 L3600,400 L2400,400 Z",
+                  "M2400,250 Q2600,220 2800,260 Q3000,240 3200,270 Q3400,260 3600,250 L3600,400 L2400,400 Z",
+                  "M2400,250 Q2600,200 2800,240 Q3000,220 3200,250 Q3400,240 3600,250 L3600,400 L2400,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
           </svg>
         </motion.div>
 
         {/* Wave Layer 3 - Light Blue */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-full"
+          className="absolute bottom-0 h-full"
+          style={{ width: "300%" }}
           animate={{
-            x: [0, -80, 0],
+            x: [0, "-66.666%"],
+            opacity: [0.55, 0.65, 0.55],
           }}
           transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "linear",
+            x: {
+              duration: 14,
+              repeat: Infinity,
+              ease: "linear",
+            },
+            opacity: {
+              duration: 4.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
           }}
         >
           <svg
             className="absolute bottom-0 w-full h-full"
-            viewBox="0 0 1200 400"
+            viewBox="0 0 3600 400"
             preserveAspectRatio="none"
           >
-            <path
-              d="M0,300 Q300,250 600,300 T1200,300 L1200,400 L0,400 Z"
-              fill="url(#waveGradient3)"
-              opacity="0.6"
-            />
             <defs>
               <linearGradient
                 id="waveGradient3"
@@ -297,6 +412,149 @@ const Hero = () => {
                 <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.6" />
               </linearGradient>
             </defs>
+            <motion.path
+              fill="url(#waveGradient3)"
+              opacity="0.6"
+              d="M0,300 Q120,260 240,280 Q360,270 480,290 Q600,280 720,295 Q840,290 960,300 Q1080,295 1200,300 L1200,400 L0,400 Z"
+              animate={{
+                d: [
+                  "M0,300 Q120,260 240,280 Q360,270 480,290 Q600,280 720,295 Q840,290 960,300 Q1080,295 1200,300 L1200,400 L0,400 Z",
+                  "M0,300 Q120,280 240,300 Q360,290 480,310 Q600,300 720,315 Q840,310 960,320 Q1080,315 1200,300 L1200,400 L0,400 Z",
+                  "M0,300 Q120,260 240,280 Q360,270 480,290 Q600,280 720,295 Q840,290 960,300 Q1080,295 1200,300 L1200,400 L0,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 7,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient3)"
+              opacity="0.6"
+              d="M1200,300 Q1320,260 1440,280 Q1560,270 1680,290 Q1800,280 1920,295 Q2040,290 2160,300 Q2280,295 2400,300 L2400,400 L1200,400 Z"
+              animate={{
+                d: [
+                  "M1200,300 Q1320,260 1440,280 Q1560,270 1680,290 Q1800,280 1920,295 Q2040,290 2160,300 Q2280,295 2400,300 L2400,400 L1200,400 Z",
+                  "M1200,300 Q1320,280 1440,300 Q1560,290 1680,310 Q1800,300 1920,315 Q2040,310 2160,320 Q2280,315 2400,300 L2400,400 L1200,400 Z",
+                  "M1200,300 Q1320,260 1440,280 Q1560,270 1680,290 Q1800,280 1920,295 Q2040,290 2160,300 Q2280,295 2400,300 L2400,400 L1200,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 7,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient3)"
+              opacity="0.6"
+              d="M2400,300 Q2520,260 2640,280 Q2760,270 2880,290 Q3000,280 3120,295 Q3240,290 3360,300 Q3480,295 3600,300 L3600,400 L2400,400 Z"
+              animate={{
+                d: [
+                  "M2400,300 Q2520,260 2640,280 Q2760,270 2880,290 Q3000,280 3120,295 Q3240,290 3360,300 Q3480,295 3600,300 L3600,400 L2400,400 Z",
+                  "M2400,300 Q2520,280 2640,300 Q2760,290 2880,310 Q3000,300 3120,315 Q3240,310 3360,320 Q3480,315 3600,300 L3600,400 L2400,400 Z",
+                  "M2400,300 Q2520,260 2640,280 Q2760,270 2880,290 Q3000,280 3120,295 Q3240,290 3360,300 Q3480,295 3600,300 L3600,400 L2400,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 7,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </svg>
+        </motion.div>
+
+        {/* Wave Layer 4 - Additional depth layer */}
+        <motion.div
+          className="absolute bottom-0 h-full"
+          style={{ width: "300%" }}
+          animate={{
+            x: [0, "-66.666%"],
+            opacity: [0.4, 0.5, 0.4],
+          }}
+          transition={{
+            x: {
+              duration: 16,
+              repeat: Infinity,
+              ease: "linear",
+            },
+            opacity: {
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+          }}
+        >
+          <svg
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 3600 400"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient
+                id="waveGradient4"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0.5" />
+              </linearGradient>
+            </defs>
+            <motion.path
+              fill="url(#waveGradient4)"
+              opacity="0.5"
+              d="M0,320 Q100,300 200,310 Q300,305 400,315 Q500,310 600,320 Q700,315 800,325 Q900,320 1000,330 Q1100,325 1200,320 L1200,400 L0,400 Z"
+              animate={{
+                d: [
+                  "M0,320 Q100,300 200,310 Q300,305 400,315 Q500,310 600,320 Q700,315 800,325 Q900,320 1000,330 Q1100,325 1200,320 L1200,400 L0,400 Z",
+                  "M0,320 Q100,310 200,320 Q300,315 400,325 Q500,320 600,330 Q700,325 800,335 Q900,330 1000,340 Q1100,335 1200,320 L1200,400 L0,400 Z",
+                  "M0,320 Q100,300 200,310 Q300,305 400,315 Q500,310 600,320 Q700,315 800,325 Q900,320 1000,330 Q1100,325 1200,320 L1200,400 L0,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient4)"
+              opacity="0.5"
+              d="M1200,320 Q1300,300 1400,310 Q1500,305 1600,315 Q1700,310 1800,320 Q1900,315 2000,325 Q2100,320 2200,330 Q2300,325 2400,320 L2400,400 L1200,400 Z"
+              animate={{
+                d: [
+                  "M1200,320 Q1300,300 1400,310 Q1500,305 1600,315 Q1700,310 1800,320 Q1900,315 2000,325 Q2100,320 2200,330 Q2300,325 2400,320 L2400,400 L1200,400 Z",
+                  "M1200,320 Q1300,310 1400,320 Q1500,315 1600,325 Q1700,320 1800,330 Q1900,325 2000,335 Q2100,330 2200,340 Q2300,335 2400,320 L2400,400 L1200,400 Z",
+                  "M1200,320 Q1300,300 1400,310 Q1500,305 1600,315 Q1700,310 1800,320 Q1900,315 2000,325 Q2100,320 2200,330 Q2300,325 2400,320 L2400,400 L1200,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.path
+              fill="url(#waveGradient4)"
+              opacity="0.5"
+              d="M2400,320 Q2500,300 2600,310 Q2700,305 2800,315 Q2900,310 3000,320 Q3100,315 3200,325 Q3300,320 3400,330 Q3500,325 3600,320 L3600,400 L2400,400 Z"
+              animate={{
+                d: [
+                  "M2400,320 Q2500,300 2600,310 Q2700,305 2800,315 Q2900,310 3000,320 Q3100,315 3200,325 Q3300,320 3400,330 Q3500,325 3600,320 L3600,400 L2400,400 Z",
+                  "M2400,320 Q2500,310 2600,320 Q2700,315 2800,325 Q2900,320 3000,330 Q3100,325 3200,335 Q3300,330 3400,340 Q3500,335 3600,320 L3600,400 L2400,400 Z",
+                  "M2400,320 Q2500,300 2600,310 Q2700,305 2800,315 Q2900,310 3000,320 Q3100,315 3200,325 Q3300,320 3400,330 Q3500,325 3600,320 L3600,400 L2400,400 Z",
+                ],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
           </svg>
         </motion.div>
       </div>
@@ -342,20 +600,36 @@ const Hero = () => {
         style={{ x: "-50%" }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{
-          x: ["-50%", "calc(-50% + 30px)", "-50%"],
-          y: [0, -10, 0],
+          x: [
+            "-50%",
+            "calc(-50% + 20px)",
+            "calc(-50% + 30px)",
+            "calc(-50% + 20px)",
+            "-50%",
+            "calc(-50% - 20px)",
+            "calc(-50% - 30px)",
+            "calc(-50% - 20px)",
+            "-50%",
+          ],
+          y: [0, -5, -10, -5, 0, -5, -10, -5, 0],
+          rotate: [0, 1, 0, -1, 0, 1, 0, -1, 0],
           opacity: 1,
         }}
         transition={{
           x: {
-            duration: 4,
+            duration: 6,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.4, 0, 0.6, 1],
           },
           y: {
-            duration: 2,
+            duration: 3,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.4, 0, 0.6, 1],
+          },
+          rotate: {
+            duration: 4,
+            repeat: Infinity,
+            ease: [0.4, 0, 0.6, 1],
           },
           opacity: {
             duration: 1,
@@ -370,28 +644,76 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.5 }}
         >
           {/* Boat */}
-          <div className="relative w-48 h-28 md:w-56 md:h-32">
-            <div className="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-b from-amber-700 to-amber-800 rounded-t-lg shadow-xl">
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-16 bg-amber-600 rounded-t-sm" />
+          <div className="relative w-56 h-32 md:w-64 md:h-36">
+            {/* Boat hull - more realistic shape */}
+            <svg
+              className="absolute bottom-0 w-full h-full"
+              viewBox="0 0 200 100"
+              preserveAspectRatio="none"
+            >
+              {/* Main hull */}
+              <path
+                d="M 0 80 Q 20 60 40 70 Q 60 75 80 72 Q 100 70 120 72 Q 140 75 160 70 Q 180 60 200 80 L 200 100 L 0 100 Z"
+                fill="url(#boatGradient)"
+                className="drop-shadow-2xl"
+              />
+              {/* Inner hull line for depth */}
+              <path
+                d="M 10 85 Q 30 68 50 75 Q 70 78 90 76 Q 110 73 130 76 Q 150 78 170 75 Q 190 68 200 85"
+                stroke="rgba(0,0,0,0.2)"
+                strokeWidth="1"
+                fill="none"
+              />
+              <defs>
+                <linearGradient id="boatGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#d97706" stopOpacity="0.9" />
+                  <stop offset="50%" stopColor="#b45309" stopOpacity="0.95" />
+                  <stop offset="100%" stopColor="#92400e" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* Boat interior/deck */}
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-b from-amber-600/80 to-amber-700/90 rounded-t-xl border-t-2 border-amber-800/50">
+              {/* Deck planks */}
+              <div className="absolute top-0 left-0 right-0 h-full flex flex-col gap-0.5 opacity-30">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-0.5 bg-amber-900/40"
+                    style={{ width: `${100 - i * 5}%`, marginLeft: `${i * 2.5}%` }}
+                  />
+                ))}
+              </div>
             </div>
-            <LifeBuoy className="absolute top-2 right-2 w-6 h-6 text-white" />
+
+            {/* Bow (front) of boat */}
+            <div className="absolute bottom-12 left-0 w-8 h-6 bg-gradient-to-r from-amber-800 to-amber-700 rounded-r-full border-r-2 border-amber-900/50" />
+
+            {/* Stern (back) of boat */}
+            <div className="absolute bottom-12 right-0 w-6 h-6 bg-gradient-to-l from-amber-800 to-amber-700 rounded-l-full border-l-2 border-amber-900/50" />
+
+            {/* Life buoy on side */}
+            <div className="absolute top-1 right-2">
+              <LifeBuoy className="w-5 h-5 md:w-6 md:h-6 text-white drop-shadow-lg" />
+            </div>
 
             {/* Rescuer 1 - Left side */}
             <motion.div
-              className="absolute -top-8 left-4 md:left-6"
+              className="absolute -top-5 left-3 md:left-4"
               animate={{
-                y: [0, -5, 0],
-                rotate: [0, 2, 0],
+                y: [0, -3, 0],
+                rotate: [0, 1.5, 0],
               }}
               transition={{
-                duration: 2,
+                duration: 2.5,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.4, 0, 0.6, 1],
               }}
             >
               <div className="relative">
-                {/* Avatar placeholder */}
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
+                {/* Avatar */}
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
                   <img
                     src="/images/cuong.jpg"
                     alt="Rescuer 1"
@@ -401,40 +723,43 @@ const Hero = () => {
                     }}
                   />
                 </div>
-                {/* Paddle animation */}
+                {/* Paddle - more realistic */}
                 <motion.div
-                  className="absolute -right-2 top-1/2 transform -translate-y-1/2"
+                  className="absolute -right-3 top-1/2 transform -translate-y-1/2 origin-bottom"
                   animate={{
                     rotate: [-20, 20, -20],
                   }}
                   transition={{
-                    duration: 1.5,
+                    duration: 1.8,
                     repeat: Infinity,
-                    ease: "easeInOut",
+                    ease: [0.4, 0, 0.6, 1],
                   }}
                 >
-                  <div className="w-1 h-8 bg-amber-800 rounded"></div>
+                  {/* Paddle handle */}
+                  <div className="w-0.5 h-10 bg-amber-900 rounded-full shadow-md" />
+                  {/* Paddle blade */}
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-4 bg-gradient-to-b from-amber-700 to-amber-800 rounded-sm shadow-lg" />
                 </motion.div>
               </div>
             </motion.div>
 
             {/* Rescuer 2 - Right side */}
             <motion.div
-              className="absolute -top-8 right-4 md:right-6"
+              className="absolute -top-5 right-3 md:right-4"
               animate={{
-                y: [0, -5, 0],
-                rotate: [0, -2, 0],
+                y: [0, -3, 0],
+                rotate: [0, -1.5, 0],
               }}
               transition={{
-                duration: 2,
+                duration: 2.5,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.4, 0, 0.6, 1],
                 delay: 0.5,
               }}
             >
               <div className="relative">
-                {/* Avatar placeholder */}
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
+                {/* Avatar */}
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
                   <img
                     src="/images/thao.jpg"
                     alt="Rescuer 2"
@@ -444,23 +769,29 @@ const Hero = () => {
                     }}
                   />
                 </div>
-                {/* Paddle animation */}
+                {/* Paddle - more realistic */}
                 <motion.div
-                  className="absolute -left-2 top-1/2 transform -translate-y-1/2"
+                  className="absolute -left-3 top-1/2 transform -translate-y-1/2 origin-bottom"
                   animate={{
                     rotate: [20, -20, 20],
                   }}
                   transition={{
-                    duration: 1.5,
+                    duration: 1.8,
                     repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.75,
+                    ease: [0.4, 0, 0.6, 1],
+                    delay: 0.9,
                   }}
                 >
-                  <div className="w-1 h-8 bg-amber-800 rounded"></div>
+                  {/* Paddle handle */}
+                  <div className="w-0.5 h-10 bg-amber-900 rounded-full shadow-md" />
+                  {/* Paddle blade */}
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-4 bg-gradient-to-b from-amber-700 to-amber-800 rounded-sm shadow-lg" />
                 </motion.div>
               </div>
             </motion.div>
+
+            {/* Water splash effect around boat */}
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3/4 h-2 bg-blue-400/30 rounded-full blur-sm" />
           </div>
         </motion.div>
       </motion.div>
@@ -629,54 +960,119 @@ const Hero = () => {
         }}
       >
         <div className="relative">
-          {/* Rotor blades - spinning */}
+          {/* Main rotor - with motion blur effect */}
           <motion.div
-            className="absolute -top-8 left-1/2 transform -translate-x-1/2"
+            className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-10"
             animate={{
               rotate: 360,
             }}
             transition={{
-              duration: 0.3,
+              duration: 0.2,
               repeat: Infinity,
               ease: "linear",
             }}
           >
-            <div className="relative w-24 h-2 md:w-32 md:h-3">
-              <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300/60 rounded-full transform -translate-y-1/2"></div>
-              <div className="absolute top-1/2 left-1/2 w-full h-1 bg-gray-300/60 rounded-full transform -translate-y-1/2 -translate-x-1/2 rotate-90"></div>
+            {/* Rotor hub */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-gray-800 rounded-full border-2 border-gray-600 z-20" />
+            
+            {/* Rotor blades with blur effect */}
+            <div className="relative w-32 h-1 md:w-40 md:h-1.5">
+              {/* Blade 1 */}
+              <div className="absolute top-1/2 left-0 w-full h-full bg-gradient-to-r from-transparent via-gray-200/80 to-gray-300/90 rounded-full transform -translate-y-1/2 blur-[0.5px]" />
+              {/* Blade 2 */}
+              <div className="absolute top-1/2 left-1/2 w-full h-full bg-gradient-to-r from-transparent via-gray-200/80 to-gray-300/90 rounded-full transform -translate-y-1/2 -translate-x-1/2 rotate-90 blur-[0.5px]" />
+              {/* Blade 3 */}
+              <div className="absolute top-1/2 left-1/2 w-full h-full bg-gradient-to-r from-transparent via-gray-200/80 to-gray-300/90 rounded-full transform -translate-y-1/2 -translate-x-1/2 rotate-45 blur-[0.5px]" />
+              {/* Blade 4 */}
+              <div className="absolute top-1/2 left-1/2 w-full h-full bg-gradient-to-r from-transparent via-gray-200/80 to-gray-300/90 rounded-full transform -translate-y-1/2 -translate-x-1/2 -rotate-45 blur-[0.5px]" />
             </div>
           </motion.div>
 
-          {/* Helicopter body */}
-          <div className="relative w-32 h-20 md:w-40 md:h-24 bg-gradient-to-b from-gray-700 to-gray-800 rounded-lg shadow-2xl border-2 border-gray-600">
-            {/* Cockpit window */}
-            <div className="absolute top-2 left-2 right-2 h-8 bg-blue-900/40 rounded-t-lg border border-blue-300/30">
-              {/* Rescuer avatar in cockpit */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50 z-10">
-                <img
-                  src="/images/khoa.jpg"
-                  alt="Helicopter Rescuer"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
+          {/* Helicopter body - more realistic shape */}
+          <div className="relative w-36 h-20 md:w-44 md:h-24" style={{ height: '5.5rem' }}>
+            {/* Main fuselage */}
+            <div className="relative w-full h-full bg-gradient-to-b from-slate-700 via-gray-800 to-slate-900 rounded-xl shadow-2xl border-2 border-gray-700/80 overflow-hidden">
+              {/* Top curve for realistic helicopter shape */}
+              <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-b from-slate-600 to-transparent rounded-t-xl" />
+              
+              {/* Side panels with depth */}
+              <div className="absolute top-2 left-0 w-1 h-full bg-gray-900/50" />
+              <div className="absolute top-2 right-0 w-1 h-full bg-gray-900/50" />
+              
+              {/* Cockpit window - more realistic */}
+              <div className="absolute top-1 left-1 right-1 h-9 bg-gradient-to-b from-sky-900/60 via-blue-800/50 to-blue-900/40 rounded-t-xl border border-blue-400/40 shadow-inner">
+                {/* Window frame */}
+                <div className="absolute inset-0 border-2 border-blue-300/30 rounded-t-xl" />
+                {/* Window reflection */}
+                <div className="absolute top-1 left-2 w-8 h-2 bg-white/20 rounded-full blur-sm" />
+                {/* Rescuer avatar in cockpit */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50 z-10">
+                  <img
+                    src="/images/khoa.jpg"
+                    alt="Helicopter Rescuer"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Side windows */}
+              <div className="absolute top-4 left-2 w-3 h-4 bg-blue-900/50 rounded border border-blue-400/30" />
+              <div className="absolute top-4 right-2 w-3 h-4 bg-blue-900/50 rounded border border-blue-400/30" />
+
+              {/* Door/panel lines */}
+              <div className="absolute top-10 left-3 right-3 h-0.5 bg-gray-700/50" />
+              <div className="absolute top-14 left-3 right-3 h-0.5 bg-gray-700/50" />
+            </div>
+
+            {/* Tail boom - more realistic */}
+            <div className="absolute top-6 -right-8 w-16 h-2.5 bg-gradient-to-r from-gray-800 via-slate-800 to-gray-900 rounded-r-full border-r-2 border-gray-700 shadow-lg">
+              {/* Tail rotor */}
+              <motion.div
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1"
+                animate={{
+                  rotate: 360,
+                }}
+                transition={{
+                  duration: 0.15,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              >
+                <div className="relative w-3 h-0.5">
+                  <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-300/70 rounded-full transform -translate-y-1/2" />
+                  <div className="absolute top-1/2 left-1/2 w-full h-0.5 bg-gray-300/70 rounded-full transform -translate-y-1/2 -translate-x-1/2 rotate-90" />
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Landing skids - more realistic */}
+            <div className="absolute -bottom-3 left-0 right-0 h-3 flex justify-between items-end">
+              {/* Left skid */}
+              <div className="relative">
+                {/* Vertical support */}
+                <div className="absolute bottom-0 left-2 w-1 h-3 bg-gray-600 rounded-t" />
+                {/* Horizontal skid */}
+                <div className="w-10 h-1 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 rounded-full shadow-md" />
+              </div>
+              {/* Right skid */}
+              <div className="relative">
+                {/* Vertical support */}
+                <div className="absolute bottom-0 right-2 w-1 h-3 bg-gray-600 rounded-t" />
+                {/* Horizontal skid */}
+                <div className="w-10 h-1 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 rounded-full shadow-md" />
               </div>
             </div>
 
-            {/* Tail */}
-            <div className="absolute top-4 -right-6 w-12 h-3 bg-gradient-to-b from-gray-700 to-gray-800 rounded-r-lg border-r-2 border-gray-600"></div>
-
-            {/* Landing skids */}
-            <div className="absolute -bottom-2 left-2 right-2 h-2 flex justify-between">
-              <div className="w-8 h-2 bg-gray-600 rounded-full"></div>
-              <div className="w-8 h-2 bg-gray-600 rounded-full"></div>
-            </div>
+            {/* Rescue equipment/antenna */}
+            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-0.5 h-2 bg-gray-600 rounded-full" />
           </div>
 
           {/* Rescue rope/cable */}
           <motion.div
-            className="absolute top-full left-1/2 transform -translate-x-1/2 w-1 bg-yellow-400 origin-top"
+            className="absolute top-full left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 origin-top shadow-lg"
             initial={{ height: 0 }}
             animate={{
               height: [0, 150, 150],
@@ -690,7 +1086,7 @@ const Hero = () => {
             }}
           >
             <motion.div
-              className="w-full h-full bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 shadow-lg"
+              className="w-full h-full"
               animate={{
                 x: [0, 5, -5, 0],
               }}
@@ -722,8 +1118,13 @@ const Hero = () => {
               },
             }}
           >
-            <div className="w-6 h-8 bg-gray-700 rounded-b-lg border-2 border-gray-600 shadow-xl">
-              <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 border-2 border-yellow-400 rounded-full bg-gray-800"></div>
+            <div className="relative w-7 h-9 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-lg border-2 border-gray-800 shadow-xl">
+              {/* Hook opening */}
+              <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-5 h-3 border-2 border-gray-800 rounded-t-full border-b-0" />
+              {/* Hook point */}
+              <div className="absolute top-5 left-1/2 transform -translate-x-1/2 w-1 h-3 bg-gray-800 rounded-full" />
+              {/* Attachment ring */}
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-3 h-3 border-2 border-yellow-400 rounded-full bg-gray-800" />
             </div>
           </motion.div>
         </div>
