@@ -1,52 +1,55 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { motion } from 'framer-motion';
-import { Save, AlertCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { motion } from "framer-motion";
+import { Save, AlertCircle } from "lucide-react";
+import { useState } from "react";
 
-// Zod schema matching backend data model
 const rescuerFormSchema = z.object({
   // Thông tin cơ bản
-  name: z.string().min(2, 'Tên đội/cá nhân phải có ít nhất 2 ký tự'),
+  name: z.string().min(2, "Tên đội/cá nhân phải có ít nhất 2 ký tự"),
   phone: z
     .string()
-    .regex(/^[0-9]{10,11}$/, 'Số điện thoại không hợp lệ (10-11 số)'),
-  
+    .regex(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ (10-11 số)"),
+
   // Vị trí tập kết
-  address: z.string().min(5, 'Địa chỉ phải có ít nhất 5 ký tự'),
+  address: z.string().min(5, "Địa chỉ phải có ít nhất 5 ký tự"),
   latitude: z
     .string()
     .optional()
     .refine(
-      (val) => !val || (!isNaN(Number(val)) && Number(val) >= -90 && Number(val) <= 90),
-      'Vĩ độ phải từ -90 đến 90'
+      (val) =>
+        !val ||
+        (!isNaN(Number(val)) && Number(val) >= -90 && Number(val) <= 90),
+      "Vĩ độ phải từ -90 đến 90"
     ),
   longitude: z
     .string()
     .optional()
     .refine(
-      (val) => !val || (!isNaN(Number(val)) && Number(val) >= -180 && Number(val) <= 180),
-      'Kinh độ phải từ -180 đến 180'
+      (val) =>
+        !val ||
+        (!isNaN(Number(val)) && Number(val) >= -180 && Number(val) <= 180),
+      "Kinh độ phải từ -180 đến 180"
     ),
-  
+
   // Phương tiện (Vehicle Type) - Required
-  vehicleType: z.enum(['motorboat', 'small_boat', 'high_clearance_vehicle'], {
-    message: 'Vui lòng chọn phương tiện',
+  vehicleType: z.enum(["motorboat", "small_boat", "high_clearance_vehicle"], {
+    message: "Vui lòng chọn phương tiện",
   }),
-  
+
   // Kỹ năng & Trang bị (Multi-select)
   hasMedicalStaff: z.boolean(),
   hasSwimmingRescue: z.boolean(),
   hasLifeJackets: z.boolean(),
-  
+
   // Tải trọng (Capacity) - Required number
   capacity: z
     .string()
-    .min(1, 'Tải trọng là bắt buộc')
+    .min(1, "Tải trọng là bắt buộc")
     .refine(
       (val) => !isNaN(Number(val)) && Number(val) > 0,
-      'Tải trọng phải là số dương'
+      "Tải trọng phải là số dương"
     ),
 });
 
@@ -70,7 +73,7 @@ const RescuerForm = () => {
     },
   });
 
-  const vehicleType = watch('vehicleType');
+  const vehicleType = watch("vehicleType");
 
   const onSubmit = async (data: RescuerFormData) => {
     setIsSubmitting(true);
@@ -96,11 +99,11 @@ const RescuerForm = () => {
       };
 
       // TODO: Replace with actual API endpoint
-      console.log('Submitting form data:', payload);
-      
+      console.log("Submitting form data:", payload);
+
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+
       setSubmitSuccess(true);
       // Reset form after 3 seconds
       setTimeout(() => {
@@ -108,7 +111,7 @@ const RescuerForm = () => {
         window.location.reload();
       }, 3000);
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -152,9 +155,9 @@ const RescuerForm = () => {
                 </label>
                 <input
                   type="text"
-                  {...register('name')}
+                  {...register("name")}
                   className={`w-full px-4 py-3 rounded-lg border ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
+                    errors.name ? "border-red-500" : "border-gray-300"
                   } focus:outline-none focus:ring-2 focus:ring-primary-red focus:border-transparent`}
                   placeholder="VD: Đội cứu hộ ABC"
                 />
@@ -172,9 +175,9 @@ const RescuerForm = () => {
                 </label>
                 <input
                   type="tel"
-                  {...register('phone')}
+                  {...register("phone")}
                   className={`w-full px-4 py-3 rounded-lg border ${
-                    errors.phone ? 'border-red-500' : 'border-gray-300'
+                    errors.phone ? "border-red-500" : "border-gray-300"
                   } focus:outline-none focus:ring-2 focus:ring-primary-red focus:border-transparent`}
                   placeholder="VD: 0901234567"
                 />
@@ -199,9 +202,9 @@ const RescuerForm = () => {
                 </label>
                 <input
                   type="text"
-                  {...register('address')}
+                  {...register("address")}
                   className={`w-full px-4 py-3 rounded-lg border ${
-                    errors.address ? 'border-red-500' : 'border-gray-300'
+                    errors.address ? "border-red-500" : "border-gray-300"
                   } focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                   placeholder="VD: 123 Đường ABC, Phường XYZ, Thành phố..."
                 />
@@ -220,9 +223,9 @@ const RescuerForm = () => {
                   </label>
                   <input
                     type="text"
-                    {...register('latitude')}
+                    {...register("latitude")}
                     className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.latitude ? 'border-red-500' : 'border-gray-300'
+                      errors.latitude ? "border-red-500" : "border-gray-300"
                     } focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                     placeholder="VD: 16.0544"
                   />
@@ -240,9 +243,9 @@ const RescuerForm = () => {
                   </label>
                   <input
                     type="text"
-                    {...register('longitude')}
+                    {...register("longitude")}
                     className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.longitude ? 'border-red-500' : 'border-gray-300'
+                      errors.longitude ? "border-red-500" : "border-gray-300"
                     } focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                     placeholder="VD: 108.2022"
                   />
@@ -264,40 +267,42 @@ const RescuerForm = () => {
               <div className="space-y-3">
                 {[
                   {
-                    value: 'motorboat',
-                    label: 'Thuyền máy',
-                    description: 'Nước sâu, dòng chảy mạnh',
+                    value: "motorboat",
+                    label: "Thuyền máy",
+                    description: "Nước sâu, dòng chảy mạnh",
                   },
                   {
-                    value: 'small_boat',
-                    label: 'Ghe nhỏ',
-                    description: 'Ngõ hẹp, nước nông',
+                    value: "small_boat",
+                    label: "Ghe nhỏ",
+                    description: "Ngõ hẹp, nước nông",
                   },
                   {
-                    value: 'high_clearance_vehicle',
-                    label: 'Xe gầm cao / Xe tải',
-                    description: 'Vận chuyển nhu yếu phẩm, nước < 0.5m',
+                    value: "high_clearance_vehicle",
+                    label: "Xe gầm cao / Xe tải",
+                    description: "Vận chuyển nhu yếu phẩm, nước < 0.5m",
                   },
                 ].map((option) => (
                   <label
                     key={option.value}
                     className={`flex items-start p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       vehicleType === option.value
-                        ? 'border-primary-orange bg-orange-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? "border-primary-orange bg-orange-50"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
                     <input
                       type="radio"
                       value={option.value}
-                      {...register('vehicleType')}
+                      {...register("vehicleType")}
                       className="mt-1 mr-3 w-5 h-5 text-primary-orange focus:ring-primary-orange"
                     />
                     <div>
                       <div className="font-semibold text-gray-900">
                         {option.label}
                       </div>
-                      <div className="text-sm text-gray-600">{option.description}</div>
+                      <div className="text-sm text-gray-600">
+                        {option.description}
+                      </div>
                     </div>
                   </label>
                 ))}
@@ -318,16 +323,16 @@ const RescuerForm = () => {
               <div className="space-y-3">
                 {[
                   {
-                    field: 'hasMedicalStaff' as const,
-                    label: 'Có nhân viên y tế / Sơ cứu',
+                    field: "hasMedicalStaff" as const,
+                    label: "Có nhân viên y tế / Sơ cứu",
                   },
                   {
-                    field: 'hasSwimmingRescue' as const,
-                    label: 'Bơi lội giỏi / Cứu hộ dưới nước',
+                    field: "hasSwimmingRescue" as const,
+                    label: "Bơi lội giỏi / Cứu hộ dưới nước",
                   },
                   {
-                    field: 'hasLifeJackets' as const,
-                    label: 'Có áo phao dự trữ',
+                    field: "hasLifeJackets" as const,
+                    label: "Có áo phao dự trữ",
                   },
                 ].map((option) => (
                   <label
@@ -339,7 +344,9 @@ const RescuerForm = () => {
                       {...register(option.field)}
                       className="w-5 h-5 text-primary-teal rounded focus:ring-primary-teal mr-3"
                     />
-                    <span className="text-gray-900 font-medium">{option.label}</span>
+                    <span className="text-gray-900 font-medium">
+                      {option.label}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -357,9 +364,9 @@ const RescuerForm = () => {
                 <input
                   type="number"
                   min="1"
-                  {...register('capacity')}
+                  {...register("capacity")}
                   className={`w-full px-4 py-3 rounded-lg border ${
-                    errors.capacity ? 'border-red-500' : 'border-gray-300'
+                    errors.capacity ? "border-red-500" : "border-gray-300"
                   } focus:outline-none focus:ring-2 focus:ring-primary-red focus:border-transparent`}
                   placeholder="VD: 10 (người) hoặc 500 (kg)"
                 />
@@ -381,7 +388,8 @@ const RescuerForm = () => {
                   className="bg-green-50 border-2 border-green-500 rounded-lg p-4 text-center"
                 >
                   <p className="text-green-700 font-semibold">
-                    ✓ Đăng ký thành công! Cảm ơn bạn đã tham gia mạng lưới cứu hộ.
+                    ✓ Đăng ký thành công! Cảm ơn bạn đã tham gia mạng lưới cứu
+                    hộ.
                   </p>
                 </motion.div>
               ) : (

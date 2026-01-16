@@ -9,7 +9,6 @@ import {
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Helper function to generate random values
 const generateRainDrops = () =>
   Array.from({ length: 50 }).map(() => ({
     opacity: Math.random() * 0.5 + 0.3,

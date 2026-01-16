@@ -1,11 +1,7 @@
+import MainLayout from "@/layouts/MainLayout";
 import { useState } from "react";
-import RegisterHero from "./RegisterHero";
-import WhyUseUs from "./WhyUseUs";
-import WaysToBePartner from "./WaysToBePartner";
-import FAQs from "./FAQs";
-import CTABanner from "./CTABanner";
-import RescuerForm from "./RescuerForm";
-import MainLayout from "../layouts/MainLayout";
+import { RegisterHero, RescuerForm } from ".";
+import { CTABanner, FAQs, WaysToBePartner, WhyUseUs } from "..";
 
 const RegisterPage = () => {
   const [showForm, setShowForm] = useState(false);

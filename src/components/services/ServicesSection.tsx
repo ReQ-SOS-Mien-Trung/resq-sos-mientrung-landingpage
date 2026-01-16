@@ -4,22 +4,46 @@ const categories = [
   {
     title: "Deliveries",
     items: [
-      { icon: ShoppingBag, title: "Food", desc: "Have all your cravings delivered to your doorstep." },
-      { icon: Package, title: "Mart", desc: "Groceries and essentials in one convenient place." },
-      { icon: Send, title: "Express", desc: "Send packages, documents, and beyond." },
+      {
+        icon: ShoppingBag,
+        title: "Food",
+        desc: "Have all your cravings delivered to your doorstep.",
+      },
+      {
+        icon: Package,
+        title: "Mart",
+        desc: "Groceries and essentials in one convenient place.",
+      },
+      {
+        icon: Send,
+        title: "Express",
+        desc: "Send packages, documents, and beyond.",
+      },
     ],
   },
   {
     title: "Mobility",
     items: [
-      { icon: Car, title: "Rides", desc: "Choose from a variety of vehicles to get from A to B safely." },
+      {
+        icon: Car,
+        title: "Rides",
+        desc: "Choose from a variety of vehicles to get from A to B safely.",
+      },
     ],
   },
   {
     title: "Financial Services",
     items: [
-      { icon: Wallet, title: "Pay", desc: "Cashless payments that are seamless and secure." },
-      { icon: Shield, title: "Insurance", desc: "Everyday protection with accessible coverage." },
+      {
+        icon: Wallet,
+        title: "Pay",
+        desc: "Cashless payments that are seamless and secure.",
+      },
+      {
+        icon: Shield,
+        title: "Insurance",
+        desc: "Everyday protection with accessible coverage.",
+      },
     ],
   },
 ];
@@ -38,7 +62,9 @@ const ServicesSection = () => {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold text-gray-700">
-          <button className="px-4 py-2 rounded-full bg-teal-900 text-white shadow-sm">Consumer</button>
+          <button className="px-4 py-2 rounded-full bg-teal-900 text-white shadow-sm">
+            Consumer
+          </button>
           <button className="px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
             Driver
           </button>
@@ -53,17 +79,26 @@ const ServicesSection = () => {
         <div className="mt-12 space-y-12">
           {categories.map((cat) => (
             <div key={cat.title} className="space-y-6">
-              <h3 className="text-3xl md:text-4xl font-semibold text-gray-900">{cat.title}</h3>
+              <h3 className="text-3xl md:text-4xl font-semibold text-gray-900">
+                {cat.title}
+              </h3>
               <div className="divide-y divide-gray-200 border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
-                {cat.items.map((item, idx) => (
-                  <div key={item.title} className="flex flex-col md:flex-row md:items-center gap-4 px-5 md:px-6 py-5 bg-white">
+                {cat.items.map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex flex-col md:flex-row md:items-center gap-4 px-5 md:px-6 py-5 bg-white"
+                  >
                     <div className="flex items-center gap-4 md:w-1/3">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
                         <item.icon className="w-6 h-6 text-emerald-700" />
                       </div>
-                      <div className="text-lg font-semibold text-gray-900">{item.title}</div>
+                      <div className="text-lg font-semibold text-gray-900">
+                        {item.title}
+                      </div>
                     </div>
-                    <p className="text-gray-700 md:flex-1 leading-relaxed">{item.desc}</p>
+                    <p className="text-gray-700 md:flex-1 leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 ))}
               </div>
