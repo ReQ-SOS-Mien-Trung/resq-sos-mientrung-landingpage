@@ -1,18 +1,20 @@
-import type { ContributionCard } from "@type";
-
-type Testimonial = {
-  id: number;
-  name: string;
-  role: string;
-  image: string;
-  quote: string;
-};
-
-type FAQ = {
-  id: number;
-  question: string;
-  answer: string;
-};
+import type {
+  BenefitSection,
+  ContributionCard,
+  DriverType,
+  FAQ,
+  MenuItem,
+  NewsArticle,
+  Testimonial,
+} from "@type";
+import {
+  AlertTriangle,
+  Filter,
+  MapPin,
+  MessageSquare,
+  Send,
+  WifiOff,
+} from "lucide-react";
 
 export const testimonials: Testimonial[] = [
   {
@@ -102,3 +104,244 @@ export const contributions: ContributionCard[] = [
     link: "#",
   },
 ];
+
+export const menuItems: MenuItem[] = [
+  {
+    id: "about",
+    label: "Về chúng tôi",
+    subItems: [
+      {
+        title: "Giới thiệu",
+        description: "Chúng tôi là ai và chúng tôi đại diện cho điều gì",
+        link: "#about",
+      },
+      {
+        title: "Tầm nhìn & Sứ mệnh",
+        description: "Mục tiêu và giá trị cốt lõi của chúng tôi",
+        link: "#vision",
+      },
+      {
+        title: "Đội ngũ",
+        description: "Gặp gỡ những người đang xây dựng tương lai cứu hộ",
+        link: "#team",
+      },
+    ],
+  },
+  {
+    id: "services",
+    label: "Dịch vụ",
+    subItems: [
+      {
+        title: "Cứu hộ khẩn cấp",
+        description: "Kết nối nạn nhân với đội cứu hộ trong thời gian thực",
+        link: "#emergency",
+      },
+      {
+        title: "Điều phối đội cứu hộ",
+        description: "Hệ thống quản lý và điều phối đội cứu hộ thông minh",
+        link: "#coordination",
+      },
+      {
+        title: "Đào tạo",
+        description: "Chương trình đào tạo và nâng cao kỹ năng cứu hộ",
+        link: "#training",
+      },
+    ],
+  },
+  {
+    id: "for-rescuers",
+    label: "Dành cho Đội cứu hộ",
+    subItems: [
+      {
+        title: "Đăng ký đội cứu hộ",
+        description: "Tham gia mạng lưới cứu hộ của chúng tôi",
+        link: "#register",
+      },
+      {
+        title: "Tài nguyên",
+        description: "Công cụ và tài liệu hỗ trợ đội cứu hộ",
+        link: "#resources",
+      },
+      {
+        title: "Cộng đồng",
+        description: "Kết nối với các đội cứu hộ khác",
+        link: "#community",
+      },
+    ],
+  },
+  {
+    id: "partners",
+    label: "Đối tác",
+    subItems: [
+      {
+        title: "Trở thành đối tác",
+        description: "Hợp tác với chúng tôi để mở rộng mạng lưới cứu hộ",
+        link: "#partner",
+      },
+      {
+        title: "Đối tác hiện tại",
+        description: "Các tổ chức đang hợp tác với chúng tôi",
+        link: "#partners",
+      },
+    ],
+  },
+  {
+    id: "news",
+    label: "Tin tức",
+    subItems: [
+      {
+        title: "Tin tức mới nhất",
+        description: "Cập nhật về hoạt động và sự kiện của chúng tôi",
+        link: "#news",
+      },
+      {
+        title: "Blog",
+        description: "Câu chuyện và chia sẻ từ cộng đồng cứu hộ",
+        link: "#blog",
+      },
+    ],
+  },
+];
+
+export const features = [
+  {
+    icon: AlertTriangle,
+    title: "Phân loại Priority",
+    description:
+      "Tự động phát hiện P1 (Nguy hiểm tính mạng) vs P3 (Cần nhu yếu phẩm)",
+    color: "text-primary-red",
+    bgColor: "bg-red-50",
+  },
+  {
+    icon: MapPin,
+    title: "Bản đồ Thời gian thực",
+    description: "Theo dõi trực tiếp vị trí các đội cứu hộ trên bản đồ",
+    color: "text-primary-blue",
+    bgColor: "bg-blue-50",
+  },
+  {
+    icon: WifiOff,
+    title: "Hoạt động Offline",
+    description:
+      "Các tính năng cơ bản hoạt động với kết nối internet không ổn định",
+    color: "text-primary-teal",
+    bgColor: "bg-teal-50",
+  },
+];
+
+export const steps = [
+  {
+    icon: MessageSquare,
+    title: "Tiếp nhận (Parser)",
+    description:
+      "Gemini chuyển đổi tin nhắn SOS thô thành JSON với mức độ ưu tiên (P1/P2/P3) và nhu cầu cụ thể.",
+    color: "from-primary-red to-primary-orange",
+  },
+  {
+    icon: Filter,
+    title: "Sàng lọc (Filter)",
+    description:
+      "Hệ thống quét bán kính 5-10km để tìm đội cứu hộ phù hợp sử dụng PostGIS.",
+    color: "from-primary-blue to-cyan-500",
+  },
+  {
+    icon: Send,
+    title: "Điều phối (Dispatch)",
+    description:
+      'AI khớp nhu cầu (ví dụ: "Cần thuyền") với khả năng của đội cứu hộ (ví dụ: "Có thuyền máy").',
+    color: "from-primary-teal to-emerald-500",
+  },
+];
+
+export const newsArticles: NewsArticle[] = [
+  {
+    id: 1,
+    image: "/images/rescuer_flood.jpg",
+    date: "15/01/25",
+    title:
+      "ResQ Mientrung SOS hợp tác với Bộ Y tế để nâng cao khả năng ứng phó khẩn cấp y tế tại miền Trung",
+    link: "#",
+  },
+  {
+    id: 2,
+    image: "/images/noodle_flood.jpg",
+    date: "10/12/24",
+    title:
+      "ResQ ra mắt công nghệ AI để tối ưu hóa phản ứng cứu hộ và phân bổ tài nguyên tại Việt Nam",
+    link: "#",
+  },
+  {
+    id: 3,
+    image: "/images/ghe_flood.jpg",
+    date: "25/11/24",
+    title:
+      "ResQ và các tổ chức địa phương ký kết hợp tác phát triển hệ thống cảnh báo sớm thiên tai",
+    link: "#",
+  },
+  {
+    id: 4,
+    image: "/images/rescuer_flood.jpg",
+    date: "18/11/24",
+    title:
+      "ResQ hợp tác với Hiệp hội Cứu hộ để tăng mức hỗ trợ tối thiểu cho các nhân viên cứu hộ",
+    link: "#",
+  },
+];
+
+export const driverTypes: DriverType[] = [
+  { id: "car", label: "Xe ô tô" },
+  { id: "taxi", label: "Taxi" },
+  { id: "boat", label: "Thuyền" },
+  { id: "rescue_team", label: "Đội cứu hộ" },
+];
+
+export const benefitSections: Record<string, BenefitSection> = {
+  car: {
+    title: "Giữ cho phương tiện của bạn hoạt động",
+    benefits: [
+      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
+      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
+      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
+    ],
+    links: [
+      { text: "Hướng dẫn ResQ Xe ô tô (Tiếng Việt)", href: "#" },
+      { text: "Hướng dẫn ResQ Xe ô tô (English)", href: "#" },
+    ],
+  },
+  taxi: {
+    title: "Giữ cho đồng hồ của bạn hoạt động",
+    benefits: [
+      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
+      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
+      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
+    ],
+    links: [
+      { text: "Hướng dẫn ResQ Taxi (Tiếng Việt)", href: "#" },
+      { text: "Hướng dẫn ResQ Taxi (English)", href: "#" },
+    ],
+  },
+  boat: {
+    title: "Giữ cho thuyền của bạn sẵn sàng",
+    benefits: [
+      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
+      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
+      "Nhận phân bổ ưu tiên và hỗ trợ nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
+    ],
+    links: [
+      { text: "Hướng dẫn ResQ Thuyền (Tiếng Việt)", href: "#" },
+      { text: "Hướng dẫn ResQ Thuyền (English)", href: "#" },
+    ],
+  },
+  rescue_team: {
+    title: "Giữ cho đội của bạn sẵn sàng",
+    benefits: [
+      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
+      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
+      "Nhận phân bổ ưu tiên và hỗ trợ trang thiết bị với Chương trình Khách hàng Thân thiết của chúng tôi",
+    ],
+    links: [
+      { text: "Hướng dẫn ResQ Đội cứu hộ (Tiếng Việt)", href: "#" },
+      { text: "Hướng dẫn ResQ Đội cứu hộ (English)", href: "#" },
+    ],
+  },
+};

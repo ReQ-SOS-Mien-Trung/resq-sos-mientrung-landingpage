@@ -1,10 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Hero from "./components/Hero";
-import Services from "./components/Services";
-import Contributions from "./components/Contributions";
-import Newsroom from "./components/Newsroom";
-import RegisterPage from "./components/RegisterPage";
-import MainLayout from "./layouts/MainLayout";
+
+import {
+  Contributions,
+  Hero,
+  Newsroom,
+  RegisterPage,
+  Services,
+} from "@/components";
+import MainLayout from "@/layouts/MainLayout";
 
 function HomePage() {
   return (
@@ -13,9 +16,6 @@ function HomePage() {
       <Services />
       <Contributions />
       <Newsroom />
-      {/* <HowItWorks />
-      <Features />
-      <RescuerForm /> */}
     </MainLayout>
   );
 }

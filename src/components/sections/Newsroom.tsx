@@ -1,44 +1,6 @@
+import { newsArticles } from "@/constants";
 import { ArrowRight, Calendar } from "lucide-react";
 import { useState } from "react";
-
-type NewsArticle = {
-  id: number;
-  image: string;
-  date: string;
-  title: string;
-  link: string;
-};
-
-const newsArticles: NewsArticle[] = [
-  {
-    id: 1,
-    image: "/images/rescuer_flood.jpg",
-    date: "15/01/25",
-    title: "ResQ Mientrung SOS hợp tác với Bộ Y tế để nâng cao khả năng ứng phó khẩn cấp y tế tại miền Trung",
-    link: "#",
-  },
-  {
-    id: 2,
-    image: "/images/noodle_flood.jpg",
-    date: "10/12/24",
-    title: "ResQ ra mắt công nghệ AI để tối ưu hóa phản ứng cứu hộ và phân bổ tài nguyên tại Việt Nam",
-    link: "#",
-  },
-  {
-    id: 3,
-    image: "/images/ghe_flood.jpg",
-    date: "25/11/24",
-    title: "ResQ và các tổ chức địa phương ký kết hợp tác phát triển hệ thống cảnh báo sớm thiên tai",
-    link: "#",
-  },
-  {
-    id: 4,
-    image: "/images/rescuer_flood.jpg",
-    date: "18/11/24",
-    title: "ResQ hợp tác với Hiệp hội Cứu hộ để tăng mức hỗ trợ tối thiểu cho các nhân viên cứu hộ",
-    link: "#",
-  },
-];
 
 const Newsroom = () => {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});

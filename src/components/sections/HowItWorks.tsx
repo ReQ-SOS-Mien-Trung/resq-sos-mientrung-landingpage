@@ -1,31 +1,7 @@
-import { motion } from 'framer-motion';
-import { MessageSquare, Filter, Send } from 'lucide-react';
+import { steps } from "@/constants";
+import { motion } from "framer-motion";
 
 const HowItWorks = () => {
-  const steps = [
-    {
-      icon: MessageSquare,
-      title: 'Tiếp nhận (Parser)',
-      description:
-        'Gemini chuyển đổi tin nhắn SOS thô thành JSON với mức độ ưu tiên (P1/P2/P3) và nhu cầu cụ thể.',
-      color: 'from-primary-red to-primary-orange',
-    },
-    {
-      icon: Filter,
-      title: 'Sàng lọc (Filter)',
-      description:
-        'Hệ thống quét bán kính 5-10km để tìm đội cứu hộ phù hợp sử dụng PostGIS.',
-      color: 'from-primary-blue to-cyan-500',
-    },
-    {
-      icon: Send,
-      title: 'Điều phối (Dispatch)',
-      description:
-        'AI khớp nhu cầu (ví dụ: "Cần thuyền") với khả năng của đội cứu hộ (ví dụ: "Có thuyền máy").',
-      color: 'from-primary-teal to-emerald-500',
-    },
-  ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -64,7 +40,8 @@ const HowItWorks = () => {
             Cách Hệ Thống Hoạt Động
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Quy trình 3 bước sử dụng AI Hybrid để kết nối nạn nhân với đội cứu hộ
+            Quy trình 3 bước sử dụng AI Hybrid để kết nối nạn nhân với đội cứu
+            hộ
           </p>
         </motion.div>
 
@@ -100,7 +77,9 @@ const HowItWorks = () => {
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                  <p className="text-gray-600 leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
 
                 {/* Arrow (except last) */}
