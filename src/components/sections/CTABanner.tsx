@@ -7,12 +7,12 @@ type CTABannerProps = {
 const CTABanner = ({ onSignUpClick }: CTABannerProps) => {
   return (
     <section className="relative overflow-hidden">
-      {/* Top Section - Light Green */}
+      {/* Top Section - Light Green (2/3) */}
       <div className="bg-emerald-400 py-12 md:py-16 lg:py-20 relative">
         <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
             {/* Left - Small Text */}
-            <p className="text-gray-900 font-medium text-sm md:text-base">
+            <p className="text-gray-700 font-medium text-sm md:text-base">
               Trở thành đối tác của chúng tôi
             </p>
 
@@ -27,22 +27,17 @@ const CTABanner = ({ onSignUpClick }: CTABannerProps) => {
                 như một đối tác cứu hộ.
               </h2>
             </div>
-
-            {/* Arrow Icon */}
-            <div className="hidden md:block">
-              <ArrowRight className="w-6 h-6 text-white/80" />
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Section - Dark Green with Sign Up Button */}
+      {/* Bottom Section - Dark Green (1/3) with Sign Up Button */}
       <div className="bg-emerald-600 py-6 md:py-8">
         <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
-          <div className="flex justify-end">
+          <div className="flex justify-start">
             <button
               onClick={onSignUpClick}
-              className="text-white font-semibold text-lg md:text-xl hover:text-emerald-100 transition-colors flex items-center gap-2"
+              className="bg-white text-emerald-600 font-semibold text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
             >
               Đăng ký
               <ArrowRight className="w-5 h-5" />
