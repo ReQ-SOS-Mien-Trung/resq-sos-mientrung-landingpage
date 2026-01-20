@@ -5,3 +5,4 @@ export { default as CTABanner } from "./CTABanner";
 export { default as Features } from "./Features";
 export { default as WhyUseUs } from "./WhyUseUs";
 export { default as FAQs } from "./FAQs";
+export { default as DownloadAppPage } from "./DownloadAppPage";

@@ -345,3 +345,30 @@ export const benefitSections: Record<string, BenefitSection> = {
     ],
   },
 };
+
+export const appStoreItems = [
+  {
+    key: "google-play",
+    name: "Google Play",
+    status: "Sắp ra mắt",
+    iconSrc: "/icons/ch-play.png",
+    iconAlt: "Google Play",
+    iconClassName: "w-6 h-6 object-contain",
+  },
+  {
+    key: "app-store",
+    name: "App Store",
+    status: "Sắp ra mắt",
+    iconSrc: "/icons/apple_storee.png",
+    iconAlt: "App Store",
+    iconClassName: "w-10 h-10 object-contain",
+  },
+  {
+    key: "appgallery",
+    name: "AppGallery",
+    status: "Sắp ra mắt",
+    iconSrc: "/icons/apk.png",
+    iconAlt: "AppGallery",
+    iconClassName: "w-10 h-10 object-contain",
+  },
+] as const;

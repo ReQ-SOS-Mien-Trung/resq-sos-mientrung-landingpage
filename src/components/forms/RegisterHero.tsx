@@ -1,7 +1,10 @@
 import { Download } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const RegisterHero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="min-h-screen flex pb-16 md:pb-20">
       {/* Left Section - Text Content */}
@@ -21,7 +24,7 @@ const RegisterHero = () => {
           >
             Trở thành đối tác cứu hộ của ResQ
           </h1>
-          <button className="inline-flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-4 rounded-lg font-semibold text-base md:text-lg transition-colors shadow-lg hover:shadow-xl">
+          <button className="inline-flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-4 rounded-lg font-semibold text-base md:text-lg transition-colors shadow-lg hover:shadow-xl" onClick={() => navigate("/download-app")}>
             <Download className="w-5 h-5" />
             <span>Tải ứng dụng ResQ</span>
           </button>

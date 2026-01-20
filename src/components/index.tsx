@@ -11,3 +11,4 @@ export {
 } from "./sections";
 export { RegisterHero, RegisterPage, RescuerForm } from "./forms";
 export { Services, ServicesSection, WaysToBePartner } from "./services";
+export { default as DownloadAppPage } from "./sections/DownloadAppPage";

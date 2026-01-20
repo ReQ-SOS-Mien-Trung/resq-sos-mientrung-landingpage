@@ -55,3 +55,10 @@ export type BenefitSection = {
     href: string;
   }[];
 };
+
+export type StoreItem = {
+  key: string;
+  name: string;
+  status: string;
+  icon: React.ReactNode;
+};

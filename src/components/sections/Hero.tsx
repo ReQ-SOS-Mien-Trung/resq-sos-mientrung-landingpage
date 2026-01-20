@@ -8,6 +8,81 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+type StickPersonProps = {
+  src: string;
+  alt: string;
+  /** Tailwind size classes, e.g. "w-16 h-16 md:w-20 md:h-20" */
+  sizeClassName: string;
+  /** Optional extra classes for the face container (borders/rings/bg) */
+  faceClassName?: string;
+  /** Show/hide stick body under the face */
+  showBody?: boolean;
+  /** Body color classes for stick parts */
+  bodyColorClassName?: string;
+  /** Scale the body relative to the face */
+  bodyScaleClassName?: string;
+};
+
+const StickPerson = ({
+  src,
+  alt,
+  sizeClassName,
+  faceClassName = "",
+  showBody = true,
+  bodyColorClassName = "bg-white/85",
+  bodyScaleClassName = "scale-100",
+}: StickPersonProps) => {
+  return (
+    <div className={`relative flex flex-col items-center ${bodyScaleClassName}`}>
+      {/* Face (cropped from the real photo) */}
+      <div
+        className={`rounded-full overflow-hidden ${sizeClassName} ${faceClassName}`}
+      >
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = "none";
+          }}
+        />
+      </div>
+
+      {/* Stick body */}
+      {showBody && (
+        <div className="relative -mt-1 flex flex-col items-center pointer-events-none">
+          {/* Neck */}
+          <div className={`w-1 h-2 rounded-full ${bodyColorClassName}`} />
+
+          {/* Torso */}
+          <div className={`w-1 h-8 rounded-full ${bodyColorClassName}`} />
+
+          {/* Arms (1 tay mỗi bên) */}
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-4">
+            <div
+              className={`absolute left-0 top-1 w-6 h-1 rounded-full ${bodyColorClassName} -rotate-25`}
+            />
+            <div
+              className={`absolute right-0 top-1 w-6 h-1 rounded-full ${bodyColorClassName} rotate-25`}
+            />
+          </div>
+
+          {/* Legs (1 chân mỗi bên) */}
+          <div className="relative mt-1 w-10 h-6">
+            <div
+              className={`absolute left-1 top-0 w-6 h-1 rounded-full ${bodyColorClassName} -rotate-35`}
+            />
+            <div
+              className={`absolute right-1 top-0 w-6 h-1 rounded-full ${bodyColorClassName} rotate-35`}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const generateRainDrops = () =>
   Array.from({ length: 50 }).map(() => ({
@@ -104,6 +179,7 @@ const generateLightningFlashes = () =>
   });
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
   const [rainDrops] = useState(() => generateRainDrops());
   const [debrisItems, setDebrisItems] = useState<
@@ -598,38 +674,22 @@ const Hero = () => {
       <motion.div
         className="absolute bottom-[22%] left-1/2 z-[28]"
         style={{ x: "-50%" }}
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{
-          x: [
-            "-50%",
-            "calc(-50% + 20px)",
-            "calc(-50% + 30px)",
-            "calc(-50% + 20px)",
-            "-50%",
-            "calc(-50% - 20px)",
-            "calc(-50% - 30px)",
-            "calc(-50% - 20px)",
-            "-50%",
-          ],
-          y: [0, -5, -10, -5, 0, -5, -10, -5, 0],
-          rotate: [0, 1, 0, -1, 0, 1, 0, -1, 0],
+          y: [0, 15, 0],
+          rotate: [0, 2, -2, 0],
           opacity: 1,
         }}
         transition={{
-          x: {
-            duration: 6,
-            repeat: Infinity,
-            ease: [0.4, 0, 0.6, 1],
-          },
           y: {
-            duration: 3,
+            duration: 2.8,
             repeat: Infinity,
-            ease: [0.4, 0, 0.6, 1],
+            ease: "easeInOut",
           },
           rotate: {
-            duration: 4,
+            duration: 3.2,
             repeat: Infinity,
-            ease: [0.4, 0, 0.6, 1],
+            ease: "easeInOut",
           },
           opacity: {
             duration: 1,
@@ -712,20 +772,17 @@ const Hero = () => {
               }}
             >
               <div className="relative">
-                {/* Avatar */}
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
-                  <img
-                    src="/images/cuong.jpg"
-                    alt="Rescuer 1"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                </div>
-                {/* Paddle - more realistic */}
+                {/* Rescuer (face + stick body) */}
+                <StickPerson
+                  src="/images/cuong.jpg"
+                  alt="Rescuer 1"
+                  sizeClassName="w-16 h-16 md:w-20 md:h-20"
+                  faceClassName="border-[3px] border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 ring-2 ring-emerald-400/50"
+                  bodyColorClassName="bg-white/85"
+                />
+                {/* Paddle - đặt sát tay phải người chèo */}
                 <motion.div
-                  className="absolute -right-3 top-1/2 transform -translate-y-1/2 origin-bottom"
+                  className="absolute -right-1 top-[60%] transform -translate-y-1/2 origin-top"
                   animate={{
                     rotate: [-20, 20, -20],
                   }}
@@ -736,7 +793,7 @@ const Hero = () => {
                   }}
                 >
                   {/* Paddle handle */}
-                  <div className="w-0.5 h-10 bg-amber-900 rounded-full shadow-md" />
+                  <div className="w-0.5 h-12 bg-amber-900 rounded-full shadow-md" />
                   {/* Paddle blade */}
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-4 bg-gradient-to-b from-amber-700 to-amber-800 rounded-sm shadow-lg" />
                 </motion.div>
@@ -758,20 +815,17 @@ const Hero = () => {
               }}
             >
               <div className="relative">
-                {/* Avatar */}
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50">
-                  <img
-                    src="/images/thao.jpg"
-                    alt="Rescuer 2"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                </div>
-                {/* Paddle - more realistic */}
+                {/* Rescuer (face + stick body) */}
+                <StickPerson
+                  src="/images/thao.jpg"
+                  alt="Rescuer 2"
+                  sizeClassName="w-16 h-16 md:w-20 md:h-20"
+                  faceClassName="border-[3px] border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 ring-2 ring-emerald-400/50"
+                  bodyColorClassName="bg-white/85"
+                />
+                {/* Paddle - đặt sát tay trái người chèo */}
                 <motion.div
-                  className="absolute -left-3 top-1/2 transform -translate-y-1/2 origin-bottom"
+                  className="absolute -left-1 top-[60%] transform -translate-y-1/2 origin-top"
                   animate={{
                     rotate: [20, -20, 20],
                   }}
@@ -835,14 +889,14 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.7 }}
         >
           {/* Avatar placeholder */}
-          <div className="relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white shadow-2xl bg-gradient-to-br from-slate-400 to-slate-600 overflow-hidden ring-4 ring-yellow-300/30">
-            <img
+          <div className="relative z-10">
+            <StickPerson
               src="/images/chu.jpg"
               alt="Victim 1"
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
+              sizeClassName="w-16 h-16 md:w-20 md:h-20"
+              faceClassName="border-4 border-white shadow-2xl bg-gradient-to-br from-slate-400 to-slate-600 ring-4 ring-yellow-300/30"
+              bodyColorClassName="bg-white/80"
+              bodyScaleClassName="scale-90 md:scale-95"
             />
           </div>
           {/* Life jacket indicator */}
@@ -906,14 +960,14 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.9 }}
         >
           {/* Avatar placeholder */}
-          <div className="relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white shadow-2xl bg-gradient-to-br from-slate-400 to-slate-600 overflow-hidden ring-4 ring-yellow-300/30">
-            <img
+          <div className="relative z-10">
+            <StickPerson
               src="/images/an.png"
               alt="Victim 2"
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
+              sizeClassName="w-16 h-16 md:w-20 md:h-20"
+              faceClassName="border-4 border-white shadow-2xl bg-gradient-to-br from-slate-400 to-slate-600 ring-4 ring-yellow-300/30"
+              bodyColorClassName="bg-white/80"
+              bodyScaleClassName="scale-90 md:scale-95"
             />
           </div>
           {/* Life jacket indicator */}
@@ -960,9 +1014,9 @@ const Hero = () => {
         }}
       >
         <div className="relative">
-          {/* Main rotor - with motion blur effect */}
+          {/* Main rotor - with motion blur effect (để z thấp hơn người trong buồng lái) */}
           <motion.div
-            className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-10"
+            className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-0"
             animate={{
               rotate: 360,
             }}
@@ -974,7 +1028,7 @@ const Hero = () => {
           >
             {/* Rotor hub */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-gray-800 rounded-full border-2 border-gray-600 z-20" />
-            
+
             {/* Rotor blades with blur effect */}
             <div className="relative w-32 h-1 md:w-40 md:h-1.5">
               {/* Blade 1 */}
@@ -991,29 +1045,29 @@ const Hero = () => {
           {/* Helicopter body - more realistic shape */}
           <div className="relative w-36 h-20 md:w-44 md:h-24" style={{ height: '5.5rem' }}>
             {/* Main fuselage */}
-            <div className="relative w-full h-full bg-gradient-to-b from-slate-700 via-gray-800 to-slate-900 rounded-xl shadow-2xl border-2 border-gray-700/80 overflow-hidden">
+            <div className="relative w-full h-full bg-gradient-to-b from-slate-700 via-gray-800 to-slate-900 rounded-xl shadow-2xl border-2 border-gray-700/80">
               {/* Top curve for realistic helicopter shape */}
               <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-b from-slate-600 to-transparent rounded-t-xl" />
-              
+
               {/* Side panels with depth */}
               <div className="absolute top-2 left-0 w-1 h-full bg-gray-900/50" />
               <div className="absolute top-2 right-0 w-1 h-full bg-gray-900/50" />
-              
+
               {/* Cockpit window - more realistic */}
               <div className="absolute top-1 left-1 right-1 h-9 bg-gradient-to-b from-sky-900/60 via-blue-800/50 to-blue-900/40 rounded-t-xl border border-blue-400/40 shadow-inner">
                 {/* Window frame */}
                 <div className="absolute inset-0 border-2 border-blue-300/30 rounded-t-xl" />
                 {/* Window reflection */}
                 <div className="absolute top-1 left-2 w-8 h-2 bg-white/20 rounded-full blur-sm" />
-                {/* Rescuer avatar in cockpit */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 overflow-hidden ring-2 ring-emerald-400/50 z-10">
-                  <img
+                {/* Rescuer in cockpit (face + tiny stick body) */}
+                <div className="absolute top-[120%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+                  <StickPerson
                     src="/images/khoa.jpg"
                     alt="Helicopter Rescuer"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
+                    sizeClassName="w-10 h-10 md:w-12 md:h-12"
+                    faceClassName="border-2 border-white shadow-xl bg-gradient-to-br from-blue-400 to-blue-600 ring-2 ring-emerald-400/50"
+                    bodyColorClassName="bg-white/80"
+                    bodyScaleClassName="scale-90 md:scale-95"
                   />
                 </div>
               </div>
@@ -1404,7 +1458,7 @@ const Hero = () => {
           className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-5 md:py-6 font-bold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 group px-4 md:px-8 lg:px-12 xl:px-16 shadow-2xl"
         >
           <LifeBuoy className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-          <span>Tìm hiểu thêm về chúng tôi</span>
+          <span>Khám phá ứng dụng ResQ SOS miền Trung</span>
           <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform ml-auto" />
         </motion.button>
 
@@ -1413,7 +1467,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.6 }}
-          onClick={() => {}}
+          onClick={() => navigate("/download-app")}
           className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-5 md:py-6 font-bold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 px-4 md:px-8 lg:px-12 xl:px-16 shadow-2xl"
         >
           <Download className="w-6 h-6 group-hover:scale-110 transition-transform" />

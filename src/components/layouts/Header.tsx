@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, Phone, ChevronDown, Search } from "lucide-react";
+import { Menu, X, Phone, Search } from "lucide-react";
 import { menuItems } from "@/constants";
 
 const Header = () => {
@@ -10,7 +10,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isRegisterDropdownOpen, setIsRegisterDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,9 +68,10 @@ const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white shadow-lg" : "bg-white/95 backdrop-blur-sm"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled
+          ? "bg-white/90 backdrop-blur-md shadow-lg border-slate-200/70"
+          : "bg-white/70 backdrop-blur-md border-slate-200/60"
+          }`}
       >
         <nav className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -112,44 +112,17 @@ const Header = () => {
               >
                 Trang chủ
               </button>
-
-              <div className="relative">
-                <button
-                  onClick={() =>
-                    setIsRegisterDropdownOpen(!isRegisterDropdownOpen)
-                  }
-                  className="text-gray-700 hover:text-primary-red transition-colors font-medium flex items-center gap-1"
-                >
-                  Đăng ký Đội cứu hộ
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      isRegisterDropdownOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {isRegisterDropdownOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setIsRegisterDropdownOpen(false)}
-                    />
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                      <Link
-                        to="/register"
-                        onClick={() => setIsRegisterDropdownOpen(false)}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-red transition-colors"
-                      >
-                        Đăng ký làm cứu hộ
-                      </Link>
-                    </div>
-                  </>
-                )}
-              </div>
               <button
                 onClick={() => scrollToSection("features")}
                 className="text-gray-700 hover:text-primary-red transition-colors font-medium"
               >
                 Trung tâm trợ giúp
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="text-gray-700 hover:text-primary-red transition-colors font-medium"
+              >
+                Dành cho cứu hộ
               </button>
               <button className="text-gray-700 hover:text-primary-red transition-colors">
                 <Search className="w-5 h-5" />
@@ -194,11 +167,10 @@ const Header = () => {
                       <li key={item.id}>
                         <button
                           onMouseEnter={() => handleMenuMouseEnter(item.id)}
-                          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                            activeMenu === item.id
-                              ? "bg-primary-red/10 text-primary-red font-semibold"
-                              : "text-gray-700 hover:bg-gray-50"
-                          }`}
+                          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeMenu === item.id
+                            ? "bg-primary-red/10 text-primary-red font-semibold"
+                            : "text-gray-700 hover:bg-gray-50"
+                            }`}
                         >
                           {item.label}
                         </button>
@@ -272,13 +244,16 @@ const Header = () => {
                 )}
               </div>
             ))}
-            <Link
-              to="/register"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block w-full bg-primary-red text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium mt-4 text-center"
+            <button
+              onClick={() => {
+                navigate("/register");
+                setIsMobileMenuOpen(false);
+                setIsMenuOpen(false);
+              }}
+              className="w-full mt-4 rounded-lg bg-primary-red text-white px-6 py-3 font-semibold text-center hover:bg-red-700 transition-colors"
             >
-              Đăng ký Đội cứu hộ
-            </Link>
+              Dành cho cứu hộ
+            </button>
           </div>
         </div>
       )}
