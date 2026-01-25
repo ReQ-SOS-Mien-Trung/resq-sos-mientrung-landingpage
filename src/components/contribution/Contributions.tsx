@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUp } from "lucide-react";
 import { contributions } from "@/constants";
 import ContributionCard from "./ContributionCard";
 

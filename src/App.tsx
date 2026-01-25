@@ -1,6 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { Contributions, DownloadAppPage, Hero, Newsroom, RegisterPage, Services } from "@/components";
+import {
+  Contributions,
+  DownloadAppPage,
+  Hero,
+  Newsroom,
+  RegisterPage,
+  Services,
+} from "@/components";
 import MainLayout from "@/layouts/MainLayout";
 
 function HomePage() {
