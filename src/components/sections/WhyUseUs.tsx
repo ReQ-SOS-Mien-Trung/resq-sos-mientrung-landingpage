@@ -1,48 +1,14 @@
 import { useState } from "react";
-
-type Testimonial = {
-  id: number;
-  name: string;
-  role: string;
-  image: string;
-  quote: string;
-};
-
-const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    role: "Đối tác cứu hộ với ResQ từ 2020",
-    image: "/images/testimonial-1.jpg",
-    quote:
-      "Mọi thứ đều có thể thực hiện ngay trên ứng dụng. Sự tiện lợi, khả năng dễ dàng theo dõi các yêu cầu cứu hộ và hỗ trợ kịp thời là điều làm cho trải nghiệm này trở nên tuyệt vời.",
-  },
-  {
-    id: 2,
-    name: "Trần Thị B",
-    role: "Đối tác cứu hộ với ResQ từ 2021",
-    image: "/images/testimonial-2.jpg",
-    quote:
-      "Hệ thống điều phối thông minh giúp chúng tôi tiếp cận các trường hợp khẩn cấp một cách nhanh chóng và hiệu quả nhất.",
-  },
-  {
-    id: 3,
-    name: "Lê Văn C",
-    role: "Đối tác cứu hộ với ResQ từ 2019",
-    image: "/images/testimonial-3.jpg",
-    quote:
-      "ResQ không chỉ là một nền tảng, mà còn là một cộng đồng hỗ trợ lẫn nhau trong những thời điểm khó khăn nhất.",
-  },
-];
+import { testimonials } from "@/constants";
 
 const WhyUseUs = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   return (
-    <section className="bg-white pt-0 pb-16 md:pb-20">
+    <section className="bg-white pt-0">
       <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
         {/* Top Border Line */}
-        <div className="border-t border-gray-200 pt-12 md:pt-16 mb-12 md:mb-16"></div>
+        <div className="border-t border-gray-500 mb-10 md:mb-16"></div>
 
         {/* Why use us Section */}
         <div className="mb-16 md:mb-20">
@@ -109,7 +75,7 @@ const WhyUseUs = () => {
             </h2>
             <div className="w-full max-w-2xl mx-auto border-t border-gray-200"></div>
           </div>
-          
+
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
             {/* Left Side - Profile Pictures and Name */}
             <div className="flex flex-col items-start">
@@ -157,7 +123,7 @@ const WhyUseUs = () => {
         </div>
 
         {/* Bottom Border Line */}
-        <div className="border-t border-gray-200 mt-12 md:mt-16"></div>
+        <div className="border-t border-gray-500 mt-12 md:mt-16"></div>
       </div>
     </section>
   );

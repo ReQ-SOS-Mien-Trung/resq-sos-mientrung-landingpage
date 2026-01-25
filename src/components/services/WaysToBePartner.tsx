@@ -1,77 +1,6 @@
 import { useState } from "react";
 import { ExternalLink, ArrowRight } from "lucide-react";
-
-type DriverType = {
-  id: string;
-  label: string;
-};
-
-type BenefitSection = {
-  title: string;
-  benefits: string[];
-  links?: {
-    text: string;
-    href: string;
-  }[];
-};
-
-const driverTypes: DriverType[] = [
-  { id: "car", label: "Xe ô tô" },
-  { id: "taxi", label: "Taxi" },
-  { id: "boat", label: "Thuyền" },
-  { id: "rescue_team", label: "Đội cứu hộ" },
-];
-
-const benefitSections: Record<string, BenefitSection> = {
-  car: {
-    title: "Giữ cho phương tiện của bạn hoạt động",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Xe ô tô (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Xe ô tô (English)", href: "#" },
-    ],
-  },
-  taxi: {
-    title: "Giữ cho đồng hồ của bạn hoạt động",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Taxi (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Taxi (English)", href: "#" },
-    ],
-  },
-  boat: {
-    title: "Giữ cho thuyền của bạn sẵn sàng",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và hỗ trợ nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Thuyền (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Thuyền (English)", href: "#" },
-    ],
-  },
-  rescue_team: {
-    title: "Giữ cho đội của bạn sẵn sàng",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và hỗ trợ trang thiết bị với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Đội cứu hộ (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Đội cứu hộ (English)", href: "#" },
-    ],
-  },
-};
+import { benefitSections, driverTypes } from "@/constants";
 
 const WaysToBePartner = () => {
   const [activeType, setActiveType] = useState("taxi");
@@ -194,9 +123,6 @@ const WaysToBePartner = () => {
             </a>
           </div>
         </div>
-
-        {/* Bottom Border Lines */}
-        <div className="border-t border-gray-200 mt-12 md:mt-16"></div>
       </div>
     </section>
   );

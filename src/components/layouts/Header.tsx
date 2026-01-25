@@ -1,121 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X, Phone, ChevronDown, Search } from "lucide-react";
-
-interface MenuItem {
-  id: string;
-  label: string;
-  subItems?: {
-    title: string;
-    description: string;
-    link?: string;
-  }[];
-}
-
-const menuItems: MenuItem[] = [
-  {
-    id: "about",
-    label: "Về chúng tôi",
-    subItems: [
-      {
-        title: "Giới thiệu",
-        description: "Chúng tôi là ai và chúng tôi đại diện cho điều gì",
-        link: "#about",
-      },
-      {
-        title: "Tầm nhìn & Sứ mệnh",
-        description: "Mục tiêu và giá trị cốt lõi của chúng tôi",
-        link: "#vision",
-      },
-      {
-        title: "Đội ngũ",
-        description: "Gặp gỡ những người đang xây dựng tương lai cứu hộ",
-        link: "#team",
-      },
-    ],
-  },
-  {
-    id: "services",
-    label: "Dịch vụ",
-    subItems: [
-      {
-        title: "Cứu hộ khẩn cấp",
-        description: "Kết nối nạn nhân với đội cứu hộ trong thời gian thực",
-        link: "#emergency",
-      },
-      {
-        title: "Điều phối đội cứu hộ",
-        description: "Hệ thống quản lý và điều phối đội cứu hộ thông minh",
-        link: "#coordination",
-      },
-      {
-        title: "Đào tạo",
-        description: "Chương trình đào tạo và nâng cao kỹ năng cứu hộ",
-        link: "#training",
-      },
-    ],
-  },
-  {
-    id: "for-rescuers",
-    label: "Dành cho Đội cứu hộ",
-    subItems: [
-      {
-        title: "Đăng ký đội cứu hộ",
-        description: "Tham gia mạng lưới cứu hộ của chúng tôi",
-        link: "#register",
-      },
-      {
-        title: "Tài nguyên",
-        description: "Công cụ và tài liệu hỗ trợ đội cứu hộ",
-        link: "#resources",
-      },
-      {
-        title: "Cộng đồng",
-        description: "Kết nối với các đội cứu hộ khác",
-        link: "#community",
-      },
-    ],
-  },
-  {
-    id: "partners",
-    label: "Đối tác",
-    subItems: [
-      {
-        title: "Trở thành đối tác",
-        description: "Hợp tác với chúng tôi để mở rộng mạng lưới cứu hộ",
-        link: "#partner",
-      },
-      {
-        title: "Đối tác hiện tại",
-        description: "Các tổ chức đang hợp tác với chúng tôi",
-        link: "#partners",
-      },
-    ],
-  },
-  {
-    id: "news",
-    label: "Tin tức",
-    subItems: [
-      {
-        title: "Tin tức mới nhất",
-        description: "Cập nhật về hoạt động và sự kiện của chúng tôi",
-        link: "#news",
-      },
-      {
-        title: "Blog",
-        description: "Câu chuyện và chia sẻ từ cộng đồng cứu hộ",
-        link: "#blog",
-      },
-    ],
-  },
-];
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Menu, X, Phone, Search } from "lucide-react";
+import { menuItems } from "@/constants";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isRegisterDropdownOpen, setIsRegisterDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,12 +20,30 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
-      setIsMenuOpen(false);
+    // Nếu đang ở trang khác, navigate về trang chủ trước
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Đợi một chút để trang load xong rồi mới scroll
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
+  };
+
+  const handleHomeClick = () => {
+    navigate("/");
+    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
   };
 
   const handleMenuMouseEnter = (menuId: string) => {
@@ -156,9 +68,10 @@ const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white shadow-lg" : "bg-white/95 backdrop-blur-sm"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled
+          ? "bg-white/90 backdrop-blur-md shadow-lg border-slate-200/70"
+          : "bg-white/70 backdrop-blur-md border-slate-200/60"
+          }`}
       >
         <nav className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -174,62 +87,42 @@ const Header = () => {
                   <Menu className="w-6 h-6" />
                 )}
               </button>
-              <div className="flex items-center space-x-2">
+              <Link
+                to="/"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsMenuOpen(false);
+                }}
+                className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              >
                 <div className="w-10 h-10 bg-gradient-to-br from-primary-red to-primary-orange rounded-lg flex items-center justify-center">
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-xl font-bold text-gray-900">
                   ResQ Mientrung SOS
                 </span>
-              </div>
+              </Link>
             </div>
 
             {/* Right: Navigation Links */}
             <div className="hidden lg:flex items-center gap-6">
               <button
-                onClick={() => scrollToSection("hero")}
+                onClick={handleHomeClick}
                 className="text-gray-700 hover:text-primary-red transition-colors font-medium"
               >
                 Trang chủ
               </button>
-
-              <div className="relative">
-                <button
-                  onClick={() =>
-                    setIsRegisterDropdownOpen(!isRegisterDropdownOpen)
-                  }
-                  className="text-gray-700 hover:text-primary-red transition-colors font-medium flex items-center gap-1"
-                >
-                  Đăng ký Đội cứu hộ
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      isRegisterDropdownOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {isRegisterDropdownOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setIsRegisterDropdownOpen(false)}
-                    />
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                      <Link
-                        to="/register"
-                        onClick={() => setIsRegisterDropdownOpen(false)}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-red transition-colors"
-                      >
-                        Đăng ký làm cứu hộ
-                      </Link>
-                    </div>
-                  </>
-                )}
-              </div>
               <button
                 onClick={() => scrollToSection("features")}
                 className="text-gray-700 hover:text-primary-red transition-colors font-medium"
               >
                 Trung tâm trợ giúp
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="text-gray-700 hover:text-primary-red transition-colors font-medium"
+              >
+                Dành cho cứu hộ
               </button>
               <button className="text-gray-700 hover:text-primary-red transition-colors">
                 <Search className="w-5 h-5" />
@@ -274,11 +167,10 @@ const Header = () => {
                       <li key={item.id}>
                         <button
                           onMouseEnter={() => handleMenuMouseEnter(item.id)}
-                          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                            activeMenu === item.id
-                              ? "bg-primary-red/10 text-primary-red font-semibold"
-                              : "text-gray-700 hover:bg-gray-50"
-                          }`}
+                          className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeMenu === item.id
+                            ? "bg-primary-red/10 text-primary-red font-semibold"
+                            : "text-gray-700 hover:bg-gray-50"
+                            }`}
                         >
                           {item.label}
                         </button>
@@ -353,10 +245,14 @@ const Header = () => {
               </div>
             ))}
             <button
-              onClick={() => scrollToSection("register")}
-              className="w-full bg-primary-red text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium mt-4"
+              onClick={() => {
+                navigate("/register");
+                setIsMobileMenuOpen(false);
+                setIsMenuOpen(false);
+              }}
+              className="w-full mt-4 rounded-lg bg-primary-red text-white px-6 py-3 font-semibold text-center hover:bg-red-700 transition-colors"
             >
-              Đăng ký Đội cứu hộ
+              Dành cho cứu hộ
             </button>
           </div>
         </div>

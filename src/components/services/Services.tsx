@@ -1,16 +1,16 @@
-import { useState } from "react";
 import {
-  Utensils,
-  ShoppingBasket,
-  Package,
-  Car,
-  WalletCards,
-  ShieldCheck,
-  Bus,
-  Building2,
   Briefcase,
+  Building2,
+  Bus,
+  Car,
+  Package,
+  ShieldCheck,
+  ShoppingBasket,
   Store,
+  Utensils,
+  WalletCards,
 } from "lucide-react";
+import { useState } from "react";
 
 const tabs = [
   {
