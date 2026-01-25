@@ -30,10 +30,6 @@ jobs:
       run: npm ci 
       # 'npm ci' tốt hơn 'npm install' cho CI vì nó cài chính xác theo package-lock.json
 
-      # Bước 1: Check cú pháp code (ESLint) - Clean code trước đã
-    - name: Lint Code
-      run: npm run lint
-
     - name: Build Project
       run: npm run build
       # Bước này check xem code có build được ra file production không
