@@ -3,9 +3,10 @@ import type { PropsWithChildren } from "react";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white text-black">
       <Header />
-      <main>{children}</main>
+      {/* Main content with left margin for sidebar on desktop, top padding for header */}
+      <main className="lg:ml-16 pt-14 sm:pt-16">{children}</main>
       <Footer />
     </div>
   );

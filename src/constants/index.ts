@@ -19,61 +19,60 @@ import {
 export const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Nguyễn Văn A",
-    role: "Đối tác cứu hộ với ResQ từ 2020",
+    name: "Nguyễn Văn Hùng",
+    role: "Tình nguyện viên cứu hộ từ 2020",
     image: "/images/testimonial-1.jpg",
     quote:
-      "Mọi thứ đều có thể thực hiện ngay trên ứng dụng. Sự tiện lợi, khả năng dễ dàng theo dõi các yêu cầu cứu hộ và hỗ trợ kịp thời là điều làm cho trải nghiệm này trở nên tuyệt vời.",
+      "Ứng dụng ResQ giúp chúng tôi tiếp cận nạn nhân nhanh chóng hơn. Hệ thống định vị chính xác và thông tin chi tiết về tình huống giúp đội cứu hộ chuẩn bị tốt hơn trước khi đến hiện trường.",
   },
   {
     id: 2,
-    name: "Trần Thị B",
-    role: "Đối tác cứu hộ với ResQ từ 2021",
+    name: "Trần Thị Mai",
+    role: "Điều phối viên cứu hộ từ 2021",
     image: "/images/testimonial-2.jpg",
     quote:
-      "Hệ thống điều phối thông minh giúp chúng tôi tiếp cận các trường hợp khẩn cấp một cách nhanh chóng và hiệu quả nhất.",
+      "Hệ thống điều phối thông minh giúp chúng tôi phân bổ lực lượng cứu hộ hiệu quả. Trong đợt lũ năm ngoái, chúng tôi đã hỗ trợ được hàng trăm gia đình nhờ ResQ.",
   },
   {
     id: 3,
-    name: "Lê Văn C",
-    role: "Đối tác cứu hộ với ResQ từ 2019",
+    name: "Lê Văn Cường",
+    role: "Đội trưởng đội cứu hộ từ 2019",
     image: "/images/testimonial-3.jpg",
     quote:
-      "ResQ không chỉ là một nền tảng, mà còn là một cộng đồng hỗ trợ lẫn nhau trong những thời điểm khó khăn nhất.",
+      "ResQ không chỉ là một ứng dụng, mà còn là cầu nối giữa những người cần giúp đỡ và những tấm lòng sẵn sàng hỗ trợ. Tôi tự hào là một phần của cộng đồng này.",
   },
 ];
 
 export const faqs: FAQ[] = [
   {
     id: 1,
-    question: "Tôi có thể rút tiền thu nhập bao lâu một lần?",
+    question: "Làm thế nào để đăng ký trở thành tình nguyện viên cứu hộ?",
     answer:
-      "Bạn có thể rút tiền thu nhập của mình bất cứ lúc nào thông qua ứng dụng ResQ. Chúng tôi hỗ trợ rút tiền tức thì vào tài khoản ngân hàng của bạn.",
+      "Bạn có thể đăng ký trực tiếp trên ứng dụng ResQ hoặc website. Sau khi đăng ký, bạn sẽ được xác minh thông tin và tham gia khóa đào tạo cơ bản về cứu hộ.",
   },
   {
     id: 2,
-    question: "Những phương tiện nào được phép cho ResQ?",
+    question: "Những phương tiện nào được phép tham gia cứu hộ?",
     answer:
-      "ResQ chấp nhận nhiều loại phương tiện bao gồm xe ô tô, taxi, thuyền máy, ghe nhỏ, và xe gầm cao. Mỗi loại phương tiện phù hợp với các tình huống cứu hộ khác nhau.",
+      "ResQ chấp nhận nhiều loại phương tiện bao gồm xe ô tô gầm cao, thuyền máy, ghe nhỏ, và ca nô. Mỗi loại phương tiện phù hợp với các tình huống cứu hộ khác nhau như lũ lụt, sạt lở đất.",
   },
   {
     id: 3,
-    question:
-      "Tôi có thể thực hiện nhiều điểm dừng trong một yêu cầu cứu hộ không?",
+    question: "Hệ thống điều phối cứu hộ hoạt động như thế nào?",
     answer:
-      "Có, bạn có thể thực hiện nhiều điểm dừng trong một yêu cầu cứu hộ nếu cần thiết. Ứng dụng sẽ hỗ trợ bạn điều hướng đến từng điểm một cách hiệu quả.",
+      "Khi có yêu cầu SOS, hệ thống AI sẽ tự động phân tích mức độ khẩn cấp và tìm đội cứu hộ phù hợp trong bán kính gần nhất. Bạn sẽ nhận được thông báo với chi tiết vị trí và tình trạng nạn nhân.",
   },
   {
     id: 4,
-    question: "Trẻ em có được phép trên phương tiện cứu hộ không?",
+    question: "Tôi cần chuẩn bị những gì khi tham gia cứu hộ?",
     answer:
-      "Có, trẻ em hoàn toàn được phép trên phương tiện cứu hộ. Chúng tôi khuyến khích các gia đình có trẻ em sử dụng dịch vụ cứu hộ của ResQ trong các tình huống khẩn cấp.",
+      "Bạn nên chuẩn bị: áo phao, đèn pin, dây thừng, bộ sơ cứu cơ bản, và điện thoại có kết nối mạng. ResQ cũng cung cấp hỗ trợ trang thiết bị cho các đội cứu hộ đăng ký chính thức.",
   },
   {
     id: 5,
-    question: "Hành khách có thể đứng trên phương tiện cứu hộ không?",
+    question: "Làm sao để đảm bảo an toàn khi tham gia cứu hộ?",
     answer:
-      "Để đảm bảo an toàn, chúng tôi khuyến khích tất cả hành khách ngồi xuống trong quá trình cứu hộ. Tuy nhiên, trong các tình huống đặc biệt, hành khách có thể đứng nếu phương tiện cho phép và điều kiện an toàn.",
+      "Luôn tuân thủ hướng dẫn an toàn trong ứng dụng, mặc áo phao và trang bị bảo hộ. Không tham gia cứu hộ khi điều kiện thời tiết quá nguy hiểm. Liên hệ đường dây nóng 24/7 nếu cần hỗ trợ.",
   },
 ];
 
@@ -289,59 +288,59 @@ export const newsArticles: NewsArticle[] = [
 ];
 
 export const driverTypes: DriverType[] = [
-  { id: "car", label: "Xe ô tô" },
-  { id: "taxi", label: "Taxi" },
-  { id: "boat", label: "Thuyền" },
+  { id: "boat", label: "Thuyền/Ghe" },
+  { id: "car", label: "Xe gầm cao" },
   { id: "rescue_team", label: "Đội cứu hộ" },
+  { id: "volunteer", label: "Tình nguyện viên" },
 ];
 
 export const benefitSections: Record<string, BenefitSection> = {
-  car: {
-    title: "Giữ cho phương tiện của bạn hoạt động",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Xe ô tô (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Xe ô tô (English)", href: "#" },
-    ],
-  },
-  taxi: {
-    title: "Giữ cho đồng hồ của bạn hoạt động",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Taxi (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Taxi (English)", href: "#" },
-    ],
-  },
   boat: {
-    title: "Giữ cho thuyền của bạn sẵn sàng",
+    title: "Cứu hộ bằng thuyền/ghe",
     benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và hỗ trợ nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
+      "Nhận thông báo yêu cầu cứu hộ từ người dân trong vùng ngập lụt",
+      "Tiếp cận các khu vực bị cô lập do lũ lụt để sơ tán nạn nhân",
+      "Được cung cấp áo phao và trang thiết bị cứu hộ đường thủy",
     ],
     links: [
-      { text: "Hướng dẫn ResQ Thuyền (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Thuyền (English)", href: "#" },
+      { text: "Hướng dẫn cứu hộ đường thủy", href: "#" },
+      { text: "Đăng ký làm tình nguyện viên", href: "#" },
+    ],
+  },
+  car: {
+    title: "Cứu hộ bằng xe gầm cao",
+    benefits: [
+      "Nhận thông báo yêu cầu cứu hộ từ người dân trong khu vực của bạn",
+      "Hỗ trợ di chuyển nạn nhân đến nơi an toàn hoặc cơ sở y tế",
+      "Vận chuyển nhu yếu phẩm và hàng cứu trợ đến vùng thiên tai",
+    ],
+    links: [
+      { text: "Hướng dẫn cứu hộ bằng xe", href: "#" },
+      { text: "Đăng ký làm tình nguyện viên", href: "#" },
     ],
   },
   rescue_team: {
-    title: "Giữ cho đội của bạn sẵn sàng",
+    title: "Đội cứu hộ chuyên nghiệp",
     benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và hỗ trợ trang thiết bị với Chương trình Khách hàng Thân thiết của chúng tôi",
+      "Nhận phân bổ ưu tiên các trường hợp khẩn cấp phức tạp",
+      "Phối hợp với lực lượng chức năng và các đội cứu hộ khác",
+      "Được hỗ trợ trang thiết bị chuyên dụng và đào tạo nâng cao",
     ],
     links: [
-      { text: "Hướng dẫn ResQ Đội cứu hộ (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Đội cứu hộ (English)", href: "#" },
+      { text: "Hướng dẫn đăng ký đội cứu hộ", href: "#" },
+      { text: "Quy trình phối hợp cứu hộ", href: "#" },
+    ],
+  },
+  volunteer: {
+    title: "Tình nguyện viên hỗ trợ",
+    benefits: [
+      "Hỗ trợ phân phát nhu yếu phẩm tại các điểm cứu trợ",
+      "Tham gia công tác sơ tán và hỗ trợ nạn nhân",
+      "Được đào tạo kỹ năng sơ cứu cơ bản miễn phí",
+    ],
+    links: [
+      { text: "Hướng dẫn tình nguyện viên", href: "#" },
+      { text: "Đăng ký ngay", href: "#" },
     ],
   },
 };
