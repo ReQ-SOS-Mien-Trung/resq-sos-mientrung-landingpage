@@ -1,4 +1,5 @@
 export { default as Hero } from "./Hero";
+export { default as HeroSection } from "./HeroSection";
 export { default as Newsroom } from "./Newsroom";
 export { default as HowItWorks } from "./HowItWorks";
 export { default as CTABanner } from "./CTABanner";

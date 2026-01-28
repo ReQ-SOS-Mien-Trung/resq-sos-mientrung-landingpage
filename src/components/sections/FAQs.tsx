@@ -1,9 +1,30 @@
-import { useState } from "react";
-import { Plus, Minus, HelpCircle } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Minus, ArrowRight } from "lucide-react";
 import { faqs } from "@/constants";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const FAQs = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (titleRef.current) {
+        gsap.fromTo(titleRef.current, 
+          { y: 50, opacity: 0 }, 
+          { 
+            y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
+            scrollTrigger: { trigger: sectionRef.current, start: "top 70%" }
+          }
+        );
+      }
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
   const toggleItem = (id: number) => {
     setOpenItems((prev) =>
@@ -12,103 +33,85 @@ const FAQs = () => {
   };
 
   return (
-    <section className="bg-white py-16 md:py-20 lg:py-24">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
-        {/* Top Border Line */}
-        <div className="border-t border-gray-300 mb-12 md:mb-16"></div>
+    <section ref={sectionRef} className="bg-white text-black">
+      {/* Top Border */}
+      <div className="h-px bg-black" />
 
-        {/* FAQs Label */}
-        <div className="mb-8 md:mb-12">
-          <div className="flex items-center gap-2 mb-2">
-            <HelpCircle className="w-4 h-4 text-emerald-600" />
-            <h2 className="text-emerald-600 text-sm md:text-base font-semibold uppercase tracking-wider">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        {/* Left Column - Intro Text */}
+        <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 lg:py-16 border-b lg:border-b-0 lg:border-r border-black/10">
+          <div className="lg:sticky lg:top-24">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
               Câu hỏi thường gặp
-            </h2>
-          </div>
-        </div>
-
-        {/* Main Content - 2 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16">
-          {/* Left Column - Intro Text */}
-          <div className="lg:sticky lg:top-8 lg:self-start">
-            <h3
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6 leading-tight"
-              style={{ fontFamily: "var(--font-sf-ui-display)" }}
-            >
-              Có câu hỏi? Chúng tôi có câu trả lời.
+            </p>
+            <h3 ref={titleRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-6">
+              CÓ CÂU HỎI?
+              <br />
+              <span className="text-black/30">CHÚNG TÔI CÓ CÂU TRẢ LỜI.</span>
             </h3>
-            <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-6">
-              Tìm hiểu thêm về dịch vụ cứu hộ của chúng tôi và cách chúng tôi hỗ
-              trợ cộng đồng.
+            <p className="text-sm sm:text-base text-black/60 leading-relaxed mb-6 sm:mb-8 max-w-md">
+              Tìm hiểu thêm về dịch vụ cứu hộ của chúng tôi và cách chúng tôi hỗ trợ cộng đồng.
             </p>
             <a
               href="#"
-              className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-semibold text-base md:text-lg transition-colors group"
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors group"
             >
-              <span>Xem thêm tại Trung tâm Trợ giúp</span>
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
-              </span>
+              Trung tâm trợ giúp
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
+        </div>
 
-          {/* Right Column - FAQ List */}
-          <div className="space-y-0">
-            {faqs.map((faq, index) => {
-              const isOpen = openItems.includes(faq.id);
-              return (
-                <div
-                  key={faq.id}
-                  className="group"
-                  style={{
-                    animationDelay: `${index * 50}ms`,
-                  }}
+        {/* Right Column - FAQ List */}
+        <div>
+          {faqs.map((faq, index) => {
+            const isOpen = openItems.includes(faq.id);
+            return (
+              <div key={faq.id} className="border-b border-black/10 last:border-b-0">
+                <button
+                  onClick={() => toggleItem(faq.id)}
+                  className="w-full flex items-start justify-between px-4 sm:px-6 md:px-8 lg:px-12 py-5 sm:py-6 md:py-8 text-left hover:bg-black/5 transition-colors group"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${faq.id}`}
                 >
-                  {/* Border line above each item */}
-                  <div className="border-t border-gray-200 transition-colors group-hover:border-gray-300"></div>
-                  <button
-                    onClick={() => toggleItem(faq.id)}
-                    className="w-full flex items-start justify-between py-5 md:py-6 text-left hover:bg-gray-50 transition-all duration-200 rounded-lg -mx-2 px-2 group/button"
-                    aria-expanded={isOpen}
-                    aria-controls={`faq-answer-${faq.id}`}
-                  >
-                    <span className="text-gray-900 font-semibold text-base md:text-lg pr-4 flex-1 leading-relaxed group-hover/button:text-emerald-600 transition-colors">
+                  <div className="flex items-start gap-3 sm:gap-4 flex-1 pr-4">
+                    <span className="text-xs sm:text-sm font-bold text-black/20 mt-0.5">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-sm sm:text-base md:text-lg font-bold leading-tight group-hover:text-[#FF5722] transition-colors">
                       {faq.question}
                     </span>
-                    <div className="shrink-0 mt-1">
-                      <div
-                        className={`transform transition-all duration-300 ${
-                          isOpen ? "rotate-180" : "rotate-0"
-                        }`}
-                      >
-                        {isOpen ? (
-                          <Minus className="w-5 h-5 text-emerald-600 transition-colors" />
-                        ) : (
-                          <Plus className="w-5 h-5 text-gray-500 group-hover/button:text-emerald-600 transition-colors" />
-                        )}
-                      </div>
-                    </div>
-                  </button>
-                  <div
-                    id={`faq-answer-${faq.id}`}
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                    }`}
-                  >
-                    <div className="pb-5 md:pb-6 pl-0 pr-2">
-                      <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  </div>
+                  <div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 border border-black/20 flex items-center justify-center group-hover:bg-black group-hover:text-white group-hover:border-black transition-colors">
+                    {isOpen ? (
+                      <Minus className="w-4 h-4 sm:w-5 sm:h-5" />
+                    ) : (
+                      <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                    )}
+                  </div>
+                </button>
+                <div
+                  id={`faq-answer-${faq.id}`}
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div className="px-4 sm:px-6 md:px-8 lg:px-12 pb-6 sm:pb-8">
+                    <div className="pl-7 sm:pl-8 md:pl-10">
+                      <p className="text-sm sm:text-base text-black/60 leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-            {/* Border line below last item */}
-            <div className="border-t border-gray-200 mt-2"></div>
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* Bottom Accent */}
+      <div className="h-1 bg-[#FF5722]" />
     </section>
   );
 };

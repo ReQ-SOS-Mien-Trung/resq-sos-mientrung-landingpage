@@ -6,45 +6,42 @@ type CTABannerProps = {
 
 const CTABanner = ({ onSignUpClick }: CTABannerProps) => {
   return (
-    <section className="relative overflow-hidden">
-      {/* Top Section - Light Green (2/3) */}
-      <div className="bg-emerald-400 py-12 md:py-16 lg:py-20 relative">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
-            {/* Left - Small Text */}
-            <p className="text-gray-700 font-medium text-sm md:text-base">
-              Trở thành đối tác của chúng tôi
-            </p>
+    <section className="bg-white text-black">
+      {/* Top Border */}
+      <div className="h-px bg-black" />
 
-            {/* Right - Main Headline */}
-            <div className="flex-1 text-right">
-              <h2
-                className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight"
-                style={{ fontFamily: "var(--font-sf-ui-display)" }}
-              >
-                Bắt đầu hành trình của bạn
-                <br />
-                như một đối tác cứu hộ.
-              </h2>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        {/* Left - Text Content */}
+        <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 border-b lg:border-b-0 lg:border-r border-black/10">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
+            Trở thành đối tác
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-[1.1]">
+            BẮT ĐẦU HÀNH TRÌNH
+            <br />
+            NHƯ MỘT ĐỐI TÁC
+            <br />
+            <span className="text-black/30">CỨU HỘ.</span>
+          </h2>
+        </div>
+
+        {/* Right - CTA */}
+        <div className="bg-black text-white px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 flex flex-col justify-center">
+          <p className="text-sm sm:text-base text-white/60 mb-6 sm:mb-8 max-w-md">
+            Tham gia cùng hàng trăm tình nguyện viên đang hỗ trợ cộng đồng miền Trung vượt qua thiên tai.
+          </p>
+          <button
+            onClick={onSignUpClick}
+            className="px-6 sm:px-8 py-4 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-colors flex items-center gap-2 w-fit group"
+          >
+            Đăng ký ngay
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
       </div>
 
-      {/* Bottom Section - Dark Green (1/3) with Sign Up Button */}
-      <div className="bg-emerald-600 py-6 md:py-8">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
-          <div className="flex justify-start">
-            <button
-              onClick={onSignUpClick}
-              className="bg-white text-emerald-600 font-semibold text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
-            >
-              Đăng ký
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Bottom Accent */}
+      <div className="h-1 bg-[#FF5722]" />
     </section>
   );
 };

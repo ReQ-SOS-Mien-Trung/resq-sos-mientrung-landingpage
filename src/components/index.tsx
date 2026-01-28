@@ -2,6 +2,7 @@ export { Contributions, ContributionCard } from "./contribution";
 export { Header, Footer } from "./layouts";
 export {
   Hero,
+  HeroSection,
   Newsroom,
   HowItWorks,
   CTABanner,
