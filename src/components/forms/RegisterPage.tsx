@@ -3,7 +3,7 @@ import MainLayout from "@/layouts/MainLayout";
 import { RegisterHero } from ".";
 import { FAQs, WaysToBePartner, WhyUseUs } from "..";
 import RescuerForm from "./RescuerForm";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@phosphor-icons/react";
 
 const RegisterPage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);

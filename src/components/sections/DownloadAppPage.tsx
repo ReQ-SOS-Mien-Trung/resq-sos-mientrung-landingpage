@@ -1,413 +1,305 @@
-import { QrCode } from "lucide-react";
-import { appStoreItems, badges } from "@/constants";
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { appStoreItems } from "@/constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRightIcon, ArrowUpRightIcon, BellIcon, MapTrifoldIcon, PhoneIcon, ShieldCheckIcon } from "@phosphor-icons/react/dist/ssr";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Animation variants for consistent staggered animations
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut" as const,
-    },
-  },
-};
-
-const badgeVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "backOut" as const,
-    },
-  },
-};
-
-const storeItemVariants = {
-  hidden: { opacity: 0, x: 30 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut" as const,
-    },
-  },
-};
-
 const DownloadAppPage = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const orangePanelRef = useRef<HTMLDivElement>(null);
-  const mockupRef = useRef<HTMLDivElement>(null);
-  const orangeTextRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const phoneRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  const features = [
+    { icon: BellIcon, label: "Cảnh báo thời gian thực" },
+    { icon: ShieldCheckIcon, label: "SOS một chạm" },
+    { icon: MapTrifoldIcon, label: "Bản đồ điểm ngập" },
+    { icon: PhoneIcon, label: "Hoạt động offline" },
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Orange panel content animation on scroll
-      if (orangeTextRef.current) {
-        gsap.fromTo(
-          orangeTextRef.current,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: orangePanelRef.current,
-              start: "top 80%",
-            },
-          },
+      // Initial page load animation timeline
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // Label animation
+      tl.fromTo(
+        ".hero-label",
+        { x: -30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.6 }
+      );
+
+      // Hero title animation - stagger each line
+      if (titleRef.current) {
+        tl.fromTo(
+          titleRef.current.children,
+          { y: 80, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, stagger: 0.12 },
+          "-=0.3"
         );
       }
 
-      // Mockup float animation
-      if (mockupRef.current) {
-        gsap.fromTo(
-          mockupRef.current,
-          { y: 80, opacity: 0, scale: 0.9 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: orangePanelRef.current,
-              start: "top 80%",
-            },
-          },
-        );
+      // Description
+      tl.fromTo(
+        ".hero-desc",
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6 },
+        "-=0.4"
+      );
 
-        // Continuous floating animation
-        gsap.to(mockupRef.current, {
-          y: -10,
-          duration: 2,
-          ease: "power1.inOut",
-          yoyo: true,
-          repeat: -1,
-          delay: 1,
-        });
+      // Stats row
+      tl.fromTo(
+        ".stat-item",
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
+        "-=0.3"
+      );
+
+      // Phone mockup animation - appears from right
+      if (phoneRef.current) {
+        tl.fromTo(
+          phoneRef.current,
+          { x: 100, opacity: 0, scale: 0.9 },
+          { x: 0, opacity: 1, scale: 1, duration: 1 },
+          "-=0.8"
+        );
       }
+
+      // Big number background
+      tl.fromTo(
+        ".big-number",
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.8 },
+        "-=0.6"
+      );
+
+      // Diagonal background
+      tl.fromTo(
+        ".diagonal-bg",
+        { xPercent: 100 },
+        { xPercent: 0, duration: 1.2, ease: "power2.out" },
+        0 // Start at the beginning
+      );
+
+      // Features strip animation - after hero
+      if (featuresRef.current) {
+        const items = featuresRef.current.querySelectorAll(".feature-item");
+        tl.fromTo(
+          items,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.08 },
+          "-=0.3"
+        );
+      }
+
+      // Store cards animation
+      if (cardsRef.current) {
+        const cards = cardsRef.current.querySelectorAll(".store-card");
+        tl.fromTo(
+          cards,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.15 },
+          "-=0.2"
+        );
+      }
+
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[calc(100vh-80px)] bg-white">
-      {/* Split screen wrapper */}
-      <div className="min-h-[calc(100vh-80px)] grid lg:grid-cols-2">
-        {/* LEFT */}
-        <div className="bg-gray-50 relative overflow-hidden">
-          {/* Decorative background elements */}
-          <motion.div
-            className="absolute top-20 -left-20 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute bottom-20 -right-20 w-80 h-80 bg-sky-500/5 rounded-full blur-3xl"
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-
-          <div className="container mx-auto px-4 lg:px-12 pt-16 md:pt-24 pb-10 md:pb-14 relative z-10">
-            <motion.div
-              className="max-w-2xl"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.h1
-                variants={itemVariants}
-                className="text-[44px] leading-[1.05] md:text-[64px] md:leading-[1.05] font-black tracking-tight text-slate-900"
-              >
-                <motion.span
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1, duration: 0.5 }}
-                >
-                  Tải ứng dụng
-                </motion.span>
-                <br />
-                <motion.span
-                  className="text-[#FF5722]"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                >
-                  ResQ SOS Miền Trung
-                </motion.span>
-                <br />
-                <motion.span
-                  className="text-slate-900/30"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                >
-                  ngay!
-                </motion.span>
-              </motion.h1>
-
-              <motion.p
-                variants={itemVariants}
-                className="mt-6 text-base md:text-lg text-slate-600 max-w-xl leading-relaxed"
-              >
-                Cảnh báo mưa lũ theo thời gian thực, gửi tín hiệu SOS chỉ với
-                một chạm và định vị nhanh để đội cứu hộ hỗ trợ kịp thời.
-              </motion.p>
-
-              <motion.div
-                className="mt-8 flex flex-wrap gap-3"
-                variants={containerVariants}
-              >
-                {badges.map((badge, index) => (
-                  <motion.div
-                    key={index}
-                    variants={badgeVariants}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="inline-flex items-center gap-2 rounded-full bg-white shadow-sm border border-slate-200 px-4 py-2.5 text-sm text-slate-700 cursor-pointer hover:shadow-md transition-shadow"
-                  >
-                    <span className={`w-2 h-2 rounded-full ${badge.color}`} />
-                    {badge.text}
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
+    <section ref={sectionRef} className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Hero Section - Full Width */}
+      <div ref={heroRef} className="relative min-h-[70vh] lg:min-h-[80vh] flex flex-col">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="diagonal-bg absolute top-0 right-0 w-[60%] h-full bg-[#FF5722] clip-diagonal" />
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="absolute w-px h-full bg-white" style={{ left: `${i * 10}%` }} />
+            ))}
+            {[...Array(6)].map((_, i) => (
+              <div key={`h-${i}`} className="absolute w-full h-px bg-white" style={{ top: `${i * 20}%` }} />
+            ))}
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="bg-white border-l border-black/10">
-          <div className="h-full flex flex-col">
-            {/* top-right stores */}
-            <div className="container mx-auto px-4 lg:px-12 pt-16 md:pt-16">
-              <motion.div
-                className="max-w-3xl mx-auto mt-4"
-                initial="hidden"
-                animate="visible"
-                variants={containerVariants}
-              >
-                <motion.div
-                  variants={itemVariants}
-                  className="flex items-center justify-between"
+        {/* Content */}
+        <div className="relative flex-1 flex flex-col lg:flex-row">
+          {/* Left - Typography */}
+          <div className="lg:w-[55%] p-6 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
+            {/* Label */}
+            <div className="hero-label flex items-center gap-4 mb-6 sm:mb-8">
+              <span className="w-8 sm:w-12 h-px bg-[#FF5722]" />
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-[#FF5722]">
+                Ứng dụng di động
+              </span>
+            </div>
+
+            {/* Title */}
+            <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.9] tracking-tight pt-6 overflow-hidden">
+              <span className="block">TẢI</span>
+              <span className="block text-white/20">NGAY</span>
+              <span className="relative inline-block">
+                RESQ
+                <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#FF5722]" />
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="hero-desc mt-6 sm:mt-8 text-sm sm:text-base lg:text-lg text-white/50 max-w-md leading-relaxed">
+              Ứng dụng cứu hộ thông minh — Cảnh báo lũ, gửi SOS, định vị và kết nối với đội cứu hộ trong tích tắc.
+            </p>
+
+            {/* Stats Row */}
+            <div className="mt-8 sm:mt-12 flex items-end gap-8 sm:gap-12">
+              <div className="stat-item group cursor-default">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#FF5722] group-hover:scale-110 inline-block transition-transform">50K+</span>
+                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">Downloads</p>
+              </div>
+              <div className="stat-item group cursor-default">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">4.8★</span>
+                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">Rating</p>
+              </div>
+              <div className="stat-item hidden sm:block group cursor-default">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">24/7</span>
+                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">Support</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right - Phone Mockup */}
+          <div className="lg:w-[45%] relative flex items-center justify-center p-6 sm:p-10 lg:p-0">
+            {/* Big Number Background */}
+            <span className="big-number absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[200px] sm:text-[300px] lg:text-[400px] font-black text-white/5 select-none pointer-events-none">
+              04
+            </span>
+            
+            {/* Phone */}
+            <div ref={phoneRef} className="relative z-10 w-full max-w-[220px] sm:max-w-[280px] lg:max-w-[320px]">
+              <img
+                src="/images/app_mockup.png"
+                alt="ResQ App"
+                className="w-full h-auto drop-shadow-2xl"
+              />
+              {/* Glow effect */}
+              <div className="absolute -inset-10 bg-[#FF5722]/20 blur-3xl rounded-full -z-10" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Download Section */}
+      <div className="bg-white text-black">
+        {/* Features Strip */}
+        <div ref={featuresRef} className="border-b border-black overflow-x-auto">
+          <div className="flex min-w-max">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div 
+                  key={index}
+                  className="feature-item flex-1 min-w-[200px] flex items-center gap-3 px-6 sm:px-8 py-4 sm:py-5 border-r border-black/10 last:border-r-0 hover:bg-black/5 transition-colors group cursor-default"
                 >
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#FF5722]">
-                    App Stores
+                  <Icon className="w-5 h-5 text-[#FF5722] group-hover:scale-125 transition-transform" weight="bold" />
+                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider">{feature.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Store Cards */}
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2">
+          {appStoreItems.map((store, index) => (
+            <div
+              key={store.key}
+              className={`store-card group relative p-8 sm:p-10 lg:p-14 border-b md:border-b-0 ${
+                index === 0 ? 'md:border-r' : ''
+              } border-black hover:bg-black hover:text-white transition-colors duration-500`}
+            >
+              {/* Number */}
+              <span className="absolute top-6 right-6 sm:top-8 sm:right-8 text-6xl sm:text-7xl lg:text-8xl font-black text-black/5 group-hover:text-white/10 group-hover:scale-110 transition-all duration-500 origin-top-right">
+                0{index + 1}
+              </span>
+
+              {/* Content */}
+              <div className="relative">
+                {/* Icon */}
+                <div className="w-16 h-16 sm:w-20 sm:h-20 border-2 border-black group-hover:border-white flex items-center justify-center mb-6 sm:mb-8 transition-all duration-500 group-hover:rotate-3">
+                  <img
+                    src={store.iconSrc}
+                    alt={store.iconAlt}
+                    className={`${store.iconClassName} group-hover:brightness-0 group-hover:invert transition-all duration-500`}
+                  />
+                </div>
+
+                {/* Store Name */}
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2">{store.name}</h3>
+                <p className="text-xs sm:text-sm text-black/40 group-hover:text-white/40 uppercase tracking-wider mb-6 sm:mb-8 transition-colors duration-500">
+                  {store.key === "app-store" ? "Available on iOS" : "Available on Android"}
+                </p>
+
+                {/* Button */}
+                <button
+                  disabled
+                  className="inline-flex items-center gap-3 text-sm sm:text-base font-bold uppercase tracking-wider group/btn"
+                >
+                  <span className="relative">
+                    Sắp ra mắt
+                    <span className="absolute -bottom-1 left-0 w-0 group-hover/btn:w-full h-0.5 bg-[#FF5722] transition-all duration-300" />
                   </span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    QR
-                  </span>
-                </motion.div>
+                  <ArrowUpRightIcon className="w-5 h-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
-                <div className="mt-6 space-y-6">
-                  {appStoreItems.map((store, index) => (
-                    <motion.div
-                      key={store.key}
-                      variants={storeItemVariants}
-                      custom={index}
-                      initial="hidden"
-                      animate="visible"
-                      transition={{ delay: 0.3 + index * 0.15 }}
-                      whileHover={{ x: 5 }}
-                      className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors group"
-                    >
-                      <div className="flex items-center gap-4 min-w-0">
-                        <motion.div
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ type: "spring", stiffness: 400 }}
-                          className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 group-hover:bg-slate-200 transition-colors"
-                        >
-                          <img
-                            src={store.iconSrc}
-                            alt={store.iconAlt}
-                            className={store.iconClassName}
-                          />
-                        </motion.div>
-                        <div className="min-w-0">
-                          <div className="text-sm font-bold text-slate-900 truncate">
-                            {store.name}
-                          </div>
-                          <div className="text-xs text-slate-500">
-                            Sắp ra mắt
-                          </div>
-                        </div>
-                      </div>
-
-                      <motion.button
-                        type="button"
-                        disabled
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="inline-flex items-center justify-center rounded-full bg-orange-50 px-6 py-2.5 text-sm font-bold text-orange-700 cursor-not-allowed border border-orange-100"
-                        title="Bản phát hành đang được chuẩn bị"
-                      >
-                        Coming Soon
-                      </motion.button>
-
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        className="w-14 h-14 flex items-center justify-center text-slate-300 group-hover:text-slate-400 transition-colors"
-                      >
-                        <QrCode className="w-10 h-10" />
-                      </motion.div>
-                    </motion.div>
-                  ))}
+        {/* Bottom CTA */}
+        <div className="border-t border-black">
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
+            {/* Left - Message */}
+            <div className="lg:col-span-8 p-6 sm:p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-black">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight">
+                  SẴN SÀNG CHO MÙA MƯA BÃO?
+                </h2>
+                <div className="flex items-center gap-2 text-sm text-black/50">
+                  <span className="w-2 h-2 bg-[#FF5722] animate-pulse" />
+                  Ứng dụng sẽ ra mắt sớm
                 </div>
               </motion.div>
             </div>
 
-            {/* bottom-right orange panel */}
-            <div
-              ref={orangePanelRef}
-              className="mt-8 md:mt-10 bg-gradient-to-br from-orange-500 via-orange-500 to-orange-600 flex-1 relative overflow-hidden"
-            >
-              {/* Decorative animated elements */}
-              <motion.div
-                className="absolute top-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.1, 0.2, 0.1],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              <motion.div
-                className="absolute bottom-20 left-10 w-48 h-48 bg-white/5 rounded-full blur-3xl"
-                animate={{
-                  scale: [1.2, 1, 1.2],
-                  x: [0, 20, 0],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-
-              <div className="container mx-auto px-4 lg:px-12 py-10 md:py-14 h-full relative z-10">
-                <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] items-center gap-10 h-full">
-                  <div ref={orangeTextRef} className="text-white/95">
-                    <motion.p
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 }}
-                      viewport={{ once: true }}
-                      className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4"
-                    >
-                      Tính năng nổi bật
-                    </motion.p>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-[1.2]">
-                      Một chạm gửi SOS.
-                      <br />
-                      <span className="text-white/70">
-                        Một hệ thống cùng phản ứng.
-                      </span>
-                    </h2>
-                    <p className="mt-4 text-white/80 leading-relaxed max-w-xl text-base md:text-lg">
-                      Khi có lũ, bạn có thể gửi vị trí và tình trạng ngay lập
-                      tức để đội cứu hộ tiếp cận nhanh hơn. Dữ liệu được tổng
-                      hợp giúp ưu tiên những trường hợp khẩn cấp.
-                    </p>
-
-                    {/* Feature list */}
-                    <motion.div
-                      className="mt-6 space-y-3"
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true }}
-                      variants={{
-                        visible: { transition: { staggerChildren: 0.1 } },
-                      }}
-                    >
-                      {[
-                        "Gửi SOS chỉ với một chạm",
-                        "Định vị GPS chính xác",
-                        "Kết nối đội cứu hộ 24/7",
-                      ].map((feature, idx) => (
-                        <motion.div
-                          key={idx}
-                          variants={{
-                            hidden: { opacity: 0, x: -20 },
-                            visible: { opacity: 1, x: 0 },
-                          }}
-                          className="flex items-center gap-3"
-                        >
-                          <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                          <span className="text-sm text-white/90">
-                            {feature}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  </div>
-
-                  <div
-                    ref={mockupRef}
-                    className="relative h-full flex items-end"
-                  >
-                    <div className="relative mx-auto w-full max-w-xs md:max-w-sm lg:max-w-md">
-                      {/* Glow effect behind phone */}
-                      <div className="absolute inset-0 bg-white/20 blur-3xl rounded-full transform scale-75" />
-
-                      <motion.img
-                        src="/images/app_mockup.png"
-                        alt="Giao diện ứng dụng ResQ SOS Miền Trung"
-                        className="w-full h-auto relative z-10 drop-shadow-2xl"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      />
-                    </div>
-                  </div>
+            {/* Right - CTA Button */}
+            <div className="lg:col-span-4 p-6 sm:p-8 lg:p-12 bg-[#FF5722] group cursor-pointer hover:bg-black transition-colors duration-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/50 mb-1">
+                    Đăng ký nhận thông báo
+                  </p>
+                  <span className="text-lg sm:text-xl font-black text-white">Nhận tin sớm nhất</span>
                 </div>
+                <ArrowRightIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:translate-x-2 transition-transform" />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Accent - matching other sections */}
-      <div className="h-1 bg-[#FF5722]" />
+      {/* Custom Styles */}
+      <style>{`
+        .clip-diagonal {
+          clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+      `}</style>
     </section>
   );
 };

@@ -152,8 +152,8 @@ const HeroSection = () => {
           >
             <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
               <div className="border-r border-b border-black/10 bg-black/5" />
-              <div className="border-b border-black/10 bg-black/[0.03]" />
-              <div className="border-r border-black/10 bg-black/[0.02]" />
+              <div className="border-b border-black/10 bg-black/3" />
+              <div className="border-r border-black/10 bg-black/2" />
               <div className="bg-black/5" />
             </div>
             <div className="relative z-10 h-full flex items-center justify-center p-4 sm:p-6 md:p-8">

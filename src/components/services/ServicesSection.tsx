@@ -1,52 +1,4 @@
-import { Package, ShoppingBag, Car, Wallet, Shield, Send } from "lucide-react";
-
-const categories = [
-  {
-    title: "Deliveries",
-    items: [
-      {
-        icon: ShoppingBag,
-        title: "Food",
-        desc: "Have all your cravings delivered to your doorstep.",
-      },
-      {
-        icon: Package,
-        title: "Mart",
-        desc: "Groceries and essentials in one convenient place.",
-      },
-      {
-        icon: Send,
-        title: "Express",
-        desc: "Send packages, documents, and beyond.",
-      },
-    ],
-  },
-  {
-    title: "Mobility",
-    items: [
-      {
-        icon: Car,
-        title: "Rides",
-        desc: "Choose from a variety of vehicles to get from A to B safely.",
-      },
-    ],
-  },
-  {
-    title: "Financial Services",
-    items: [
-      {
-        icon: Wallet,
-        title: "Pay",
-        desc: "Cashless payments that are seamless and secure.",
-      },
-      {
-        icon: Shield,
-        title: "Insurance",
-        desc: "Everyday protection with accessible coverage.",
-      },
-    ],
-  },
-];
+import { serviceCategories } from '../../constants';
 
 const ServicesSection = () => {
   return (
@@ -77,7 +29,7 @@ const ServicesSection = () => {
         </div>
 
         <div className="mt-12 space-y-12">
-          {categories.map((cat) => (
+          {serviceCategories.map((cat) => (
             <div key={cat.title} className="space-y-6">
               <h3 className="text-3xl md:text-4xl font-semibold text-gray-900">
                 {cat.title}
