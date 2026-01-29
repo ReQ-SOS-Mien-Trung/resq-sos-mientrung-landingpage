@@ -2,7 +2,14 @@ import { useEffect, useRef } from "react";
 import { appStoreItems } from "@/constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRightIcon, ArrowUpRightIcon, BellIcon, MapTrifoldIcon, PhoneIcon, ShieldCheckIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  BellIcon,
+  MapTrifoldIcon,
+  PhoneIcon,
+  ShieldCheckIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,7 +37,7 @@ const DownloadAppPage = () => {
       tl.fromTo(
         ".hero-label",
         { x: -30, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.6 }
+        { x: 0, opacity: 1, duration: 0.6 },
       );
 
       // Hero title animation - stagger each line
@@ -39,7 +46,7 @@ const DownloadAppPage = () => {
           titleRef.current.children,
           { y: 80, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.8, stagger: 0.12 },
-          "-=0.3"
+          "-=0.3",
         );
       }
 
@@ -48,7 +55,7 @@ const DownloadAppPage = () => {
         ".hero-desc",
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.6 },
-        "-=0.4"
+        "-=0.4",
       );
 
       // Stats row
@@ -56,7 +63,7 @@ const DownloadAppPage = () => {
         ".stat-item",
         { y: 40, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
-        "-=0.3"
+        "-=0.3",
       );
 
       // Phone mockup animation - appears from right
@@ -65,7 +72,7 @@ const DownloadAppPage = () => {
           phoneRef.current,
           { x: 100, opacity: 0, scale: 0.9 },
           { x: 0, opacity: 1, scale: 1, duration: 1 },
-          "-=0.8"
+          "-=0.8",
         );
       }
 
@@ -74,7 +81,7 @@ const DownloadAppPage = () => {
         ".big-number",
         { scale: 0.5, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.8 },
-        "-=0.6"
+        "-=0.6",
       );
 
       // Diagonal background
@@ -82,7 +89,7 @@ const DownloadAppPage = () => {
         ".diagonal-bg",
         { xPercent: 100 },
         { xPercent: 0, duration: 1.2, ease: "power2.out" },
-        0 // Start at the beginning
+        0, // Start at the beginning
       );
 
       // Features strip animation - after hero
@@ -92,7 +99,7 @@ const DownloadAppPage = () => {
           items,
           { y: 20, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.5, stagger: 0.08 },
-          "-=0.3"
+          "-=0.3",
         );
       }
 
@@ -103,29 +110,42 @@ const DownloadAppPage = () => {
           cards,
           { y: 40, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6, stagger: 0.15 },
-          "-=0.2"
+          "-=0.2",
         );
       }
-
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-screen bg-black text-white overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="min-h-screen bg-black text-white overflow-hidden"
+    >
       {/* Hero Section - Full Width */}
-      <div ref={heroRef} className="relative min-h-[70vh] lg:min-h-[80vh] flex flex-col">
+      <div
+        ref={heroRef}
+        className="relative min-h-[70vh] lg:min-h-[80vh] flex flex-col"
+      >
         {/* Background Pattern */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="diagonal-bg absolute top-0 right-0 w-[60%] h-full bg-[#FF5722] clip-diagonal" />
           {/* Grid Pattern */}
           <div className="absolute inset-0 opacity-10">
             {[...Array(10)].map((_, i) => (
-              <div key={i} className="absolute w-px h-full bg-white" style={{ left: `${i * 10}%` }} />
+              <div
+                key={i}
+                className="absolute w-px h-full bg-white"
+                style={{ left: `${i * 10}%` }}
+              />
             ))}
             {[...Array(6)].map((_, i) => (
-              <div key={`h-${i}`} className="absolute w-full h-px bg-white" style={{ top: `${i * 20}%` }} />
+              <div
+                key={`h-${i}`}
+                className="absolute w-full h-px bg-white"
+                style={{ top: `${i * 20}%` }}
+              />
             ))}
           </div>
         </div>
@@ -143,7 +163,10 @@ const DownloadAppPage = () => {
             </div>
 
             {/* Title */}
-            <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.9] tracking-tight pt-6 overflow-hidden">
+            <h1
+              ref={titleRef}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.9] tracking-tight pt-6 overflow-hidden"
+            >
               <span className="block">TẢI</span>
               <span className="block text-white/20">NGAY</span>
               <span className="relative inline-block">
@@ -154,22 +177,35 @@ const DownloadAppPage = () => {
 
             {/* Description */}
             <p className="hero-desc mt-6 sm:mt-8 text-sm sm:text-base lg:text-lg text-white/50 max-w-md leading-relaxed">
-              Ứng dụng cứu hộ thông minh — Cảnh báo lũ, gửi SOS, định vị và kết nối với đội cứu hộ trong tích tắc.
+              Ứng dụng cứu hộ thông minh — Cảnh báo lũ, gửi SOS, định vị và kết
+              nối với đội cứu hộ trong tích tắc.
             </p>
 
             {/* Stats Row */}
             <div className="mt-8 sm:mt-12 flex items-end gap-8 sm:gap-12">
               <div className="stat-item group cursor-default">
-                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#FF5722] group-hover:scale-110 inline-block transition-transform">50K+</span>
-                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">Downloads</p>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#FF5722] group-hover:scale-110 inline-block transition-transform">
+                  50K+
+                </span>
+                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">
+                  Downloads
+                </p>
               </div>
               <div className="stat-item group cursor-default">
-                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">4.8★</span>
-                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">Rating</p>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">
+                  4.8★
+                </span>
+                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">
+                  Rating
+                </p>
               </div>
               <div className="stat-item hidden sm:block group cursor-default">
-                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">24/7</span>
-                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">Support</p>
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">
+                  24/7
+                </span>
+                <p className="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider mt-1">
+                  Support
+                </p>
               </div>
             </div>
           </div>
@@ -180,9 +216,12 @@ const DownloadAppPage = () => {
             <span className="big-number absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[200px] sm:text-[300px] lg:text-[400px] font-black text-white/5 select-none pointer-events-none">
               04
             </span>
-            
+
             {/* Phone */}
-            <div ref={phoneRef} className="relative z-10 w-full max-w-[220px] sm:max-w-[280px] lg:max-w-[320px]">
+            <div
+              ref={phoneRef}
+              className="relative z-10 w-full max-w-[220px] sm:max-w-[280px] lg:max-w-[320px]"
+            >
               <img
                 src="/images/app_mockup.png"
                 alt="ResQ App"
@@ -198,17 +237,25 @@ const DownloadAppPage = () => {
       {/* Download Section */}
       <div className="bg-white text-black">
         {/* Features Strip */}
-        <div ref={featuresRef} className="border-b border-black overflow-x-auto">
+        <div
+          ref={featuresRef}
+          className="border-b border-black overflow-x-auto"
+        >
           <div className="flex min-w-max">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className="feature-item flex-1 min-w-[200px] flex items-center gap-3 px-6 sm:px-8 py-4 sm:py-5 border-r border-black/10 last:border-r-0 hover:bg-black/5 transition-colors group cursor-default"
                 >
-                  <Icon className="w-5 h-5 text-[#FF5722] group-hover:scale-125 transition-transform" weight="bold" />
-                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider">{feature.label}</span>
+                  <Icon
+                    className="w-5 h-5 text-[#FF5722] group-hover:scale-125 transition-transform"
+                    weight="bold"
+                  />
+                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider">
+                    {feature.label}
+                  </span>
                 </div>
               );
             })}
@@ -221,7 +268,7 @@ const DownloadAppPage = () => {
             <div
               key={store.key}
               className={`store-card group relative p-8 sm:p-10 lg:p-14 border-b md:border-b-0 ${
-                index === 0 ? 'md:border-r' : ''
+                index === 0 ? "md:border-r" : ""
               } border-black hover:bg-black hover:text-white transition-colors duration-500`}
             >
               {/* Number */}
@@ -241,9 +288,13 @@ const DownloadAppPage = () => {
                 </div>
 
                 {/* Store Name */}
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2">{store.name}</h3>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2">
+                  {store.name}
+                </h3>
                 <p className="text-xs sm:text-sm text-black/40 group-hover:text-white/40 uppercase tracking-wider mb-6 sm:mb-8 transition-colors duration-500">
-                  {store.key === "app-store" ? "Available on iOS" : "Available on Android"}
+                  {store.key === "app-store"
+                    ? "Available on iOS"
+                    : "Available on Android"}
                 </p>
 
                 {/* Button */}
@@ -285,7 +336,9 @@ const DownloadAppPage = () => {
                   <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/50 mb-1">
                     Đăng ký nhận thông báo
                   </p>
-                  <span className="text-lg sm:text-xl font-black text-white">Nhận tin sớm nhất</span>
+                  <span className="text-lg sm:text-xl font-black text-white">
+                    Nhận tin sớm nhất
+                  </span>
                 </div>
                 <ArrowRightIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:translate-x-2 transition-transform" />
               </div>
@@ -305,4 +358,3 @@ const DownloadAppPage = () => {
 };
 
 export default DownloadAppPage;
-
