@@ -6,13 +6,11 @@ import { Save, AlertCircle } from "lucide-react";
 import { useState } from "react";
 
 const rescuerFormSchema = z.object({
-  // Thông tin cơ bản
   name: z.string().min(2, "Tên đội/cá nhân phải có ít nhất 2 ký tự"),
   phone: z
     .string()
     .regex(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ (10-11 số)"),
 
-  // Vị trí tập kết
   address: z.string().min(5, "Địa chỉ phải có ít nhất 5 ký tự"),
   latitude: z
     .string()
@@ -21,7 +19,7 @@ const rescuerFormSchema = z.object({
       (val) =>
         !val ||
         (!isNaN(Number(val)) && Number(val) >= -90 && Number(val) <= 90),
-      "Vĩ độ phải từ -90 đến 90"
+      "Vĩ độ phải từ -90 đến 90",
     ),
   longitude: z
     .string()
@@ -30,26 +28,23 @@ const rescuerFormSchema = z.object({
       (val) =>
         !val ||
         (!isNaN(Number(val)) && Number(val) >= -180 && Number(val) <= 180),
-      "Kinh độ phải từ -180 đến 180"
+      "Kinh độ phải từ -180 đến 180",
     ),
 
-  // Phương tiện (Vehicle Type) - Required
   vehicleType: z.enum(["motorboat", "small_boat", "high_clearance_vehicle"], {
     message: "Vui lòng chọn phương tiện",
   }),
 
-  // Kỹ năng & Trang bị (Multi-select)
   hasMedicalStaff: z.boolean(),
   hasSwimmingRescue: z.boolean(),
   hasLifeJackets: z.boolean(),
 
-  // Tải trọng (Capacity) - Required number
   capacity: z
     .string()
     .min(1, "Tải trọng là bắt buộc")
     .refine(
       (val) => !isNaN(Number(val)) && Number(val) > 0,
-      "Tải trọng phải là số dương"
+      "Tải trọng phải là số dương",
     ),
 });
 

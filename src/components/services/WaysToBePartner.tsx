@@ -15,12 +15,16 @@ const WaysToBePartner = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (titleRef.current) {
-        gsap.fromTo(titleRef.current, 
-          { y: 50, opacity: 0 }, 
-          { 
-            y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-            scrollTrigger: { trigger: sectionRef.current, start: "top 70%" }
-          }
+        gsap.fromTo(
+          titleRef.current,
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: { trigger: sectionRef.current, start: "top 70%" },
+          },
         );
       }
     }, sectionRef);
@@ -38,7 +42,10 @@ const WaysToBePartner = () => {
           <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
             Hướng dẫn
           </p>
-          <h2 ref={titleRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
+          <h2
+            ref={titleRef}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]"
+          >
             CÁCH THAM GIA
             <br />
             MẠNG LƯỚI CỨU HỘ
@@ -81,13 +88,18 @@ const WaysToBePartner = () => {
             {currentSection.benefits.map((benefit, index) => (
               <li key={index} className="flex items-start gap-3 sm:gap-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 bg-[#FF5722] text-white flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-[10px] sm:text-xs font-bold">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="text-[10px] sm:text-xs font-bold">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                 </div>
                 <span className="text-sm sm:text-base text-black/70 leading-relaxed">
                   {benefit.includes("Chương trình Khách hàng Thân thiết") ? (
                     <>
                       {benefit.split("Chương trình Khách hàng Thân thiết")[0]}
-                      <a href="#" className="text-[#FF5722] font-bold hover:underline">
+                      <a
+                        href="#"
+                        className="text-[#FF5722] font-bold hover:underline"
+                      >
                         Chương trình Khách hàng Thân thiết
                       </a>
                       {benefit.split("Chương trình Khách hàng Thân thiết")[1]}
@@ -150,7 +162,7 @@ const WaysToBePartner = () => {
           </ul>
 
           <a
-            href="#"
+            href="/download-app"
             className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-black hover:text-[#FF5722] transition-colors group"
           >
             Tải ứng dụng ResQ ngay

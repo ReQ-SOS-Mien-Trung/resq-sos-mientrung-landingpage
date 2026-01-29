@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Search, Heart, User } from "lucide-react";
 import { menuItems } from "@/constants";
+import SearchOverlay from "./SearchOverlay";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     // Close menus on route change
@@ -51,13 +53,6 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
-  const handleMenuIconClick = () => {
-    if (!isMenuOpen) {
-      setActiveMenu(menuItems[0]?.id || null);
-    }
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const activeMenuData = menuItems.find((item) => item.id === activeMenu);
 
   return (
@@ -66,8 +61,16 @@ const Header = () => {
       <aside className="fixed left-0 top-0 bottom-0 w-16 bg-black text-white z-50 hidden lg:flex flex-col">
         {/* Logo */}
         <div className="h-16 flex items-center justify-center border-b border-white/10">
-          <Link to="/" onClick={handleHomeClick} className="text-white hover:text-[#FF5722] transition-colors">
-            <svg viewBox="0 0 24 24" className="w-7 h-7 lg:w-8 lg:h-8" fill="currentColor">
+          <Link
+            to="/"
+            onClick={handleHomeClick}
+            className="text-white hover:text-[#FF5722] transition-colors"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="w-7 h-7 lg:w-8 lg:h-8"
+              fill="currentColor"
+            >
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </Link>
@@ -75,12 +78,12 @@ const Header = () => {
 
         {/* Vertical Text - Search */}
         <button
-          onClick={handleMenuIconClick}
+          onClick={() => setIsSearchOpen(true)}
           className="flex-1 flex items-center justify-center hover:bg-white/10 transition-colors group"
         >
           <span
             className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
-            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+            style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
             Tìm kiếm
           </span>
@@ -93,7 +96,7 @@ const Header = () => {
         >
           <span
             className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
-            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+            style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
             Đăng ký cứu hộ
           </span>
@@ -120,7 +123,11 @@ const Header = () => {
               className="lg:hidden text-black hover:text-[#FF5722] transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
+              ) : (
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
+              )}
             </button>
 
             {/* Logo */}
@@ -129,7 +136,9 @@ const Header = () => {
               onClick={handleHomeClick}
               className="flex items-center gap-2 sm:gap-3 hover:opacity-70 transition-opacity"
             >
-              <span className="text-sm sm:text-base lg:text-lg font-black tracking-tight">ResQ SOS</span>
+              <span className="text-sm sm:text-base lg:text-lg font-black tracking-tight">
+                ResQ SOS
+              </span>
             </Link>
           </div>
 
@@ -153,14 +162,20 @@ const Header = () => {
             >
               Dành cho cứu hộ
             </button>
-            <button className="w-8 h-8 flex items-center justify-center text-black/70 hover:text-black transition-colors">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="w-8 h-8 flex items-center justify-center text-black/70 hover:text-black transition-colors"
+            >
               <Search className="w-4 h-4 xl:w-5 xl:h-5" />
             </button>
           </div>
 
           {/* Mobile Right Icons */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
-            <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors"
+            >
               <Search className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
@@ -176,7 +191,10 @@ const Header = () => {
           className="fixed inset-0 z-30 pt-14 sm:pt-16 lg:pl-16 hidden lg:block"
           onMouseLeave={handleMenuMouseLeave}
         >
-          <div className="absolute inset-0 bg-black/20" onClick={handleMenuMouseLeave} />
+          <div
+            className="absolute inset-0 bg-black/20"
+            onClick={handleMenuMouseLeave}
+          />
 
           <div className="relative bg-white border-b border-black">
             <div className="px-6 lg:px-12 py-8 lg:py-12">
@@ -189,7 +207,9 @@ const Header = () => {
                         <button
                           onMouseEnter={() => handleMenuMouseEnter(item.id)}
                           className={`w-full text-left py-3 lg:py-4 text-xs lg:text-sm font-bold uppercase tracking-wider transition-colors ${
-                            activeMenu === item.id ? "text-[#FF5722]" : "text-black/60 hover:text-black"
+                            activeMenu === item.id
+                              ? "text-[#FF5722]"
+                              : "text-black/60 hover:text-black"
                           }`}
                         >
                           {item.label}
@@ -277,6 +297,12 @@ const Header = () => {
           </div>
         </div>
       )}
+
+      {/* Search Overlay */}
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </>
   );
 };

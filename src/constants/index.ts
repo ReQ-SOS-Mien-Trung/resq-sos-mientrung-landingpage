@@ -371,3 +371,9 @@ export const appStoreItems = [
     iconClassName: "w-10 h-10 object-contain",
   },
 ] as const;
+
+export const badges = [
+  { text: "24/7 Sẵn sàng hỗ trợ", color: "bg-orange-500" },
+  { text: "Bản đồ điểm ngập & tuyến an toàn", color: "bg-sky-500" },
+  { text: "Kết nối đội cứu hộ địa phương", color: "bg-amber-500" },
+];

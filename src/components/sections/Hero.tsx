@@ -9,21 +9,7 @@ import {
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type StickPersonProps = {
-  src: string;
-  alt: string;
-  /** Tailwind size classes, e.g. "w-16 h-16 md:w-20 md:h-20" */
-  sizeClassName: string;
-  /** Optional extra classes for the face container (borders/rings/bg) */
-  faceClassName?: string;
-  /** Show/hide stick body under the face */
-  showBody?: boolean;
-  /** Body color classes for stick parts */
-  bodyColorClassName?: string;
-  /** Scale the body relative to the face */
-  bodyScaleClassName?: string;
-};
+import type { StickPersonProps } from "@type";
 
 const StickPerson = ({
   src,
@@ -35,7 +21,9 @@ const StickPerson = ({
   bodyScaleClassName = "scale-100",
 }: StickPersonProps) => {
   return (
-    <div className={`relative flex flex-col items-center ${bodyScaleClassName}`}>
+    <div
+      className={`relative flex flex-col items-center ${bodyScaleClassName}`}
+    >
       {/* Face (cropped from the real photo) */}
       <div
         className={`rounded-full overflow-hidden ${sizeClassName} ${faceClassName}`}
@@ -212,10 +200,10 @@ const Hero = () => {
       };
       setDimensions(newDimensions);
       setDebrisItems(
-        generateDebrisItems(newDimensions.width, newDimensions.height)
+        generateDebrisItems(newDimensions.width, newDimensions.height),
       );
       setWaterDroplets(
-        generateWaterDroplets(newDimensions.width, newDimensions.height)
+        generateWaterDroplets(newDimensions.width, newDimensions.height),
       );
     };
 
@@ -725,7 +713,13 @@ const Hero = () => {
                 fill="none"
               />
               <defs>
-                <linearGradient id="boatGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient
+                  id="boatGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
                   <stop offset="0%" stopColor="#d97706" stopOpacity="0.9" />
                   <stop offset="50%" stopColor="#b45309" stopOpacity="0.95" />
                   <stop offset="100%" stopColor="#92400e" stopOpacity="1" />
@@ -741,7 +735,10 @@ const Hero = () => {
                   <div
                     key={i}
                     className="h-0.5 bg-amber-900/40"
-                    style={{ width: `${100 - i * 5}%`, marginLeft: `${i * 2.5}%` }}
+                    style={{
+                      width: `${100 - i * 5}%`,
+                      marginLeft: `${i * 2.5}%`,
+                    }}
                   />
                 ))}
               </div>
@@ -1043,7 +1040,10 @@ const Hero = () => {
           </motion.div>
 
           {/* Helicopter body - more realistic shape */}
-          <div className="relative w-36 h-20 md:w-44 md:h-24" style={{ height: '5.5rem' }}>
+          <div
+            className="relative w-36 h-20 md:w-44 md:h-24"
+            style={{ height: "5.5rem" }}
+          >
             {/* Main fuselage */}
             <div className="relative w-full h-full bg-gradient-to-b from-slate-700 via-gray-800 to-slate-900 rounded-xl shadow-2xl border-2 border-gray-700/80">
               {/* Top curve for realistic helicopter shape */}

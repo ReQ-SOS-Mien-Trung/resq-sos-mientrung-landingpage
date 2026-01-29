@@ -4,7 +4,6 @@ export {
   Hero,
   HeroSection,
   Newsroom,
-  HowItWorks,
   CTABanner,
   Features,
   WhyUseUs,
