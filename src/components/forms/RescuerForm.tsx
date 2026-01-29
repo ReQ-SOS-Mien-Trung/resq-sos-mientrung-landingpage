@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
-import { Save, AlertCircle } from "lucide-react";
+import { FloppyDisk, WarningCircle } from "@phosphor-icons/react";
 import { useState } from "react";
+import type { RescuerFormData } from "../../../type";
 
 const rescuerFormSchema = z.object({
   // Thông tin cơ bản
@@ -52,8 +53,6 @@ const rescuerFormSchema = z.object({
       "Tải trọng phải là số dương"
     ),
 });
-
-type RescuerFormData = z.infer<typeof rescuerFormSchema>;
 
 const RescuerForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -163,7 +162,7 @@ const RescuerForm = () => {
                 />
                 {errors.name && (
                   <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                    <WarningCircle className="w-4 h-4" />
                     {errors.name.message}
                   </p>
                 )}
@@ -183,7 +182,7 @@ const RescuerForm = () => {
                 />
                 {errors.phone && (
                   <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                    <WarningCircle className="w-4 h-4" />
                     {errors.phone.message}
                   </p>
                 )}
@@ -210,7 +209,7 @@ const RescuerForm = () => {
                 />
                 {errors.address && (
                   <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                    <WarningCircle className="w-4 h-4" />
                     {errors.address.message}
                   </p>
                 )}
@@ -231,7 +230,7 @@ const RescuerForm = () => {
                   />
                   {errors.latitude && (
                     <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
+                      <WarningCircle className="w-4 h-4" />
                       {errors.latitude.message}
                     </p>
                   )}
@@ -251,7 +250,7 @@ const RescuerForm = () => {
                   />
                   {errors.longitude && (
                     <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
+                      <WarningCircle className="w-4 h-4" />
                       {errors.longitude.message}
                     </p>
                   )}
@@ -308,7 +307,7 @@ const RescuerForm = () => {
                 ))}
                 {errors.vehicleType && (
                   <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                    <WarningCircle className="w-4 h-4" />
                     {errors.vehicleType.message}
                   </p>
                 )}
@@ -372,7 +371,7 @@ const RescuerForm = () => {
                 />
                 {errors.capacity && (
                   <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                    <WarningCircle className="w-4 h-4" />
                     {errors.capacity.message}
                   </p>
                 )}
@@ -405,7 +404,7 @@ const RescuerForm = () => {
                     </>
                   ) : (
                     <>
-                      <Save className="w-5 h-5" />
+                      <FloppyDisk className="w-5 h-5" />
                       Đăng ký
                     </>
                   )}

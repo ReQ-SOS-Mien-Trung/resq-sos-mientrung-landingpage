@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Youtube, MapPin, Phone, Mail } from "lucide-react";
+import { FacebookLogo, InstagramLogo, YoutubeLogo, MapPin, Phone, Envelope } from "@phosphor-icons/react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -37,7 +37,7 @@ const Footer = () => {
               <p className="text-xs sm:text-sm text-black/60">1900 1234</p>
             </div>
             <div className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-black/40" />
+              <Envelope className="w-4 h-4 text-black/40" />
               <p className="text-xs sm:text-sm text-black/60">contact@resq.vn</p>
             </div>
           </div>
@@ -49,21 +49,21 @@ const Footer = () => {
               className="w-8 h-8 border border-black/20 flex items-center justify-center text-black/60 hover:border-[#FF5722] hover:text-[#FF5722] transition-colors"
               aria-label="Facebook"
             >
-              <Facebook className="w-4 h-4" />
+              <FacebookLogo className="w-4 h-4" />
             </a>
             <a
               href="#"
               className="w-8 h-8 border border-black/20 flex items-center justify-center text-black/60 hover:border-[#FF5722] hover:text-[#FF5722] transition-colors"
               aria-label="Instagram"
             >
-              <Instagram className="w-4 h-4" />
+              <InstagramLogo className="w-4 h-4" />
             </a>
             <a
               href="#"
               className="w-8 h-8 border border-black/20 flex items-center justify-center text-black/60 hover:border-[#FF5722] hover:text-[#FF5722] transition-colors"
               aria-label="YouTube"
             >
-              <Youtube className="w-4 h-4" />
+              <YoutubeLogo className="w-4 h-4" />
             </a>
           </div>
         </div>

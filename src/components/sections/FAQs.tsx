@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, Minus, ArrowRight } from "lucide-react";
+import { Plus, Minus, ArrowRight } from "@phosphor-icons/react";
 import { faqs } from "@/constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

@@ -5,16 +5,128 @@ import type {
   FAQ,
   MenuItem,
   NewsArticle,
+  Region,
+  Service,
+  ServiceCategory,
   Testimonial,
 } from "@type";
 import {
-  AlertTriangle,
-  Filter,
+  Warning,
+  Car,
+  Funnel,
+  Heart,
+  House,
   MapPin,
-  MessageSquare,
-  Send,
-  WifiOff,
-} from "lucide-react";
+  ChatCircle,
+  Package,
+  Phone,
+  PaperPlaneTilt,
+  Shield,
+  ShoppingBag,
+  Truck,
+  Users,
+  Wallet,
+  WifiSlash,
+} from "@phosphor-icons/react";
+
+export const services: Service[] = [
+  {
+    id: 'sos',
+    icon: Warning,
+    title: 'Gửi tín hiệu SOS',
+    description: 'Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.',
+    region: 'Khẩn cấp',
+  },
+  {
+    id: 'shelter',
+    icon: House,
+    title: 'Tìm nơi trú ẩn',
+    description: 'Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.',
+    region: 'An toàn',
+  },
+  {
+    id: 'rescue',
+    icon: Users,
+    title: 'Đội cứu hộ',
+    description: 'Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.',
+    region: 'Hỗ trợ',
+  },
+  {
+    id: 'supply',
+    icon: Truck,
+    title: 'Tiếp tế vật tư',
+    description: 'Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.',
+    region: 'Cứu trợ',
+  },
+  {
+    id: 'medical',
+    icon: Heart,
+    title: 'Hỗ trợ y tế',
+    description: 'Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.',
+    region: 'Y tế',
+  },
+  {
+    id: 'hotline',
+    icon: Phone,
+    title: 'Đường dây nóng',
+    description: 'Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.',
+    region: 'Liên lạc',
+  },
+];
+
+export const regions: Region[] = [
+  { id: 'mien-trung', name: 'Miền Trung', image: '/images/mien-trung.jpg' },
+  { id: 'mien-bac', name: 'Miền Bắc', image: '/images/mien-bac.jpg' },
+  { id: 'mien-nam', name: 'Miền Nam', image: '/images/mien-nam.jpg' },
+];
+
+export const serviceCategories: ServiceCategory[] = [
+  {
+    title: "Deliveries",
+    items: [
+      {
+        icon: ShoppingBag,
+        title: "Food",
+        desc: "Have all your cravings delivered to your doorstep.",
+      },
+      {
+        icon: Package,
+        title: "Mart",
+        desc: "Groceries and essentials in one convenient place.",
+      },
+      {
+        icon: PaperPlaneTilt,
+        title: "Express",
+        desc: "Send packages, documents, and beyond.",
+      },
+    ],
+  },
+  {
+    title: "Mobility",
+    items: [
+      {
+        icon: Car,
+        title: "Rides",
+        desc: "Choose from a variety of vehicles to get from A to B safely.",
+      },
+    ],
+  },
+  {
+    title: "Financial Services",
+    items: [
+      {
+        icon: Wallet,
+        title: "Pay",
+        desc: "Cashless payments that are seamless and secure.",
+      },
+      {
+        icon: Shield,
+        title: "Insurance",
+        desc: "Everyday protection with accessible coverage.",
+      },
+    ],
+  },
+];
 
 export const testimonials: Testimonial[] = [
   {
@@ -204,7 +316,7 @@ export const menuItems: MenuItem[] = [
 
 export const features = [
   {
-    icon: AlertTriangle,
+    icon: Warning,
     title: "Phân loại Priority",
     description:
       "Tự động phát hiện P1 (Nguy hiểm tính mạng) vs P3 (Cần nhu yếu phẩm)",
@@ -219,7 +331,7 @@ export const features = [
     bgColor: "bg-blue-50",
   },
   {
-    icon: WifiOff,
+    icon: WifiSlash,
     title: "Hoạt động Offline",
     description:
       "Các tính năng cơ bản hoạt động với kết nối internet không ổn định",
@@ -230,21 +342,21 @@ export const features = [
 
 export const steps = [
   {
-    icon: MessageSquare,
+    icon: ChatCircle,
     title: "Tiếp nhận (Parser)",
     description:
       "Gemini chuyển đổi tin nhắn SOS thô thành JSON với mức độ ưu tiên (P1/P2/P3) và nhu cầu cụ thể.",
     color: "from-primary-red to-primary-orange",
   },
   {
-    icon: Filter,
+    icon: Funnel,
     title: "Sàng lọc (Filter)",
     description:
       "Hệ thống quét bán kính 5-10km để tìm đội cứu hộ phù hợp sử dụng PostGIS.",
     color: "from-primary-blue to-cyan-500",
   },
   {
-    icon: Send,
+    icon: PaperPlaneTilt,
     title: "Điều phối (Dispatch)",
     description:
       'AI khớp nhu cầu (ví dụ: "Cần thuyền") với khả năng của đội cứu hộ (ví dụ: "Có thuyền máy").',
@@ -360,14 +472,6 @@ export const appStoreItems = [
     status: "Sắp ra mắt",
     iconSrc: "/icons/apple_storee.png",
     iconAlt: "App Store",
-    iconClassName: "w-10 h-10 object-contain",
-  },
-  {
-    key: "appgallery",
-    name: "AppGallery",
-    status: "Sắp ra mắt",
-    iconSrc: "/icons/apk.png",
-    iconAlt: "AppGallery",
     iconClassName: "w-10 h-10 object-contain",
   },
 ] as const;

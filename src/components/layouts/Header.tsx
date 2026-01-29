@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, Search, Heart, User } from "lucide-react";
+import { List, X, MagnifyingGlass, Heart, User } from "@phosphor-icons/react";
 import { menuItems } from "@/constants";
+import gsap from "gsap";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -9,12 +10,65 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // GSAP refs
+  const menuOverlayRef = useRef<HTMLDivElement>(null);
+  const menuContentRef = useRef<HTMLDivElement>(null);
+  const menuItemsRef = useRef<HTMLDivElement>(null);
+  const subItemsRef = useRef<HTMLDivElement>(null);
 
+  // Close menus on route change using useLayoutEffect
   useEffect(() => {
-    // Close menus on route change
-    setIsMenuOpen(false);
-    setIsMobileMenuOpen(false);
-  }, [location]);
+    // Reset menu states when location changes
+    return () => {
+      setIsMenuOpen(false);
+      setIsMobileMenuOpen(false);
+    };
+  }, [location.pathname]);
+
+  // GSAP animation for menu open/close
+  useEffect(() => {
+    if (isMenuOpen) {
+      // Animate menu open
+      const tl = gsap.timeline();
+      
+      if (menuOverlayRef.current) {
+        gsap.set(menuOverlayRef.current, { display: 'block' });
+        tl.fromTo(menuOverlayRef.current, 
+          { opacity: 0 },
+          { opacity: 1, duration: 0.3, ease: 'power2.out' }
+        );
+      }
+      
+      if (menuContentRef.current) {
+        tl.fromTo(menuContentRef.current,
+          { y: -20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' },
+          '-=0.2'
+        );
+      }
+      
+      if (menuItemsRef.current) {
+        const items = menuItemsRef.current.querySelectorAll('li');
+        tl.fromTo(items,
+          { x: -20, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.3, stagger: 0.05, ease: 'power2.out' },
+          '-=0.2'
+        );
+      }
+    }
+  }, [isMenuOpen]);
+
+  // GSAP animation for sub-items when activeMenu changes
+  useEffect(() => {
+    if (subItemsRef.current && activeMenu) {
+      const items = subItemsRef.current.querySelectorAll('.sub-item');
+      gsap.fromTo(items,
+        { y: 15, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.35, stagger: 0.06, ease: 'power2.out' }
+      );
+    }
+  }, [activeMenu]);
 
   const scrollToSection = (id: string) => {
     if (location.pathname !== "/") {
@@ -37,6 +91,14 @@ const Header = () => {
 
   const handleHomeClick = () => {
     navigate("/");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
+  };
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setIsMobileMenuOpen(false);
     setIsMenuOpen(false);
   };
@@ -47,8 +109,25 @@ const Header = () => {
   };
 
   const handleMenuMouseLeave = () => {
-    setActiveMenu(null);
-    setIsMenuOpen(false);
+    // Animate menu close
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setActiveMenu(null);
+        setIsMenuOpen(false);
+      }
+    });
+    
+    if (menuContentRef.current) {
+      tl.to(menuContentRef.current, {
+        y: -10, opacity: 0, duration: 0.25, ease: 'power2.in'
+      });
+    }
+    
+    if (menuOverlayRef.current) {
+      tl.to(menuOverlayRef.current, {
+        opacity: 0, duration: 0.2, ease: 'power2.in'
+      }, '-=0.1');
+    }
   };
 
   const handleMenuIconClick = () => {
@@ -88,7 +167,7 @@ const Header = () => {
 
         {/* Vertical Text - Find */}
         <button
-          onClick={() => navigate("/register")}
+          onClick={() => handleNavigate("/register")}
           className="flex-1 flex items-center justify-center hover:bg-white/10 transition-colors group border-t border-white/10"
         >
           <span
@@ -120,7 +199,7 @@ const Header = () => {
               className="lg:hidden text-black hover:text-[#FF5722] transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <List className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
 
             {/* Logo */}
@@ -142,26 +221,26 @@ const Header = () => {
               Trang chủ
             </button>
             <button
-              onClick={() => navigate("/features")}
+              onClick={() => handleNavigate("/features")}
               className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
             >
               Trung tâm trợ giúp
             </button>
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => handleNavigate("/register")}
               className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
             >
               Dành cho cứu hộ
             </button>
             <button className="w-8 h-8 flex items-center justify-center text-black/70 hover:text-black transition-colors">
-              <Search className="w-4 h-4 xl:w-5 xl:h-5" />
+              <MagnifyingGlass className="w-4 h-4 xl:w-5 xl:h-5" />
             </button>
           </div>
 
           {/* Mobile Right Icons */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
             <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
-              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+              <MagnifyingGlass className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
               <User className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -173,26 +252,41 @@ const Header = () => {
       {/* Mega Menu Overlay - Desktop */}
       {isMenuOpen && (
         <div
+          ref={menuOverlayRef}
           className="fixed inset-0 z-30 pt-14 sm:pt-16 lg:pl-16 hidden lg:block"
           onMouseLeave={handleMenuMouseLeave}
         >
+          {/* Backdrop */}
           <div className="absolute inset-0 bg-black/20" onClick={handleMenuMouseLeave} />
 
-          <div className="relative bg-white border-b border-black">
-            <div className="px-6 lg:px-12 py-8 lg:py-12">
-              <div className="flex gap-8 lg:gap-16">
+          {/* Menu Content */}
+          <div ref={menuContentRef} className="relative bg-white border-b border-black shadow-xl overflow-hidden">
+            {/* Top accent line */}
+            <div className="h-0.5 bg-[#FF5722]" />
+            
+            <div className="px-8 lg:px-12 py-10 lg:py-12">
+              <div className="flex gap-12 lg:gap-20">
                 {/* Left: Categories */}
-                <div className="w-48 lg:w-64 shrink-0 border-r border-black/10 pr-6 lg:pr-8">
+                <div ref={menuItemsRef} className="w-56 lg:w-64 shrink-0 border-r border-black/10 pr-8">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/30 mb-6">Danh mục</p>
                   <ul className="space-y-0">
                     {menuItems.map((item) => (
-                      <li key={item.id} className="border-b border-black/10">
+                      <li key={item.id} className="border-b border-black/10 last:border-b-0">
                         <button
                           onMouseEnter={() => handleMenuMouseEnter(item.id)}
-                          className={`w-full text-left py-3 lg:py-4 text-xs lg:text-sm font-bold uppercase tracking-wider transition-colors ${
-                            activeMenu === item.id ? "text-[#FF5722]" : "text-black/60 hover:text-black"
+                          className={`relative w-full text-left py-4 text-sm font-bold uppercase tracking-wider transition-all duration-300 group ${
+                            activeMenu === item.id 
+                              ? "text-black pl-3" 
+                              : "text-black/40 hover:text-black hover:pl-3"
                           }`}
                         >
                           {item.label}
+                          {/* Underline indicator */}
+                          <span 
+                            className={`absolute bottom-3 left-0 h-0.5 bg-[#FF5722] transition-all duration-300 ${
+                              activeMenu === item.id ? "w-8" : "w-0 group-hover:w-6"
+                            }`} 
+                          />
                         </button>
                       </li>
                     ))}
@@ -201,25 +295,30 @@ const Header = () => {
 
                 {/* Right: Sub-items */}
                 {activeMenuData && activeMenuData.subItems && (
-                  <div className="flex-1 grid grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-8">
-                    {activeMenuData.subItems.map((subItem, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          if (subItem.link) {
-                            scrollToSection(subItem.link.replace("#", ""));
-                          }
-                        }}
-                        className="text-left group p-3 lg:p-4 border border-transparent hover:border-black/10 transition-colors"
-                      >
-                        <h3 className="text-base lg:text-lg font-bold mb-1 lg:mb-2 group-hover:text-[#FF5722] transition-colors">
-                          {subItem.title}
-                        </h3>
-                        <p className="text-xs lg:text-sm text-black/50 leading-relaxed">
-                          {subItem.description}
-                        </p>
-                      </button>
-                    ))}
+                  <div ref={subItemsRef} className="flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/30 mb-6">
+                      {activeMenuData.label}
+                    </p>
+                    <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-6">
+                      {activeMenuData.subItems.map((subItem, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            if (subItem.link) {
+                              scrollToSection(subItem.link.replace("#", ""));
+                            }
+                          }}
+                          className="sub-item text-left group py-4 border-b border-black/10 hover:border-[#FF5722] transition-all duration-300"
+                        >
+                          <h3 className="text-base font-bold text-black mb-1 group-hover:text-[#FF5722] transition-colors">
+                            {subItem.title}
+                          </h3>
+                          <p className="text-xs text-black/40 leading-relaxed">
+                            {subItem.description}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -266,10 +365,7 @@ const Header = () => {
           </div>
           <div className="p-4 sm:p-6">
             <button
-              onClick={() => {
-                navigate("/register");
-                setIsMobileMenuOpen(false);
-              }}
+              onClick={() => handleNavigate("/register")}
               className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"
             >
               Dành cho cứu hộ

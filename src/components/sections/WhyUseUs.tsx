@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { testimonials } from "@/constants";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -143,13 +143,13 @@ const WhyUseUs = () => {
                 onClick={prevTestimonial}
                 className="w-10 h-10 sm:w-12 sm:h-12 border border-black/20 flex items-center justify-center hover:bg-black hover:text-white transition-colors"
               >
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                <CaretLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <button 
                 onClick={nextTestimonial}
                 className="w-10 h-10 sm:w-12 sm:h-12 bg-[#FF5722] text-white flex items-center justify-center hover:bg-black transition-colors"
               >
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <CaretRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <span className="text-xs sm:text-sm text-black/40 ml-3 sm:ml-4">
                 {activeTestimonial + 1} / {testimonials.length}
