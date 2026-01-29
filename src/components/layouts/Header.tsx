@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { List, X, MagnifyingGlass, Heart, User } from "@phosphor-icons/react";
+import { List, XIcon } from "@phosphor-icons/react";
 import { menuItems } from "@/constants";
 import gsap from "gsap";
+import { HeartIcon, MagnifyingGlassIcon, UserIcon } from "@phosphor-icons/react/dist/ssr";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -146,8 +147,8 @@ const Header = () => {
         {/* Logo */}
         <div className="h-16 flex items-center justify-center border-b border-white/10">
           <Link to="/" onClick={handleHomeClick} className="text-white hover:text-[#FF5722] transition-colors">
-            <svg viewBox="0 0 24 24" className="w-7 h-7 lg:w-8 lg:h-8" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            <svg viewBox="0 0 500 500" className="w-8 h-8 lg:w-9 lg:h-9" fill="currentColor">
+              <path d="M393.724 123.906C387.609 118.729 381.307 114.266 374.849 110.474C361.443 122.542 348.406 136.203 351.083 152.953C353.547 165.896 355.135 176.682 355.203 189.938C348.396 198.24 343.953 183.12 342.328 175.01C335.828 144.573 305.917 188.214 300.177 197.672C297.083 202.771 289.828 197.911 293.099 192.328C297.297 184.859 307.089 175.786 306.604 167.771C302.589 165.099 284.318 179.302 278.078 182.802C272.438 186.422 267.714 179.016 273.177 175.521C306.672 154.005 307.563 151.786 270.016 161.672C265.818 162.932 263.62 156.526 268.083 155.203C288.646 148.203 319.984 139.125 276.13 139.786C269.339 140.188 269.688 134.01 273.995 133.708C284.094 133.292 290.443 133.224 303.01 129.854C320.823 124.266 334.307 112.396 344.214 97.9688C336.026 96 327.641 95 319.073 95C287.401 95 261.849 108.641 250.156 116.161C238.469 108.641 212.922 95 181.25 95C154.365 95 129.245 104.724 106.599 123.906C71.5729 153.563 58.599 193.375 70.0625 236.01C76.7396 260.839 94.0781 280.396 111.63 298.651C125.5 313.073 145.979 332.333 174.24 354.182C194.453 335.578 212.885 314.568 208.823 289.146C204.859 268.323 202.297 250.964 202.188 229.635C213.141 216.276 220.292 240.609 222.906 253.656C233.37 302.63 281.505 232.411 290.734 217.193C295.719 208.979 307.396 216.807 302.13 225.792C295.37 237.813 279.615 252.406 280.401 265.307C286.859 269.604 316.255 246.75 326.297 241.12C335.375 235.292 342.979 247.208 334.182 252.833C280.292 287.458 278.854 291.031 339.276 275.12C346.031 273.089 349.563 283.396 342.38 285.526C309.297 296.792 258.865 311.401 329.432 310.339C340.359 309.693 339.807 319.635 332.87 320.115C316.62 320.786 306.401 320.901 286.182 326.323C254.927 336.125 231.964 357.938 215.703 384.016C226.417 391.203 237.88 398.536 250.156 405.958C320.495 363.438 364.568 323.734 388.688 298.651C406.24 280.396 423.573 260.839 430.25 236.01C441.719 193.375 428.74 153.563 393.724 123.906Z" />
             </svg>
           </Link>
         </div>
@@ -181,10 +182,10 @@ const Header = () => {
         {/* Bottom Icons */}
         <div className="border-t border-white/10 py-3 lg:py-4 flex flex-col items-center gap-3 lg:gap-4">
           <button className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors">
-            <Heart className="w-4 h-4 lg:w-5 lg:h-5" />
+            <HeartIcon className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
           <button className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors">
-            <User className="w-4 h-4 lg:w-5 lg:h-5" />
+            <UserIcon className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
         </div>
       </aside>
@@ -199,7 +200,7 @@ const Header = () => {
               className="lg:hidden text-black hover:text-[#FF5722] transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <List className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {isMobileMenuOpen ? <XIcon className="w-5 h-5 sm:w-6 sm:h-6" /> : <List className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
 
             {/* Logo */}
@@ -233,17 +234,17 @@ const Header = () => {
               Dành cho cứu hộ
             </button>
             <button className="w-8 h-8 flex items-center justify-center text-black/70 hover:text-black transition-colors">
-              <MagnifyingGlass className="w-4 h-4 xl:w-5 xl:h-5" />
+              <MagnifyingGlassIcon className="w-4 h-4 xl:w-5 xl:h-5" />
             </button>
           </div>
 
           {/* Mobile Right Icons */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
             <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
-              <MagnifyingGlass className="w-4 h-4 sm:w-5 sm:h-5" />
+              <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
-              <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              <UserIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </nav>

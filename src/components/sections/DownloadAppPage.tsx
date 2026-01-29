@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { ArrowRight, ArrowUpRight, Phone, Shield, MapTrifold, Bell } from "@phosphor-icons/react";
 import { appStoreItems } from "@/constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRightIcon, ArrowUpRightIcon, BellIcon, MapTrifoldIcon, PhoneIcon, ShieldCheckIcon } from "@phosphor-icons/react/dist/ssr";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,10 +15,10 @@ const DownloadAppPage = () => {
   const cardsRef = useRef<HTMLDivElement>(null);
 
   const features = [
-    { icon: Bell, label: "Cảnh báo thời gian thực" },
-    { icon: Shield, label: "SOS một chạm" },
-    { icon: MapTrifold, label: "Bản đồ điểm ngập" },
-    { icon: Phone, label: "Hoạt động offline" },
+    { icon: BellIcon, label: "Cảnh báo thời gian thực" },
+    { icon: ShieldCheckIcon, label: "SOS một chạm" },
+    { icon: MapTrifoldIcon, label: "Bản đồ điểm ngập" },
+    { icon: PhoneIcon, label: "Hoạt động offline" },
   ];
 
   useEffect(() => {
@@ -255,7 +255,7 @@ const DownloadAppPage = () => {
                     Sắp ra mắt
                     <span className="absolute -bottom-1 left-0 w-0 group-hover/btn:w-full h-0.5 bg-[#FF5722] transition-all duration-300" />
                   </span>
-                  <ArrowUpRight className="w-5 h-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                  <ArrowUpRightIcon className="w-5 h-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -287,7 +287,7 @@ const DownloadAppPage = () => {
                   </p>
                   <span className="text-lg sm:text-xl font-black text-white">Nhận tin sớm nhất</span>
                 </div>
-                <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:translate-x-2 transition-transform" />
+                <ArrowRightIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:translate-x-2 transition-transform" />
               </div>
             </div>
           </div>
