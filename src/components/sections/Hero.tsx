@@ -1,29 +1,15 @@
 import {
-  Download,
+  DownloadSimple,
   ArrowRight,
-  Droplets,
+  Drop,
   Waves,
   CloudRain,
-  LifeBuoy,
-} from "lucide-react";
+  Lifebuoy,
+} from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type StickPersonProps = {
-  src: string;
-  alt: string;
-  /** Tailwind size classes, e.g. "w-16 h-16 md:w-20 md:h-20" */
-  sizeClassName: string;
-  /** Optional extra classes for the face container (borders/rings/bg) */
-  faceClassName?: string;
-  /** Show/hide stick body under the face */
-  showBody?: boolean;
-  /** Body color classes for stick parts */
-  bodyColorClassName?: string;
-  /** Scale the body relative to the face */
-  bodyScaleClassName?: string;
-};
+import type { StickPersonProps } from "../../../type";
 
 const StickPerson = ({
   src,
@@ -755,7 +741,7 @@ const Hero = () => {
 
             {/* Life buoy on side */}
             <div className="absolute top-1 right-2">
-              <LifeBuoy className="w-5 h-5 md:w-6 md:h-6 text-white drop-shadow-lg" />
+              <Lifebuoy className="w-5 h-5 md:w-6 md:h-6 text-white drop-shadow-lg" />
             </div>
 
             {/* Rescuer 1 - Left side */}
@@ -1198,7 +1184,7 @@ const Hero = () => {
         }}
       >
         <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/80 rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-4 border-white/30">
-          <LifeBuoy className="w-8 h-8 md:w-10 md:h-10 text-white" />
+          <Lifebuoy className="w-8 h-8 md:w-10 md:h-10 text-white" />
         </div>
       </motion.div>
 
@@ -1227,7 +1213,7 @@ const Hero = () => {
               ease: "easeInOut",
             }}
           >
-            <Droplets className="w-4 h-4 text-blue-400" />
+            <Drop className="w-4 h-4 text-blue-400" />
           </motion.div>
         ))}
       </div>
@@ -1438,7 +1424,7 @@ const Hero = () => {
               <span className="text-sm md:text-base">24/7 Sẵn sàng cứu hộ</span>
             </div>
             <div className="flex items-center gap-2 text-white/90">
-              <LifeBuoy className="w-5 h-5 text-emerald-400" />
+              <Lifebuoy className="w-5 h-5 text-emerald-400" />
               <span className="text-sm md:text-base">
                 Mạng lưới cứu hộ rộng khắp
               </span>
@@ -1457,7 +1443,7 @@ const Hero = () => {
           onClick={() => scrollToSection("features")}
           className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-5 md:py-6 font-bold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 group px-4 md:px-8 lg:px-12 xl:px-16 shadow-2xl"
         >
-          <LifeBuoy className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+          <Lifebuoy className="w-6 h-6 group-hover:rotate-12 transition-transform" />
           <span>Khám phá ứng dụng ResQ SOS miền Trung</span>
           <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform ml-auto" />
         </motion.button>
@@ -1470,7 +1456,7 @@ const Hero = () => {
           onClick={() => navigate("/download-app")}
           className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-5 md:py-6 font-bold text-lg md:text-xl transition-all duration-300 flex items-center justify-start gap-3 px-4 md:px-8 lg:px-12 xl:px-16 shadow-2xl"
         >
-          <Download className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          <DownloadSimple className="w-6 h-6 group-hover:scale-110 transition-transform" />
           <span>Tải App ngay</span>
         </motion.button>
       </div>

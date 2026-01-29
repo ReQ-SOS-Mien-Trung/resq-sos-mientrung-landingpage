@@ -62,3 +62,58 @@ export type StoreItem = {
   status: string;
   icon: React.ReactNode;
 };
+
+export type Service = {
+  id: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  region: string;
+};
+
+export type Region = {
+  id: string;
+  name: string;
+  image: string;
+};
+
+export type ServiceCategory = {
+  title: string;
+  items: {
+    icon: React.ComponentType<{ className?: string }>;
+    title: string;
+    desc: string;
+  }[];
+};
+
+export type CTABannerProps = {
+  onSignUpClick: () => void;
+};
+
+export type StickPersonProps = {
+  src: string;
+  alt: string;
+  /** Tailwind size classes, e.g. "w-16 h-16 md:w-20 md:h-20" */
+  sizeClassName: string;
+  /** Optional extra classes for the face container (borders/rings/bg) */
+  faceClassName?: string;
+  /** Show/hide stick body under the face */
+  showBody?: boolean;
+  /** Body color classes for stick parts */
+  bodyColorClassName?: string;
+  /** Scale the body relative to the face */
+  bodyScaleClassName?: string;
+};
+
+export type RescuerFormData = {
+  name: string;
+  phone: string;
+  address: string;
+  latitude?: string;
+  longitude?: string;
+  vehicleType: "motorboat" | "small_boat" | "high_clearance_vehicle";
+  hasMedicalStaff: boolean;
+  hasSwimmingRescue: boolean;
+  hasLifeJackets: boolean;
+  capacity: string;
+};

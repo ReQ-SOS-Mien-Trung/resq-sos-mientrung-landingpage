@@ -1,68 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import {
-  AlertTriangle,
-  Heart,
-  Home,
-  MapPin,
-  Phone,
-  Truck,
-  Users,
-} from 'lucide-react';
+import { MapPin } from '@phosphor-icons/react';
+import { services, regions } from '../../constants';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const services = [
-  {
-    id: 'sos',
-    icon: <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />,
-    title: 'Gửi tín hiệu SOS',
-    description: 'Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.',
-    region: 'Khẩn cấp',
-  },
-  {
-    id: 'shelter',
-    icon: <Home className="w-5 h-5 sm:w-6 sm:h-6" />,
-    title: 'Tìm nơi trú ẩn',
-    description: 'Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.',
-    region: 'An toàn',
-  },
-  {
-    id: 'rescue',
-    icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" />,
-    title: 'Đội cứu hộ',
-    description: 'Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.',
-    region: 'Hỗ trợ',
-  },
-  {
-    id: 'supply',
-    icon: <Truck className="w-5 h-5 sm:w-6 sm:h-6" />,
-    title: 'Tiếp tế vật tư',
-    description: 'Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.',
-    region: 'Cứu trợ',
-  },
-  {
-    id: 'medical',
-    icon: <Heart className="w-5 h-5 sm:w-6 sm:h-6" />,
-    title: 'Hỗ trợ y tế',
-    description: 'Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.',
-    region: 'Y tế',
-  },
-  {
-    id: 'hotline',
-    icon: <Phone className="w-5 h-5 sm:w-6 sm:h-6" />,
-    title: 'Đường dây nóng',
-    description: 'Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.',
-    region: 'Liên lạc',
-  },
-];
-
-const regions = [
-  { id: 'mien-trung', name: 'Miền Trung', image: '/images/mien-trung.jpg' },
-  { id: 'mien-bac', name: 'Miền Bắc', image: '/images/mien-bac.jpg' },
-  { id: 'mien-nam', name: 'Miền Nam', image: '/images/mien-nam.jpg' },
-];
 
 const Services = () => {
   const [activeRegion, setActiveRegion] = useState(regions[0].id);
@@ -108,7 +50,7 @@ const Services = () => {
           </div>
 
           <div className="relative p-6 sm:p-8 md:p-12 lg:p-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[0.95] mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1] mb-6 sm:mb-8">
               DỊCH VỤ
               <br />
               CỨU TRỢ
@@ -180,30 +122,33 @@ const Services = () => {
 
           {/* Services Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, index) => (
-              <div
-                key={service.id}
-                className={`p-4 sm:p-6 border-b border-black/10 ${
-                  index % 2 !== 1 ? 'sm:border-r' : ''
-                } ${
-                  index % 3 !== 2 ? 'lg:border-r' : 'lg:border-r-0'
-                } group hover:bg-black/5 transition-colors cursor-pointer`}
-              >
-                {/* Region Tag */}
-                <span className="text-[10px] font-bold uppercase tracking-wider text-black/30 mb-2 sm:mb-3 block">
-                  {service.region}
-                </span>
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={service.id}
+                  className={`p-4 sm:p-6 border-b border-black/10 ${
+                    index % 2 !== 1 ? 'sm:border-r' : ''
+                  } ${
+                    index % 3 !== 2 ? 'lg:border-r' : 'lg:border-r-0'
+                  } group hover:bg-black/5 transition-colors cursor-pointer`}
+                >
+                  {/* Region Tag */}
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-black/30 mb-2 sm:mb-3 block">
+                    {service.region}
+                  </span>
 
-                {/* Icon */}
-                <div className="w-10 h-10 sm:w-12 sm:h-12 border border-black/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:border-[#FF5722] group-hover:text-[#FF5722] transition-colors">
-                  {service.icon}
+                  {/* Icon */}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 border border-black/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:border-[#FF5722] group-hover:text-[#FF5722] transition-colors">
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  
+                  {/* Content */}
+                  <h4 className="text-sm sm:text-base font-bold mb-1 sm:mb-2">{service.title}</h4>
+                  <p className="text-xs text-black/50 leading-relaxed">{service.description}</p>
                 </div>
-                
-                {/* Content */}
-                <h4 className="text-sm sm:text-base font-bold mb-1 sm:mb-2">{service.title}</h4>
-                <p className="text-xs text-black/50 leading-relaxed">{service.description}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Bottom Stats */}

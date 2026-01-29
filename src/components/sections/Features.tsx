@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { AlertTriangle, MapPin, Users, Phone, Shield, Bell, ArrowRight } from 'lucide-react';
+import { Warning, MapPin, Users, Phone, Shield, Bell, ArrowRight } from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +12,7 @@ const panels = [
     subtitle: 'Khi bạn cần giúp đỡ',
     description: 'Chỉ với một chạm, gửi ngay tín hiệu cứu trợ khẩn cấp kèm vị trí GPS chính xác đến đội ngũ cứu hộ gần nhất.',
     features: [
-      { icon: AlertTriangle, text: 'Gửi SOS một chạm' },
+      { icon: Warning, text: 'Gửi SOS một chạm' },
       { icon: MapPin, text: 'Định vị GPS tự động' },
       { icon: Bell, text: 'Thông báo đến đội cứu hộ' },
     ],

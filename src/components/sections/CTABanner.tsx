@@ -1,8 +1,5 @@
-import { ArrowRight } from "lucide-react";
-
-type CTABannerProps = {
-  onSignUpClick: () => void;
-};
+import { ArrowRight } from "@phosphor-icons/react";
+import type { CTABannerProps } from "../../../type";
 
 const CTABanner = ({ onSignUpClick }: CTABannerProps) => {
   return (
