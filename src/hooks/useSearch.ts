@@ -40,7 +40,6 @@ const getSearchScore = (item: SearchItem, query: string): number => {
   if (normalizedQuery.length < 2) return 0;
   
   const normalizedTitle = normalizeText(item.title);
-  const normalizedDescription = normalizeText(item.description);
   const normalizedKeywords = item.keywords.map(normalizeText);
 
   let score = 0;
@@ -94,8 +93,11 @@ export function useSearch(): UseSearchResult {
 
   // Perform search when query changes
   useEffect(() => {
-    if (!query.trim()) {
+    const trimmedQuery = query.trim();
+    
+    if (!trimmedQuery) {
       setResults([]);
+      setIsLoading(false);
       return;
     }
 
@@ -103,8 +105,6 @@ export function useSearch(): UseSearchResult {
 
     // Simulate slight delay for UX (debounce effect)
     const timeoutId = setTimeout(() => {
-      const trimmedQuery = query.trim();
-      
       // Don't search if query is too short
       if (trimmedQuery.length < 2) {
         setResults([]);
