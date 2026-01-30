@@ -482,11 +482,11 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 3,
-    image: "/images/ghe_flood.jpg",
-    date: "25/11/24",
+    image: "/images/cong_an.png",
+    date: "04/12/25",
     title:
-      "Ủng hộ hơn 450 triệu đồng hỗ trợ đồng bào bị thiệt hại do bão lũ",
-    link: "#",
+      "Công an Lâm Đồng chủ động ứng phó, xuyên đêm cứu dân trong mưa lũ",
+    link: "https://bocongan.gov.vn/bai-viet/cong-an-lam-dong-chu-dong-ung-pho-xuyen-dem-cuu-dan-trong-mua-lu-1764835632",
   },
   {
     id: 4,
