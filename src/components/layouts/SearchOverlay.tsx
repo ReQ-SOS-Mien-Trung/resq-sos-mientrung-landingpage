@@ -34,10 +34,11 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
     }
   }, [isOpen]);
 
-  // Reset selected index when results change
-  useEffect(() => {
+  // Reset selected index when query changes
+  const handleQueryChange = useCallback((newQuery: string) => {
+    setQuery(newQuery);
     setSelectedIndex(-1);
-  }, [results]);
+  }, [setQuery]);
 
   // Close on route change
   useEffect(() => {
@@ -239,7 +240,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                   ref={inputRef}
                   type="text"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => handleQueryChange(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Tìm kiếm trang, tính năng, câu hỏi..."
                   className="flex-1 text-base lg:text-lg font-medium text-black placeholder:text-black/30 outline-none bg-transparent"

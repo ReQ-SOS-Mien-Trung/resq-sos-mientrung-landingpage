@@ -25,42 +25,63 @@ const normalizeText = (text: string): string => {
     .replace(/Đ/g, "D");
 };
 
-// Fuzzy search scoring function
+// Check if all query words are found in the text
+const matchAllWords = (text: string, queryWords: string[]): boolean => {
+  const normalizedText = normalizeText(text);
+  return queryWords.every(word => normalizedText.includes(word));
+};
+
+// Improved search scoring function - requires all words to match
 const getSearchScore = (item: SearchItem, query: string): number => {
-  const normalizedQuery = normalizeText(query);
+  const normalizedQuery = normalizeText(query.trim());
+  const queryWords = normalizedQuery.split(/\s+/).filter(w => w.length > 0);
+  
+  // If query is too short (less than 2 chars), don't search
+  if (normalizedQuery.length < 2) return 0;
+  
   const normalizedTitle = normalizeText(item.title);
-  const normalizedDescription = normalizeText(item.description);
   const normalizedKeywords = item.keywords.map(normalizeText);
 
   let score = 0;
+  
+  // Check if title matches all query words
+  const titleMatchesAll = matchAllWords(item.title, queryWords);
+  
+  // Check if any keyword matches the full query
+  const keywordExactMatch = normalizedKeywords.some(kw => 
+    kw.includes(normalizedQuery) || normalizedQuery.includes(kw)
+  );
+  
+  // Check if description matches all query words
+  const descMatchesAll = matchAllWords(item.description, queryWords);
 
-  // Exact match in title (highest priority)
+  // Title contains the exact query phrase (highest priority)
   if (normalizedTitle.includes(normalizedQuery)) {
-    score += 100;
-    // Bonus for starting with query
+    score += 150;
     if (normalizedTitle.startsWith(normalizedQuery)) {
       score += 50;
     }
+  } 
+  // Title matches all individual words
+  else if (titleMatchesAll) {
+    score += 100;
   }
 
-  // Match in description
-  if (normalizedDescription.includes(normalizedQuery)) {
-    score += 50;
+  // Exact keyword match
+  if (keywordExactMatch) {
+    score += 80;
   }
 
-  // Match in keywords
-  for (const keyword of normalizedKeywords) {
-    if (keyword.includes(normalizedQuery)) {
-      score += 30;
-    }
-    if (keyword === normalizedQuery) {
-      score += 20; // Exact keyword match bonus
-    }
+  // Description matches (lower priority)
+  if (descMatchesAll && score === 0) {
+    score += 30;
   }
 
   // Priority boost by type
-  if (item.type === "page") score += 10;
-  if (item.type === "feature") score += 5;
+  if (score > 0) {
+    if (item.type === "page") score += 10;
+    if (item.type === "feature") score += 5;
+  }
 
   return score;
 };
@@ -72,8 +93,11 @@ export function useSearch(): UseSearchResult {
 
   // Perform search when query changes
   useEffect(() => {
-    if (!query.trim()) {
+    const trimmedQuery = query.trim();
+    
+    if (!trimmedQuery) {
       setResults([]);
+      setIsLoading(false);
       return;
     }
 
@@ -81,18 +105,26 @@ export function useSearch(): UseSearchResult {
 
     // Simulate slight delay for UX (debounce effect)
     const timeoutId = setTimeout(() => {
+      // Don't search if query is too short
+      if (trimmedQuery.length < 2) {
+        setResults([]);
+        setIsLoading(false);
+        return;
+      }
+      
       const scoredResults = searchData
         .map((item) => ({
           item,
-          score: getSearchScore(item, query.trim()),
+          score: getSearchScore(item, trimmedQuery),
         }))
         .filter(({ score }) => score > 0)
         .sort((a, b) => b.score - a.score)
+        .slice(0, 8) // Limit to top 8 results
         .map(({ item }) => item);
 
       setResults(scoredResults);
       setIsLoading(false);
-    }, 150);
+    }, 200);
 
     return () => clearTimeout(timeoutId);
   }, [query]);

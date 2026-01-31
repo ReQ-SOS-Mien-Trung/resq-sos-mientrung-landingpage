@@ -79,7 +79,7 @@ const RegisterHero = () => {
           <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
             <div className="border-r border-b border-black/10 relative overflow-hidden">
               <img 
-                src="/images/hero_registered.jpg" 
+                src="/images/tnv2.png" 
                 alt="Cứu hộ 1" 
                 className="w-full h-full object-cover"
               />
@@ -98,7 +98,7 @@ const RegisterHero = () => {
             </div>
             <div className="relative overflow-hidden">
               <img 
-                src="/images/rescuer_flood.jpg" 
+                src="/images/ceo.png" 
                 alt="Cứu hộ 2" 
                 className="w-full h-full object-cover"
               />

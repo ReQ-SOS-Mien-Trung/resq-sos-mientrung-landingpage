@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { contributions } from '@/constants';
+import { Link } from 'react-router';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,8 +61,8 @@ const Contributions = () => {
         <div className="flex min-w-max lg:min-w-0 lg:grid lg:grid-cols-3">
           {[
             { org: 'Hội Chữ thập đỏ', desc: 'Đối tác chiến lược' },
-            { org: 'Bộ NN&PTNT', desc: 'Phối hợp cứu trợ' },
-            { org: 'Quân khu 4', desc: 'Lực lượng hỗ trợ' },
+            { org: 'MTTQ Việt Nam', desc: 'Kêu gọi, tiếp nhận và phân bổ nguồn lực cứu trợ' },
+            { org: 'Quân đội nhân dân Việt Nam', desc: 'Lực lượng hỗ trợ' },
           ].map((item, i) => (
             <div key={i} className={`px-4 sm:px-6 md:px-8 py-4 sm:py-6 ${i !== 2 ? 'border-r border-black/10' : ''} min-w-[200px] lg:min-w-0`}>
               <span className="block text-xs sm:text-sm font-bold">{item.org}</span>
@@ -80,7 +81,7 @@ const Contributions = () => {
             className={`border-b border-black/10 ${index % 2 !== 1 ? 'sm:border-r' : ''} ${index % 3 !== 2 ? 'lg:border-r' : 'lg:border-r-0'} group`}
           >
             {/* Image */}
-            <div className="aspect-[4/3] bg-black/5 relative overflow-hidden">
+            <div className="aspect-4/3 bg-black/5 relative overflow-hidden">
               <img
                 src={contribution.image}
                 alt={contribution.title}
@@ -106,7 +107,7 @@ const Contributions = () => {
               <p className="text-xs sm:text-sm text-black/50 leading-relaxed mb-4 sm:mb-6 line-clamp-2">
                 {contribution.description}
               </p>
-              <a href="#" className="inline-flex items-center text-xs sm:text-sm font-bold uppercase tracking-wider group/link">
+              <a href={contribution.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-xs sm:text-sm font-bold uppercase tracking-wider group/link">
                 <span>Tìm hiểu thêm</span>
                 <span className="ml-2 w-5 h-5 sm:w-6 sm:h-6 border border-black flex items-center justify-center group-hover/link:bg-[#FF5722] group-hover/link:border-[#FF5722] group-hover/link:text-white transition-all text-xs">
                   ↗
@@ -121,9 +122,10 @@ const Contributions = () => {
           <span className="text-4xl sm:text-5xl md:text-6xl font-black text-black/10 mb-3 sm:mb-4">+</span>
           <h3 className="text-lg sm:text-xl font-bold mb-2">Tham gia cùng chúng tôi</h3>
           <p className="text-xs sm:text-sm text-black/50 mb-4 sm:mb-6">Trở thành một phần của sứ mệnh nhân đạo.</p>
-          <button className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black transition-colors w-fit">
+          <Link 
+          to="/register" className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black transition-colors w-fit">
             Đăng ký ngay
-          </button>
+          </Link>
         </div>
       </div>
 

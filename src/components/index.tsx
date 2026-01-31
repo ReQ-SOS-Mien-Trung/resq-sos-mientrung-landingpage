@@ -7,6 +7,8 @@ export {
   Features,
   WhyUseUs,
   FAQs,
+  PrivacyPolicyPage,
+  TermsOfServicePage,
 } from "./sections";
 export { RegisterHero, RegisterPage, RescuerForm } from "./forms";
 export { Services, ServicesSection, WaysToBePartner } from "./services";
