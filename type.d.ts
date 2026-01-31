@@ -117,3 +117,32 @@ export type RescuerFormData = {
   hasLifeJackets: boolean;
   capacity: string;
 };
+
+export type PrerequisiteQuestion = {
+  id: number;
+  category: string;
+  categoryEn: string;
+  question: string;
+  yesAnswer: string;
+  noAnswer: string;
+  warningMessage: string;
+  iconName: "PersonSimpleSwimIcon" | "ShieldCheck" | "Handshake" | "GraduationCap";
+};
+
+export type RescueSkill = {
+  id: string;
+  label: string;
+};
+
+export type RescueSkillSubgroup = {
+  subtitle: string;
+  singleSelect?: boolean; // true = chỉ được chọn 1 trong nhóm
+  skills: RescueSkill[];
+};
+
+export type RescueSkillCategory = {
+  id: string;
+  title: string;
+  titleEn: string;
+  subgroups: RescueSkillSubgroup[];
+};
