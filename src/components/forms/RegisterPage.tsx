@@ -3,6 +3,7 @@ import MainLayout from "@/layouts/MainLayout";
 import { RegisterHero } from ".";
 import { FAQs, WaysToBePartner, WhyUseUs } from "..";
 import RescuerForm from "./RescuerForm";
+import { ArrowRight } from "@phosphor-icons/react";
 
 const RegisterPage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -41,42 +42,55 @@ const RegisterPage = () => {
       {/* FAQs Section */}
       <FAQs />
 
-      {/* Bottom CTA + Toggleable Rescuer Form */}
-      <section className="mt-12">
-        <div className="bg-linear-to-r from-emerald-500 to-green-500 text-white">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-              <p className="text-lg md:text-xl font-semibold md:whitespace-nowrap md:pt-2">
-                Trở thành đối tác cứu hộ ResQ
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold leading-tight md:text-right md:max-w-3xl">
-                Bắt đầu hành trình hỗ trợ cộng đồng cùng ResQ.
-              </h2>
-            </div>
+      {/* Bottom CTA - Nike Style */}
+      <section className="bg-white">
+        <div className="h-px bg-black" />
+        
+        {/* Main CTA Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Left - Text */}
+          <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 border-b lg:border-b-0 lg:border-r border-black/10">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
+              Trở thành đối tác
+            </p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-6">
+              BẮT ĐẦU HÀNH TRÌNH
+              <br />
+              HỖ TRỢ CỘNG ĐỒNG
+              <br />
+              <span className="text-black/30">CÙNG RESQ.</span>
+            </h2>
           </div>
-          <div className="bg-green-600">
-            <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12 py-4 flex justify-center">
-              <button
-                type="button"
-                onClick={toggleForm}
-                className="px-6 py-3 rounded-lg font-semibold text-white bg-white/10 border border-white/30 hover:bg-white/20 transition-colors"
-              >
-                {isFormOpen ? "Ẩn form đăng ký" : "Đăng ký đội cứu hộ"}
-              </button>
-            </div>
+
+          {/* Right - Action */}
+          <div className="flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 bg-black text-white">
+            <p className="text-sm sm:text-base text-white/60 mb-6 max-w-md">
+              Đăng ký ngay để trở thành một phần của mạng lưới cứu hộ lớn nhất miền Trung.
+            </p>
+            <button
+              type="button"
+              onClick={toggleForm}
+              className="px-6 sm:px-8 py-4 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-colors flex items-center gap-2 w-fit group"
+            >
+              {isFormOpen ? "Ẩn form đăng ký" : "Đăng ký đội cứu hộ"}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
 
-        <div
-          ref={formAnchorRef}
-          className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12"
-        >
+        {/* Form Container */}
+        <div ref={formAnchorRef}>
           {isFormOpen && (
-            <div className="mt-6">
-              <RescuerForm />
+            <div className="border-t border-black">
+              <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12">
+                <RescuerForm />
+              </div>
             </div>
           )}
         </div>
+
+        {/* Bottom Accent */}
+        <div className="h-1 bg-[#FF5722]" />
       </section>
     </MainLayout>
   );

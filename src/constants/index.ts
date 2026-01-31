@@ -5,103 +5,313 @@ import type {
   FAQ,
   MenuItem,
   NewsArticle,
+  Region,
+  Service,
+  ServiceCategory,
   Testimonial,
 } from "@type";
 import {
-  AlertTriangle,
-  Filter,
+  Warning,
+  Car,
+  Funnel,
+  Heart,
+  House,
   MapPin,
-  MessageSquare,
-  Send,
-  WifiOff,
-} from "lucide-react";
+  ChatCircle,
+  Package,
+  Phone,
+  PaperPlaneTilt,
+  Shield,
+  ShoppingBag,
+  Truck,
+  Users,
+  Wallet,
+  WifiSlash,
+  Target,
+  Handshake,
+  Envelope,
+} from "@phosphor-icons/react";
+
+// ==================== ABOUT PAGE ====================
+export const aboutStats = [
+  { number: "50,000+", label: "NGƯỜI ĐƯỢC CỨU TRỢ" },
+  { number: "5,000+", label: "TÌNH NGUYỆN VIÊN" },
+  { number: "100+", label: "ĐỘI CỨU HỘ" },
+  { number: "24/7", label: "SẴN SÀNG HỖ TRỢ" },
+];
+
+export const aboutValues = [
+  {
+    icon: Heart,
+    title: "NHÂN ÁI",
+    desc: "Đặt con người làm trung tâm, hành động vì cộng đồng",
+  },
+  {
+    icon: Target,
+    title: "HIỆU QUẢ",
+    desc: "Phản ứng nhanh, điều phối chính xác, tối ưu nguồn lực",
+  },
+  {
+    icon: Users,
+    title: "ĐOÀN KẾT",
+    desc: "Kết nối cộng đồng, cùng nhau vượt qua khó khăn",
+  },
+  {
+    icon: Handshake,
+    title: "MINH BẠCH",
+    desc: "Hoạt động công khai, báo cáo rõ ràng, đáng tin cậy",
+  },
+];
+
+export const aboutTeam = [
+  { name: "Huỳnh Kim Cương", role: "Giám đốc điều hành", image: "public/images/team/team-1.jpeg" },
+  { name: "Lê Minh Đăng Khoa", role: "Trưởng phòng Điều phối", image: "public/images/team/team-2.jpeg" },
+  { name: "Nguyễn Trần Phương An", role: "Trưởng phòng Công nghệ", image: "public/images/team/team-3.jpeg" },
+  { name: "Nguyễn Ngọc Thảo", role: "Trưởng phòng Truyền thông", image: "public/images/team/team-4.jpeg" },
+  { name: "Lê Bảo Châu", role: "Trưởng phòng Vận hành", image: "public/images/team/team-5.jpeg" },
+];
+
+// ==================== NEWS PAGE ====================
+export const featuredNews = {
+  id: 0,
+  image: "/images/rescuer_flood.jpg",
+  date: "20/01/26",
+  title: "ResQ SOS Miền Trung chính thức ra mắt phiên bản 2.0 với nhiều tính năng mới",
+  description: "Phiên bản mới tích hợp AI để phân loại mức độ khẩn cấp tự động, cải thiện thời gian phản hồi và nâng cao trải nghiệm người dùng.",
+  category: "SẢN PHẨM",
+};
+
+export const newsCategories = ["TẤT CẢ", "SẢN PHẨM", "CỘNG ĐỒNG", "ĐỐI TÁC", "SỰ KIỆN"];
+
+// ==================== CONTACT PAGE ====================
+export const contactMethods = [
+  {
+    icon: Phone,
+    title: "ĐƯỜNG DÂY NÓNG",
+    value: "1900 1234",
+    desc: "Hoạt động 24/7 cho các trường hợp khẩn cấp",
+    action: "tel:19001234",
+    color: "bg-[#FF5722]",
+  },
+  {
+    icon: Envelope,
+    title: "EMAIL",
+    value: "contact@resq.vn",
+    desc: "Phản hồi trong vòng 24 giờ làm việc",
+    action: "mailto:contact@resq.vn",
+    color: "bg-black",
+  },
+  {
+    icon: ChatCircle,
+    title: "LIVE CHAT",
+    value: "Chat trực tuyến",
+    desc: "Hỗ trợ nhanh qua chat trong giờ làm việc",
+    action: "#",
+    color: "bg-blue-500",
+  },
+];
+
+// ==================== DONATE PAGE ====================
+export const donationOptions = [
+  { amount: "100,000", label: "VNĐ", desc: "Hỗ trợ 1 gia đình với nhu yếu phẩm cơ bản" },
+  { amount: "500,000", label: "VNĐ", desc: "Cung cấp áo phao và đèn pin cho đội cứu hộ" },
+  { amount: "1,000,000", label: "VNĐ", desc: "Hỗ trợ vận chuyển hàng cứu trợ một chuyến" },
+  { amount: "Khác", label: "", desc: "Nhập số tiền bạn muốn đóng góp" },
+];
+
+export const impactStats = [
+  { number: "50,000+", label: "Người được hỗ trợ" },
+  { number: "10,000+", label: "Phần quà cứu trợ" },
+  { number: "500+", label: "Chuyến xe cứu trợ" },
+  { number: "100%", label: "Minh bạch tài chính" },
+];
+
+// ==================== SERVICES ====================
+
+export const services: Service[] = [
+  {
+    id: 'sos',
+    icon: Warning,
+    title: 'Gửi tín hiệu SOS',
+    description: 'Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.',
+    region: 'Khẩn cấp',
+  },
+  {
+    id: 'shelter',
+    icon: House,
+    title: 'Tìm nơi trú ẩn',
+    description: 'Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.',
+    region: 'An toàn',
+  },
+  {
+    id: 'rescue',
+    icon: Users,
+    title: 'Đội cứu hộ',
+    description: 'Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.',
+    region: 'Hỗ trợ',
+  },
+  {
+    id: 'supply',
+    icon: Truck,
+    title: 'Tiếp tế vật tư',
+    description: 'Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.',
+    region: 'Cứu trợ',
+  },
+  {
+    id: 'medical',
+    icon: Heart,
+    title: 'Hỗ trợ y tế',
+    description: 'Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.',
+    region: 'Y tế',
+  },
+  {
+    id: 'hotline',
+    icon: Phone,
+    title: 'Đường dây nóng',
+    description: 'Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.',
+    region: 'Liên lạc',
+  },
+];
+
+export const regions: Region[] = [
+  { id: 'mien-trung', name: 'Miền Trung', image: '/images/mien-trung.jpg' },
+  { id: 'mien-bac', name: 'Miền Bắc', image: '/images/mien-bac.jpg' },
+  { id: 'mien-nam', name: 'Miền Nam', image: '/images/mien-nam.jpg' },
+];
+
+export const serviceCategories: ServiceCategory[] = [
+  {
+    title: "Deliveries",
+    items: [
+      {
+        icon: ShoppingBag,
+        title: "Food",
+        desc: "Have all your cravings delivered to your doorstep.",
+      },
+      {
+        icon: Package,
+        title: "Mart",
+        desc: "Groceries and essentials in one convenient place.",
+      },
+      {
+        icon: PaperPlaneTilt,
+        title: "Express",
+        desc: "Send packages, documents, and beyond.",
+      },
+    ],
+  },
+  {
+    title: "Mobility",
+    items: [
+      {
+        icon: Car,
+        title: "Rides",
+        desc: "Choose from a variety of vehicles to get from A to B safely.",
+      },
+    ],
+  },
+  {
+    title: "Financial Services",
+    items: [
+      {
+        icon: Wallet,
+        title: "Pay",
+        desc: "Cashless payments that are seamless and secure.",
+      },
+      {
+        icon: Shield,
+        title: "Insurance",
+        desc: "Everyday protection with accessible coverage.",
+      },
+    ],
+  },
+];
 
 export const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Nguyễn Văn A",
-    role: "Đối tác cứu hộ với ResQ từ 2020",
+    name: "Nguyễn Văn Hùng",
+    role: "Tình nguyện viên cứu hộ từ 2020",
     image: "/images/testimonial-1.jpg",
     quote:
-      "Mọi thứ đều có thể thực hiện ngay trên ứng dụng. Sự tiện lợi, khả năng dễ dàng theo dõi các yêu cầu cứu hộ và hỗ trợ kịp thời là điều làm cho trải nghiệm này trở nên tuyệt vời.",
+      "Ứng dụng ResQ giúp chúng tôi tiếp cận nạn nhân nhanh chóng hơn. Hệ thống định vị chính xác và thông tin chi tiết về tình huống giúp đội cứu hộ chuẩn bị tốt hơn trước khi đến hiện trường.",
   },
   {
     id: 2,
-    name: "Trần Thị B",
-    role: "Đối tác cứu hộ với ResQ từ 2021",
+    name: "Trần Thị Mai",
+    role: "Điều phối viên cứu hộ từ 2021",
     image: "/images/testimonial-2.jpg",
     quote:
-      "Hệ thống điều phối thông minh giúp chúng tôi tiếp cận các trường hợp khẩn cấp một cách nhanh chóng và hiệu quả nhất.",
+      "Hệ thống điều phối thông minh giúp chúng tôi phân bổ lực lượng cứu hộ hiệu quả. Trong đợt lũ năm ngoái, chúng tôi đã hỗ trợ được hàng trăm gia đình nhờ ResQ.",
   },
   {
     id: 3,
-    name: "Lê Văn C",
-    role: "Đối tác cứu hộ với ResQ từ 2019",
+    name: "Lê Văn Cường",
+    role: "Đội trưởng đội cứu hộ từ 2019",
     image: "/images/testimonial-3.jpg",
     quote:
-      "ResQ không chỉ là một nền tảng, mà còn là một cộng đồng hỗ trợ lẫn nhau trong những thời điểm khó khăn nhất.",
+      "ResQ không chỉ là một ứng dụng, mà còn là cầu nối giữa những người cần giúp đỡ và những tấm lòng sẵn sàng hỗ trợ. Tôi tự hào là một phần của cộng đồng này.",
   },
 ];
 
 export const faqs: FAQ[] = [
   {
     id: 1,
-    question: "Tôi có thể rút tiền thu nhập bao lâu một lần?",
+    question: "Làm thế nào để đăng ký trở thành tình nguyện viên cứu hộ?",
     answer:
-      "Bạn có thể rút tiền thu nhập của mình bất cứ lúc nào thông qua ứng dụng ResQ. Chúng tôi hỗ trợ rút tiền tức thì vào tài khoản ngân hàng của bạn.",
+      "Bạn có thể đăng ký trực tiếp trên ứng dụng ResQ hoặc website. Sau khi đăng ký, bạn sẽ được xác minh thông tin và tham gia khóa đào tạo cơ bản về cứu hộ.",
   },
   {
     id: 2,
-    question: "Những phương tiện nào được phép cho ResQ?",
+    question: "Những phương tiện nào được phép tham gia cứu hộ?",
     answer:
-      "ResQ chấp nhận nhiều loại phương tiện bao gồm xe ô tô, taxi, thuyền máy, ghe nhỏ, và xe gầm cao. Mỗi loại phương tiện phù hợp với các tình huống cứu hộ khác nhau.",
+      "ResQ chấp nhận nhiều loại phương tiện bao gồm xe ô tô gầm cao, thuyền máy, ghe nhỏ, và ca nô. Mỗi loại phương tiện phù hợp với các tình huống cứu hộ khác nhau như lũ lụt, sạt lở đất.",
   },
   {
     id: 3,
-    question:
-      "Tôi có thể thực hiện nhiều điểm dừng trong một yêu cầu cứu hộ không?",
+    question: "Hệ thống điều phối cứu hộ hoạt động như thế nào?",
     answer:
-      "Có, bạn có thể thực hiện nhiều điểm dừng trong một yêu cầu cứu hộ nếu cần thiết. Ứng dụng sẽ hỗ trợ bạn điều hướng đến từng điểm một cách hiệu quả.",
+      "Khi có yêu cầu SOS, hệ thống AI sẽ tự động phân tích mức độ khẩn cấp và tìm đội cứu hộ phù hợp trong bán kính gần nhất. Bạn sẽ nhận được thông báo với chi tiết vị trí và tình trạng nạn nhân.",
   },
   {
     id: 4,
-    question: "Trẻ em có được phép trên phương tiện cứu hộ không?",
+    question: "Tôi cần chuẩn bị những gì khi tham gia cứu hộ?",
     answer:
-      "Có, trẻ em hoàn toàn được phép trên phương tiện cứu hộ. Chúng tôi khuyến khích các gia đình có trẻ em sử dụng dịch vụ cứu hộ của ResQ trong các tình huống khẩn cấp.",
+      "Bạn nên chuẩn bị: áo phao, đèn pin, dây thừng, bộ sơ cứu cơ bản, và điện thoại có kết nối mạng. ResQ cũng cung cấp hỗ trợ trang thiết bị cho các đội cứu hộ đăng ký chính thức.",
   },
   {
     id: 5,
-    question: "Hành khách có thể đứng trên phương tiện cứu hộ không?",
+    question: "Làm sao để đảm bảo an toàn khi tham gia cứu hộ?",
     answer:
-      "Để đảm bảo an toàn, chúng tôi khuyến khích tất cả hành khách ngồi xuống trong quá trình cứu hộ. Tuy nhiên, trong các tình huống đặc biệt, hành khách có thể đứng nếu phương tiện cho phép và điều kiện an toàn.",
+      "Luôn tuân thủ hướng dẫn an toàn trong ứng dụng, mặc áo phao và trang bị bảo hộ. Không tham gia cứu hộ khi điều kiện thời tiết quá nguy hiểm. Liên hệ đường dây nóng 24/7 nếu cần hỗ trợ.",
   },
 ];
 
 export const contributions: ContributionCard[] = [
   {
     id: 1,
-    image: "/images/rescuer_flood.jpg",
-    title: "Tác động của ResQ Mientrung SOS đến cộng đồng",
+    image: "/images/hoi_chu_thap_do.png",
+    title: "Kêu gọi nguồn lực hỗ trợ khẩn cấp cho người dân vùng lũ",
     description:
-      "Dịch vụ cứu hộ và hỗ trợ khẩn cấp của ResQ đã hỗ trợ hơn 50,000 trường hợp khẩn cấp tại miền Trung trong năm 2024, tạo ra hơn 5,000 cơ hội việc làm cho các nhân viên cứu hộ và tình nguyện viên, đồng thời góp phần nâng cao nhận thức về an toàn và ứng phó khẩn cấp trong cộng đồng.",
-    link: "#",
+      "Hội Chữ thập đỏ các địa phương đang khẩn trương hỗ trợ nhu yếu phẩm để giúp người dân vượt qua giai đoạn khó khăn nhất.",
+    link: "https://redcross.org.vn/keu-goi-nguon-luc-ho-tro-khan-cap-cho-nguoi-dan-vung-lu.html/",
   },
   {
     id: 2,
-    image: "/images/noodle_flood.jpg",
-    title: "ResQ ra mắt Trung tâm Đào tạo Cứu hộ và Ứng phó Khẩn cấp",
+    image: "/images/mttq.png",
+    title: "Ủy ban Trung ương MTTQ Việt Nam phát động toàn dân ủng hộ",
     description:
-      "ResQ chính thức khai trương Trung tâm Đào tạo Cứu hộ và Ứng phó Khẩn cấp đầu tiên với sự hỗ trợ từ các tổ chức địa phương. Trung tâm nhằm mục tiêu đẩy nhanh các giải pháp cứu hộ hiện đại, nâng cao khả năng ứng phó khẩn cấp, và đóng góp vào việc xây dựng cộng đồng an toàn hơn tại miền Trung Việt Nam.",
-    link: "#",
+      "Trước những thiệt hại nặng nề do bão, lũ gây ra đối với đồng bào các tỉnh khu vực miền Trung, Tây Nguyên, chiều 21/11, Đoàn Chủ tịch Ủy ban Trung ương MTTQ Việt Nam tổ chức Lễ phát động “Toàn dân ủng hộ đồng bào miền Trung, Tây Nguyên khắc phục hậu quả mưa lũ”.",
+    link: "https://baochinhphu.vn/uy-ban-trung-uong-mttq-viet-nam-phat-dong-toan-dan-ung-ho-dong-bao-mien-trung-tay-nguyen-khac-phuc-hau-qua-mua-lu-102251121184431511.htm",
   },
   {
     id: 3,
-    image: "/images/ghe_flood.jpg",
+    image: "/images/quan_doi.png",
     title:
-      "ResQ Mientrung SOS đạt chứng nhận An toàn Thông tin và Bảo mật Dữ liệu",
+      "Các đơn vị Quân đội tập trung ứng phó lũ đặc biệt lớn",
     description:
-      "ResQ Mientrung SOS đã được chính thức công nhận đạt tiêu chuẩn An toàn Thông tin và Bảo mật Dữ liệu. Chứng nhận này phản ánh cam kết của ResQ trong việc tăng cường niềm tin số và đảm bảo dữ liệu cá nhân luôn được bảo vệ an toàn cho tất cả người dùng trên nền tảng.",
-    link: "#",
+      "Ngày 20-11, Bộ Quốc phòng có Công điện số 7453/CĐ-BQP về việc tập trung ứng phó lũ đặc biệt lớn tại Khánh Hòa, Đắk Lắk và Gia Lai",
+    link: "https://www.qdnd.vn/quoc-phong-an-ninh/tin-tuc/cac-don-vi-quan-doi-tap-trung-ung-pho-lu-dac-biet-lon-1012970",
   },
 ];
 
@@ -205,7 +415,7 @@ export const menuItems: MenuItem[] = [
 
 export const features = [
   {
-    icon: AlertTriangle,
+    icon: Warning,
     title: "Phân loại Priority",
     description:
       "Tự động phát hiện P1 (Nguy hiểm tính mạng) vs P3 (Cần nhu yếu phẩm)",
@@ -220,7 +430,7 @@ export const features = [
     bgColor: "bg-blue-50",
   },
   {
-    icon: WifiOff,
+    icon: WifiSlash,
     title: "Hoạt động Offline",
     description:
       "Các tính năng cơ bản hoạt động với kết nối internet không ổn định",
@@ -231,21 +441,21 @@ export const features = [
 
 export const steps = [
   {
-    icon: MessageSquare,
+    icon: ChatCircle,
     title: "Tiếp nhận (Parser)",
     description:
       "Gemini chuyển đổi tin nhắn SOS thô thành JSON với mức độ ưu tiên (P1/P2/P3) và nhu cầu cụ thể.",
     color: "from-primary-red to-primary-orange",
   },
   {
-    icon: Filter,
+    icon: Funnel,
     title: "Sàng lọc (Filter)",
     description:
       "Hệ thống quét bán kính 5-10km để tìm đội cứu hộ phù hợp sử dụng PostGIS.",
     color: "from-primary-blue to-cyan-500",
   },
   {
-    icon: Send,
+    icon: PaperPlaneTilt,
     title: "Điều phối (Dispatch)",
     description:
       'AI khớp nhu cầu (ví dụ: "Cần thuyền") với khả năng của đội cứu hộ (ví dụ: "Có thuyền máy").',
@@ -256,92 +466,92 @@ export const steps = [
 export const newsArticles: NewsArticle[] = [
   {
     id: 1,
-    image: "/images/rescuer_flood.jpg",
-    date: "15/01/25",
+    image: "/images/image.png",
+    date: "31/12/25",
     title:
-      "ResQ Mientrung SOS hợp tác với Bộ Y tế để nâng cao khả năng ứng phó khẩn cấp y tế tại miền Trung",
-    link: "#",
+      "Hệ thống MTTQ Việt Nam vận động được hơn 3.900 tỷ đồng hỗ trợ đồng bào khắc phục hậu quả mưa lũ",
+    link: "https://tienphong.vn/he-thong-mttq-viet-nam-van-dong-duoc-hon-3900-ty-dong-ho-tro-dong-bao-khac-phuc-hau-qua-mua-lu-post1809370.tpo",
   },
   {
     id: 2,
-    image: "/images/noodle_flood.jpg",
-    date: "10/12/24",
+    image: "/images/fix.png",
+    date: "15/12/25",
     title:
-      "ResQ ra mắt công nghệ AI để tối ưu hóa phản ứng cứu hộ và phân bổ tài nguyên tại Việt Nam",
-    link: "#",
+      "Thiên tai khốc liệt tại Khánh Hòa năm 2025 gây thiệt hại trên 6.000 tỉ đồng",
+    link: "https://thanhnien.vn/thien-tai-khoc-liet-tai-khanh-hoa-nam-2025-gay-thiet-hai-tren-6000-ti-dong-185251215164812173.htm",
   },
   {
     id: 3,
-    image: "/images/ghe_flood.jpg",
-    date: "25/11/24",
+    image: "/images/cong_an.png",
+    date: "04/12/25",
     title:
-      "ResQ và các tổ chức địa phương ký kết hợp tác phát triển hệ thống cảnh báo sớm thiên tai",
-    link: "#",
+      "Công an Lâm Đồng chủ động ứng phó, xuyên đêm cứu dân trong mưa lũ",
+    link: "https://bocongan.gov.vn/bai-viet/cong-an-lam-dong-chu-dong-ung-pho-xuyen-dem-cuu-dan-trong-mua-lu-1764835632",
   },
   {
     id: 4,
-    image: "/images/rescuer_flood.jpg",
-    date: "18/11/24",
+    image: "/images/rescue_team.png",
+    date: "24/11/25",
     title:
-      "ResQ hợp tác với Hiệp hội Cứu hộ để tăng mức hỗ trợ tối thiểu cho các nhân viên cứu hộ",
-    link: "#",
+      "'Vỡ trận' đăng ký, 1.000 tình nguyện viên chen nhau xin trực vì vùng lũ miền Trung",
+    link: "https://thanhnien.vn/vo-tran-dang-ky-1000-tinh-nguyen-vien-chen-nhau-xin-truc-vi-vung-lu-mien-trung-185251124004155295.htm",
   },
 ];
 
 export const driverTypes: DriverType[] = [
-  { id: "car", label: "Xe ô tô" },
-  { id: "taxi", label: "Taxi" },
-  { id: "boat", label: "Thuyền" },
+  { id: "boat", label: "Thuyền/Ghe" },
+  { id: "car", label: "Xe gầm cao" },
   { id: "rescue_team", label: "Đội cứu hộ" },
+  { id: "volunteer", label: "Tình nguyện viên" },
 ];
 
 export const benefitSections: Record<string, BenefitSection> = {
-  car: {
-    title: "Giữ cho phương tiện của bạn hoạt động",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Xe ô tô (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Xe ô tô (English)", href: "#" },
-    ],
-  },
-  taxi: {
-    title: "Giữ cho đồng hồ của bạn hoạt động",
-    benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và giảm giá nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
-    ],
-    links: [
-      { text: "Hướng dẫn ResQ Taxi (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Taxi (English)", href: "#" },
-    ],
-  },
   boat: {
-    title: "Giữ cho thuyền của bạn sẵn sàng",
+    title: "Cứu hộ bằng thuyền/ghe",
     benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và hỗ trợ nhiên liệu với Chương trình Khách hàng Thân thiết của chúng tôi",
+      "Nhận thông báo yêu cầu cứu hộ từ người dân trong vùng ngập lụt",
+      "Tiếp cận các khu vực bị cô lập do lũ lụt để sơ tán nạn nhân",
+      "Được cung cấp áo phao và trang thiết bị cứu hộ đường thủy",
     ],
     links: [
-      { text: "Hướng dẫn ResQ Thuyền (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Thuyền (English)", href: "#" },
+      { text: "Hướng dẫn cứu hộ đường thủy", href: "#" },
+      { text: "Đăng ký làm tình nguyện viên", href: "#" },
+    ],
+  },
+  car: {
+    title: "Cứu hộ bằng xe gầm cao",
+    benefits: [
+      "Nhận thông báo yêu cầu cứu hộ từ người dân trong khu vực của bạn",
+      "Hỗ trợ di chuyển nạn nhân đến nơi an toàn hoặc cơ sở y tế",
+      "Vận chuyển nhu yếu phẩm và hàng cứu trợ đến vùng thiên tai",
+    ],
+    links: [
+      { text: "Hướng dẫn cứu hộ bằng xe", href: "#" },
+      { text: "Đăng ký làm tình nguyện viên", href: "#" },
     ],
   },
   rescue_team: {
-    title: "Giữ cho đội của bạn sẵn sàng",
+    title: "Đội cứu hộ chuyên nghiệp",
     benefits: [
-      "Nhận yêu cầu cứu hộ từ người dùng trong khu vực của bạn",
-      "Không cần tìm kiếm các trường hợp khẩn cấp trên đường",
-      "Nhận phân bổ ưu tiên và hỗ trợ trang thiết bị với Chương trình Khách hàng Thân thiết của chúng tôi",
+      "Nhận phân bổ ưu tiên các trường hợp khẩn cấp phức tạp",
+      "Phối hợp với lực lượng chức năng và các đội cứu hộ khác",
+      "Được hỗ trợ trang thiết bị chuyên dụng và đào tạo nâng cao",
     ],
     links: [
-      { text: "Hướng dẫn ResQ Đội cứu hộ (Tiếng Việt)", href: "#" },
-      { text: "Hướng dẫn ResQ Đội cứu hộ (English)", href: "#" },
+      { text: "Hướng dẫn đăng ký đội cứu hộ", href: "#" },
+      { text: "Quy trình phối hợp cứu hộ", href: "#" },
+    ],
+  },
+  volunteer: {
+    title: "Tình nguyện viên hỗ trợ",
+    benefits: [
+      "Hỗ trợ phân phát nhu yếu phẩm tại các điểm cứu trợ",
+      "Tham gia công tác sơ tán và hỗ trợ nạn nhân",
+      "Được đào tạo kỹ năng sơ cứu cơ bản miễn phí",
+    ],
+    links: [
+      { text: "Hướng dẫn tình nguyện viên", href: "#" },
+      { text: "Đăng ký ngay", href: "#" },
     ],
   },
 };
@@ -363,12 +573,176 @@ export const appStoreItems = [
     iconAlt: "App Store",
     iconClassName: "w-10 h-10 object-contain",
   },
-  {
-    key: "appgallery",
-    name: "AppGallery",
-    status: "Sắp ra mắt",
-    iconSrc: "/icons/apk.png",
-    iconAlt: "AppGallery",
-    iconClassName: "w-10 h-10 object-contain",
-  },
 ] as const;
+
+export const badges = [
+  { text: "24/7 Sẵn sàng hỗ trợ", color: "bg-orange-500" },
+  { text: "Bản đồ điểm ngập & tuyến an toàn", color: "bg-sky-500" },
+  { text: "Kết nối đội cứu hộ địa phương", color: "bg-amber-500" },
+];
+
+// Terms of Service Page Constants
+export const termsOfServiceSections = [
+  {
+    number: "01",
+    title: "CHẤP NHẬN ĐIỀU KHOẢN",
+    content: [
+      "Bằng việc tải xuống, cài đặt hoặc sử dụng ứng dụng ResQ SOS Miền Trung, bạn đồng ý tuân thủ các điều khoản và điều kiện được quy định trong tài liệu này.",
+      "Nếu bạn không đồng ý với bất kỳ điều khoản nào, vui lòng không sử dụng dịch vụ của chúng tôi.",
+      "Chúng tôi có quyền sửa đổi các điều khoản này bất cứ lúc nào. Việc tiếp tục sử dụng dịch vụ sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới.",
+    ],
+  },
+  {
+    number: "02",
+    title: "MÔ TẢ DỊCH VỤ",
+    content: [
+      "ResQ SOS Miền Trung là nền tảng kết nối người dân gặp nạn trong thiên tai với đội ngũ cứu hộ.",
+    ],
+    list: [
+      { label: "GỬI TÍN HIỆU SOS", desc: "Gửi yêu cầu cứu hộ khẩn cấp kèm vị trí GPS" },
+      { label: "TÌM NƠI TRÚ ẨN", desc: "Xác định các điểm sơ tán an toàn gần nhất" },
+      { label: "YÊU CẦU TIẾP TẾ", desc: "Đăng ký nhu cầu về lương thực, nước uống, thuốc men" },
+      { label: "CẬP NHẬT THÔNG TIN", desc: "Nhận thông tin về tình hình thiên tai" },
+      { label: "KẾT NỐI CỘNG ĐỒNG", desc: "Liên lạc với tình nguyện viên và đội cứu hộ" },
+    ],
+  },
+  {
+    number: "03",
+    title: "TRÁCH NHIỆM NGƯỜI DÙNG",
+    content: [
+      "Khi sử dụng ResQ SOS Miền Trung, bạn cam kết:",
+      "Cung cấp thông tin chính xác, trung thực khi đăng ký và gửi yêu cầu cứu hộ.",
+      "CHỈ GỬI TÍN HIỆU SOS KHI THỰC SỰ CẦN CỨU HỘ — việc gửi tín hiệu giả có thể khiến người khác gặp nguy hiểm.",
+      "Không sử dụng dịch vụ cho mục đích bất hợp pháp hoặc gây hại cho người khác.",
+      "Bảo mật thông tin tài khoản và thông báo ngay nếu phát hiện truy cập trái phép.",
+    ],
+  },
+  {
+    number: "04",
+    title: "HÀNH VI BỊ CẤM",
+    content: [
+      "Các hành vi sau đây bị nghiêm cấm:",
+    ],
+    warnings: [
+      "Gửi tín hiệu SOS giả — có thể bị xử lý theo quy định pháp luật",
+      "Cố ý cung cấp thông tin sai lệch về vị trí hoặc tình trạng khẩn cấp",
+      "Sử dụng dịch vụ để quấy rối, đe dọa hoặc gây hại cho người khác",
+      "Cố gắng truy cập trái phép vào hệ thống hoặc dữ liệu",
+      "Phát tán virus, mã độc hoặc nội dung có hại",
+    ],
+    footer: "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
+  },
+  {
+    number: "05",
+    title: "GIỚI HẠN TRÁCH NHIỆM",
+    content: [
+      "ResQ SOS Miền Trung cung cấp nền tảng kết nối và không chịu trách nhiệm trực tiếp về hoạt động cứu hộ.",
+      "Chúng tôi nỗ lực để dịch vụ hoạt động liên tục nhưng không đảm bảo 100% thời gian hoạt động.",
+      "Trong tình huống thiên tai, hiệu quả cứu hộ phụ thuộc vào nhiều yếu tố ngoài tầm kiểm soát.",
+    ],
+  },
+  {
+    number: "06",
+    title: "DỊCH VỤ KHẨN CẤP",
+    isEmergency: true,
+    content: [
+      "ResQ SOS Miền Trung KHÔNG thay thế các dịch vụ cứu hộ khẩn cấp chính thức.",
+      "Trong tình huống đe dọa tính mạng, hãy gọi ngay đường dây nóng cứu hộ.",
+      "Ứng dụng yêu cầu kết nối internet để hoạt động.",
+    ],
+    emergency: [
+      { number: "113", label: "CÔNG AN" },
+      { number: "114", label: "CỨU HỎA" },
+      { number: "115", label: "CẤP CỨU" },
+    ],
+  },
+];
+
+export const termsOfServiceAdditionalTerms = [
+  { number: "07", title: "QUYỀN SỞ HỮU TRÍ TUỆ", content: "Tất cả nội dung, thiết kế, logo, mã nguồn thuộc quyền sở hữu của ResQ SOS và được bảo vệ bởi luật sở hữu trí tuệ." },
+  { number: "08", title: "CHẤM DỨT DỊCH VỤ", content: "Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập nếu bạn vi phạm điều khoản hoặc gây hại cho cộng đồng." },
+  { number: "09", title: "LUẬT ÁP DỤNG", content: "Các điều khoản được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền." },
+  { number: "10", title: "ĐIỀU KHOẢN RIÊNG BIỆT", content: "Nếu bất kỳ điều khoản nào bị tuyên bố vô hiệu, các điều khoản còn lại vẫn có hiệu lực đầy đủ." },
+];
+
+// Privacy Policy Page Constants
+export const privacyPolicySections = [
+  {
+    number: "01",
+    title: "THU THẬP THÔNG TIN",
+    intro: "Khi bạn sử dụng ứng dụng ResQ SOS Miền Trung, chúng tôi có thể thu thập:",
+    items: [
+      { label: "THÔNG TIN CÁ NHÂN", desc: "Họ tên, số điện thoại, địa chỉ email khi đăng ký tài khoản hoặc gửi yêu cầu SOS" },
+      { label: "THÔNG TIN VỊ TRÍ", desc: "Vị trí GPS để xác định chính xác nơi cần cứu hộ và kết nối với đội cứu trợ gần nhất" },
+      { label: "THÔNG TIN THIẾT BỊ", desc: "Loại thiết bị, hệ điều hành, mã nhận dạng để đảm bảo ứng dụng hoạt động tối ưu" },
+      { label: "THÔNG TIN SỨC KHỎE", desc: "Trong trường hợp khẩn cấp, thông tin y tế để đội cứu trợ chuẩn bị phương án phù hợp" },
+    ],
+  },
+  {
+    number: "02",
+    title: "MỤC ĐÍCH SỬ DỤNG",
+    intro: "Chúng tôi sử dụng thông tin thu thập được để:",
+    content: [
+      "Cung cấp dịch vụ cứu hộ khẩn cấp và kết nối bạn với đội ngũ cứu trợ",
+      "Xác định vị trí của bạn để điều phối lực lượng cứu hộ hiệu quả",
+      "Liên lạc về tình trạng yêu cầu cứu hộ hoặc thông báo quan trọng",
+      "Cải thiện chất lượng dịch vụ và trải nghiệm người dùng",
+      "Phân tích xu hướng thiên tai để nâng cao khả năng ứng phó",
+      "Tuân thủ các yêu cầu pháp lý và hỗ trợ cơ quan chức năng",
+    ],
+  },
+  {
+    number: "03",
+    title: "BẢO MẬT THÔNG TIN",
+    isHighlight: true,
+    intro: "ResQ SOS Miền Trung cam kết bảo vệ thông tin của bạn:",
+    features: [
+      { stat: "256-BIT", label: "Mã hóa dữ liệu đầu-cuối" },
+      { stat: "24/7", label: "Giám sát hoạt động đáng ngờ" },
+      { stat: "ISO", label: "Tiêu chuẩn bảo mật quốc tế" },
+      { stat: "99.9%", label: "Cam kết bảo vệ dữ liệu" },
+    ],
+  },
+  {
+    number: "04",
+    title: "CHIA SẺ THÔNG TIN",
+    intro: "Chúng tôi có thể chia sẻ thông tin trong các trường hợp:",
+    shares: [
+      { to: "ĐỘI NGŨ CỨU HỘ", reason: "Chia sẻ vị trí và thông tin liên lạc để thực hiện cứu trợ" },
+      { to: "CƠ QUAN CHỨC NĂNG", reason: "Khi có yêu cầu từ cơ quan nhà nước theo quy định pháp luật" },
+      { to: "ĐỐI TÁC Y TẾ", reason: "Trong trường hợp khẩn cấp cần hỗ trợ y tế" },
+    ],
+    warning: "Chúng tôi KHÔNG bán hoặc cho thuê thông tin cá nhân cho bên thứ ba vì mục đích thương mại.",
+  },
+  {
+    number: "05",
+    title: "QUYỀN CỦA NGƯỜI DÙNG",
+    intro: "Bạn có các quyền sau đối với thông tin cá nhân:",
+    rights: [
+      { right: "QUYỀN TRUY CẬP", desc: "Yêu cầu xem thông tin cá nhân chúng tôi đang lưu trữ" },
+      { right: "QUYỀN CHỈNH SỬA", desc: "Cập nhật hoặc sửa đổi thông tin không chính xác" },
+      { right: "QUYỀN XÓA", desc: "Yêu cầu xóa thông tin cá nhân" },
+      { right: "QUYỀN HẠN CHẾ", desc: "Yêu cầu hạn chế việc xử lý thông tin" },
+      { right: "QUYỀN PHẢN ĐỐI", desc: "Phản đối việc sử dụng thông tin" },
+    ],
+  },
+  {
+    number: "06",
+    title: "COOKIE & THEO DÕI",
+    intro: "Website và ứng dụng của chúng tôi sử dụng:",
+    cookies: [
+      { type: "CẦN THIẾT", desc: "Để đảm bảo ứng dụng hoạt động bình thường", required: true },
+      { type: "PHÂN TÍCH", desc: "Để hiểu cách người dùng sử dụng dịch vụ", required: false },
+    ],
+  },
+  {
+    number: "07",
+    title: "LƯU TRỮ DỮ LIỆU",
+    intro: "Thời gian lưu trữ thông tin:",
+    timeline: [
+      { period: "ĐANG SỬ DỤNG", desc: "Thông tin được lưu trữ trong thời gian bạn sử dụng dịch vụ" },
+      { period: "SAU KHI XÓA", desc: "Xóa hoặc ẩn danh hóa trong vòng 30 ngày" },
+      { period: "THEO PHÁP LUẬT", desc: "Một số thông tin có thể được giữ lâu hơn nếu được yêu cầu" },
+    ],
+  },
+];

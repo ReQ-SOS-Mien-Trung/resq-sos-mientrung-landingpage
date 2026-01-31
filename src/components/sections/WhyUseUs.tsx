@@ -1,130 +1,173 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { testimonials } from "@/constants";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const WhyUseUs = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (titleRef.current) {
+        gsap.fromTo(titleRef.current, 
+          { y: 50, opacity: 0 }, 
+          { 
+            y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
+            scrollTrigger: { trigger: sectionRef.current, start: "top 70%" }
+          }
+        );
+      }
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  const nextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const features = [
+    {
+      number: "01",
+      title: "ĐIỀU PHỐI THÔNG MINH",
+      description: "Hệ thống AI tự động tìm đội cứu hộ gần nhất và phù hợp nhất với tình huống.",
+    },
+    {
+      number: "02",
+      title: "HỖ TRỢ 24/7",
+      description: "Đường dây nóng và hỗ trợ kỹ thuật luôn sẵn sàng khi bạn cần.",
+    },
+    {
+      number: "03",
+      title: "ĐÀO TẠO MIỄN PHÍ",
+      description: "Được đào tạo kỹ năng sơ cứu và cứu hộ từ các chuyên gia.",
+    },
+  ];
 
   return (
-    <section className="bg-white pt-0">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
-        {/* Top Border Line */}
-        <div className="border-t border-gray-500 mb-10 md:mb-16"></div>
+    <section ref={sectionRef} className="bg-white text-black">
+      {/* Top Border */}
+      <div className="h-px bg-black" />
 
-        {/* Why use us Section */}
-        <div className="mb-16 md:mb-20">
-          <h2 className="text-gray-400 text-sm md:text-base font-medium mb-8 md:mb-12 uppercase tracking-wide">
-            Tại sao chọn chúng tôi
+      {/* Header */}
+      <div className="border-b border-black/10">
+        <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
+            Lợi ích
+          </p>
+          <h2 ref={titleRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
+            TẠI SAO CHỌN
+            <br />
+            <span className="text-black/30">RESQ?</span>
           </h2>
-          <div className="space-y-0">
-            {[
-              {
-                number: "1",
-                title: "Thanh toán tức thì",
-                description:
-                  "Dễ dàng chuyển khoản thu nhập của bạn vào tài khoản ngân hàng.",
-              },
-              {
-                number: "2",
-                title: "Hỗ trợ 24/7",
-                description:
-                  "Hỗ trợ đối tác cứu hộ và công cụ an toàn bất cứ khi nào bạn cần.",
-              },
-              {
-                number: "3",
-                title: "Thông tin thu nhập",
-                description: (
-                  <>
-                    Để giúp bạn{" "}
-                    <span className="text-emerald-600 font-semibold">
-                      tối đa hóa thu nhập
-                    </span>{" "}
-                    và lập kế hoạch tài chính tốt hơn.
-                  </>
-                ),
-              },
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className={`py-6 md:py-8 ${
-                  index !== 2 ? "border-b border-gray-200" : ""
-                }`}
-              >
-                <div className="flex items-start gap-4 md:gap-6">
-                  <div className="text-2xl md:text-3xl font-bold text-gray-300 flex-shrink-0">
-                    {feature.number}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 text-base md:text-lg leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
-
-        {/* Testimonial Section */}
-        <div>
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-gray-400 text-sm md:text-base font-medium mb-4 uppercase tracking-wide">
-              Phản hồi từ đối tác
-            </h2>
-            <div className="w-full max-w-2xl mx-auto border-t border-gray-200"></div>
-          </div>
-
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            {/* Left Side - Profile Pictures and Name */}
-            <div className="flex flex-col items-start">
-              {/* Profile Pictures */}
-              <div className="flex items-center gap-4 md:gap-6 mb-6">
-                {testimonials.map((testimonial, index) => (
-                  <button
-                    key={testimonial.id}
-                    onClick={() => setActiveTestimonial(index)}
-                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 transition-all ${
-                      activeTestimonial === index
-                        ? "border-emerald-400 scale-110"
-                        : "border-transparent hover:border-gray-200 opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <div className="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
-                      <div className="w-8 h-8 md:w-10 md:h-10 bg-emerald-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-sm md:text-base">
-                          {testimonial.name.charAt(0)}
-                        </span>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Name and Role - Below first profile picture */}
-              <div className="pl-0 lg:pl-0">
-                <p className="text-gray-900 font-medium text-sm md:text-base mb-1">
-                  {testimonials[activeTestimonial].name}
-                </p>
-                <p className="text-gray-600 text-sm">
-                  {testimonials[activeTestimonial].role}
-                </p>
-              </div>
-            </div>
-
-            {/* Right Side - Quote */}
-            <div className="flex-1 lg:pt-0">
-              <blockquote className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 leading-relaxed">
-                "{testimonials[activeTestimonial].quote}"
-              </blockquote>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Border Line */}
-        <div className="border-t border-gray-500 mt-12 md:mt-16"></div>
       </div>
+
+      {/* Features Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className={`px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 ${
+              index !== features.length - 1 ? "border-b md:border-b-0 md:border-r" : ""
+            } border-black/10 group hover:bg-black hover:text-white transition-colors duration-300`}
+          >
+            <div className="flex items-start gap-4">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black/20 group-hover:text-white/20 transition-colors">
+                {feature.number}
+              </span>
+              <div className="flex-1">
+                <h3 className="text-base sm:text-lg md:text-xl font-black mb-3 sm:mb-4 tracking-tight">
+                  {feature.title}
+                </h3>
+                <p className="text-sm sm:text-base text-black/60 group-hover:text-white/60 leading-relaxed transition-colors">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Testimonial Section */}
+      <div className="border-t border-black">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Left - Label & Navigation */}
+          <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 border-b lg:border-b-0 lg:border-r border-black/10">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/40 mb-6 sm:mb-8">
+              Phản hồi từ đối tác
+            </p>
+
+            {/* Profile Avatars */}
+            <div className="flex items-center gap-3 sm:gap-4 mb-6">
+              {testimonials.map((testimonial, index) => (
+                <button
+                  key={testimonial.id}
+                  onClick={() => setActiveTestimonial(index)}
+                  className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 overflow-hidden transition-all ${
+                    activeTestimonial === index
+                      ? "ring-2 ring-[#FF5722] ring-offset-2"
+                      : "opacity-50 hover:opacity-100"
+                  }`}
+                >
+                  <div className="w-full h-full bg-black flex items-center justify-center">
+                    <span className="text-white font-black text-sm sm:text-base md:text-lg">
+                      {testimonial.name.charAt(0)}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Name & Role */}
+            <div className="mb-6">
+              <p className="text-sm sm:text-base font-bold">
+                {testimonials[activeTestimonial].name}
+              </p>
+              <p className="text-xs sm:text-sm text-black/50">
+                {testimonials[activeTestimonial].role}
+              </p>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={prevTestimonial}
+                className="w-10 h-10 sm:w-12 sm:h-12 border border-black/20 flex items-center justify-center hover:bg-black hover:text-white transition-colors"
+              >
+                <CaretLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+              <button 
+                onClick={nextTestimonial}
+                className="w-10 h-10 sm:w-12 sm:h-12 bg-[#FF5722] text-white flex items-center justify-center hover:bg-black transition-colors"
+              >
+                <CaretRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+              <span className="text-xs sm:text-sm text-black/40 ml-3 sm:ml-4">
+                {activeTestimonial + 1} / {testimonials.length}
+              </span>
+            </div>
+          </div>
+
+          {/* Right - Quote */}
+          <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 flex items-center">
+            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black leading-[1.3] tracking-tight">
+              "{testimonials[activeTestimonial].quote}"
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Accent */}
+      <div className="h-1 bg-[#FF5722]" />
     </section>
   );
 };

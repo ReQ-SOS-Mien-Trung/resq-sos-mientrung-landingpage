@@ -1,4 +1,4 @@
-import { ArrowRight, Image as ImageIcon } from "lucide-react";
+import { ArrowRight, Image as ImageIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import type { ContributionCardProps } from "@type";
 

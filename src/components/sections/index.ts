@@ -1,8 +1,15 @@
-export { default as Hero } from "./Hero";
+export { default as HeroSection } from "./HeroSection";
 export { default as Newsroom } from "./Newsroom";
-export { default as HowItWorks } from "./HowItWorks";
 export { default as CTABanner } from "./CTABanner";
 export { default as Features } from "./Features";
 export { default as WhyUseUs } from "./WhyUseUs";
 export { default as FAQs } from "./FAQs";
 export { default as DownloadAppPage } from "./DownloadAppPage";
+export { default as PrivacyPolicyPage } from "./PrivacyPolicyPage";
+export { default as TermsOfServicePage } from "./TermsOfServicePage";
+export { default as AboutPage } from "./AboutPage";
+export { default as NewsPage } from "./NewsPage";
+export { default as ServicesPage } from "./ServicesPage";
+export { default as ContactPage } from "./ContactPage";
+export { default as DonatePage } from "./DonatePage";
+export { default as HelpCenterPage } from "./HelpCenterPage";
