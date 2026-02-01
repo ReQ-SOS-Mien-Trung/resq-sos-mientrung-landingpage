@@ -147,7 +147,7 @@ const DonatePage = () => {
           {donationOptions.map((option, index) => (
             <button
               key={index}
-              className={`option-item p-6 sm:p-8 lg:p-10 ${index < 3 ? 'border-r-2' : ''} border-black hover:bg-black hover:text-white transition-colors group text-left`}
+              className={`option-item p-6 sm:p-8 lg:p-10 border-b-2 lg:border-b-0 ${index % 2 === 0 ? 'border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black hover:bg-black hover:text-white transition-colors group text-left`}
             >
               <span className="text-2xl sm:text-3xl lg:text-4xl font-black block text-[#FF5722] group-hover:text-[#FF5722]">
                 {option.amount}
@@ -263,7 +263,7 @@ const DonatePage = () => {
           {impactStats.map((stat, index) => (
             <div 
               key={index}
-              className={`impact-item p-6 sm:p-8 lg:p-10 ${index < 3 ? 'border-r-2' : ''} border-black text-center`}
+              className={`impact-item p-6 sm:p-8 lg:p-10 border-b-2 lg:border-b-0 ${index % 2 === 0 ? 'border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black text-center`}
             >
               <span className="text-3xl sm:text-4xl font-black text-[#FF5722] block">{stat.number}</span>
               <span className="text-xs text-black/50">{stat.label}</span>

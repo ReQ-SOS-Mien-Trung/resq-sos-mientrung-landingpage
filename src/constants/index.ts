@@ -5,6 +5,7 @@ import type {
   FAQ,
   MenuItem,
   NewsArticle,
+  PrerequisiteQuestion,
   Region,
   Service,
   ServiceCategory,
@@ -411,6 +412,22 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
+  {
+    id: "ability-check",
+    label: "🧪 Test Khảo sát",
+    subItems: [
+      {
+        title: "1. Thông tin cá nhân",
+        description: "Test trang nhập thông tin cá nhân (Dev only)",
+        link: "/auth/personal-info",
+      },
+      {
+        title: "2. Câu hỏi tiên quyết",
+        description: "Test trang khảo sát năng lực cứu hộ (Dev only)",
+        link: "/auth/ability-check",
+      },
+    ],
+  },
 ];
 
 export const features = [
@@ -743,6 +760,208 @@ export const privacyPolicySections = [
       { period: "ĐANG SỬ DỤNG", desc: "Thông tin được lưu trữ trong thời gian bạn sử dụng dịch vụ" },
       { period: "SAU KHI XÓA", desc: "Xóa hoặc ẩn danh hóa trong vòng 30 ngày" },
       { period: "THEO PHÁP LUẬT", desc: "Một số thông tin có thể được giữ lâu hơn nếu được yêu cầu" },
+    ],
+  },
+];
+
+// ==================== ABILITY CHECK PAGE ====================
+export const prerequisiteQuestions: PrerequisiteQuestion[] = [
+  {
+    id: 1,
+    category: "Kỹ năng bơi",
+    categoryEn: "Swimming Ability",
+    question: "Bạn có thể tự bơi và giữ an toàn cho bản thân trong môi trường nước ngập không?",
+    yesAnswer: "Có, tôi có thể tự bơi và không hoảng loạn khi ở dưới nước",
+    noAnswer: "Không",
+    warningMessage: "Nếu chọn \"Không\" → không thể tham gia cứu hộ lũ. Khả năng bơi là yêu cầu bắt buộc để đảm bảo an toàn cho chính bạn trong các tình huống ngập nước.",
+    iconName: "PersonSimpleSwimIcon",
+  },
+  {
+    id: 2,
+    category: "Nhận thức an toàn cá nhân",
+    categoryEn: "Personal Safety Awareness",
+    question: "Trong tình huống nguy hiểm (nước xiết, điện giật, sạt lở), bạn có sẵn sàng rút lui và không cố cứu vượt khả năng của mình không?",
+    yesAnswer: "Có, tôi ưu tiên an toàn cho bản thân và đội",
+    noAnswer: "Không / Tôi sẽ cố cứu bằng mọi giá",
+    warningMessage: "Chọn phương án này → không đủ điều kiện. Việc cố cứu vượt khả năng có thể gây nguy hiểm cho cả bạn và người được cứu, đồng thời tạo thêm gánh nặng cho đội cứu hộ.",
+    iconName: "ShieldCheck",
+  },
+  {
+    id: 3,
+    category: "Giao tiếp & tuân thủ điều phối",
+    categoryEn: "Communication & Coordination",
+    question: "Khi tham gia cứu hộ, bạn có cam kết tuân thủ sự điều phối của hệ thống và người điều phối, không tự ý hành động ngoài nhiệm vụ được giao không?",
+    yesAnswer: "Có, tôi cam kết tuân thủ điều phối",
+    noAnswer: "Không",
+    warningMessage: "Không tuân thủ → không thể tham gia hệ thống ResQ. Sự phối hợp nhịp nhàng giữa các thành viên là yếu tố quyết định thành công của mỗi nhiệm vụ cứu hộ.",
+    iconName: "Handshake",
+  },
+  {
+    id: 4,
+    category: "Khả năng học nhanh & tuân thủ quy trình",
+    categoryEn: "Trainability",
+    question: "Bạn có sẵn sàng học và tuân thủ quy trình cứu hộ do ResQ hướng dẫn trước khi tham gia nhiệm vụ không?",
+    yesAnswer: "Có, tôi sẵn sàng học và làm theo quy trình",
+    noAnswer: "Không",
+    warningMessage: "Không sẵn sàng học → rủi ro cao cho toàn đội. Quy trình cứu hộ được thiết kế để bảo vệ tất cả mọi người, việc không tuân thủ có thể dẫn đến hậu quả nghiêm trọng.",
+    iconName: "GraduationCap",
+  },
+];
+
+// ==================== DETAILED ABILITIES ====================
+export const rescueSkillCategories = [
+  {
+    id: "rescue-survival",
+    title: "I. CỨU HỘ & SINH TỒN",
+    titleEn: "RESCUE & SURVIVAL",
+    subgroups: [
+      {
+        subtitle: "Kỹ năng bơi lội",
+        skills: [
+          { id: "basic-swimming", label: "Bơi cơ bản" },
+          { id: "advanced-swimming", label: "Bơi thành thạo" },
+          { id: "underwater-rescue", label: "Cứu hộ dưới nước" },
+          { id: "deep-water-movement", label: "Di chuyển trong nước ngập sâu" },
+          { id: "strong-current-movement", label: "Di chuyển trong dòng nước chảy xiết" },
+          { id: "basic-diving", label: "Lặn cơ bản" },
+          { id: "flooded-escape", label: "Thoát hiểm trong môi trường ngập nước" },
+        ],
+      },
+      {
+        subtitle: "Kỹ năng cứu người",
+        skills: [
+          { id: "house-rescue", label: "Cứu người bị mắc kẹt trong nhà ngập" },
+          { id: "roof-rescue", label: "Cứu người bị mắc kẹt trên mái nhà" },
+          { id: "vehicle-rescue", label: "Cứu người bị kẹt trong phương tiện (xe, ghe)" },
+          { id: "rope-rescue", label: "Sử dụng dây thừng cứu hộ" },
+          { id: "life-jacket-use", label: "Sử dụng áo phao, phao cứu sinh" },
+        ],
+      },
+      {
+        subtitle: "Cứu hộ trong điều kiện khắc nghiệt",
+        skills: [
+          { id: "night-rescue", label: "Cứu hộ ban đêm / tầm nhìn kém" },
+          { id: "storm-rescue", label: "Cứu hộ trong mưa lớn / bão" },
+          { id: "debris-rescue", label: "Cứu hộ tại khu vực đổ nát" },
+          { id: "hazard-rescue", label: "Cứu hộ trong môi trường nguy hiểm" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "medical-first-aid",
+    title: "II. Y TẾ & SƠ CỨU",
+    titleEn: "MEDICAL & FIRST AID",
+    subgroups: [
+      {
+        subtitle: "Sơ cứu cơ bản",
+        skills: [
+          { id: "open-wound-first-aid", label: "Sơ cứu vết thương hở" },
+          { id: "bleeding-control", label: "Cầm máu" },
+          { id: "wound-bandaging", label: "Băng bó vết thương" },
+          { id: "minor-injury-treatment", label: "Xử lý trầy xước, chấn thương nhẹ" },
+          { id: "minor-burn-treatment", label: "Xử lý bỏng nhẹ" },
+        ],
+      },
+      {
+        subtitle: "Cấp cứu",
+        skills: [
+          { id: "cpr", label: "Hồi sức tim phổi (CPR)" },
+          { id: "drowning-treatment", label: "Xử lý đuối nước" },
+          { id: "shock-treatment", label: "Xử lý sốc" },
+          { id: "hypothermia-treatment", label: "Xử lý hạ thân nhiệt" },
+          { id: "vital-signs-monitoring", label: "Theo dõi dấu hiệu sinh tồn" },
+          { id: "victim-assessment", label: "Đánh giá mức độ nguy kịch nạn nhân" },
+        ],
+      },
+      {
+        subtitle: "Chấn thương",
+        skills: [
+          { id: "fracture-immobilization", label: "Cố định gãy xương tạm thời" },
+          { id: "spinal-injury-handling", label: "Xử lý chấn thương cột sống (cơ bản)" },
+          { id: "safe-patient-transport", label: "Vận chuyển người bị thương an toàn" },
+        ],
+      },
+      {
+        subtitle: "Y tế chuyên môn",
+        singleSelect: true, // Chỉ được chọn 1 vai trò
+        skills: [
+          { id: "medical-staff", label: "Nhân viên y tế" },
+          { id: "nurse", label: "Y tá" },
+          { id: "doctor", label: "Bác sĩ" },
+          { id: "pre-hospital-emergency", label: "Cấp cứu tiền viện" },
+        ],
+      },
+    ],
+  },
+  // ==================== III. PHƯƠNG TIỆN & VẬN CHUYỂN ====================
+  {
+    id: "mobility-transport",
+    title: "III. PHƯƠNG TIỆN & VẬN CHUYỂN",
+    titleEn: "MOBILITY & TRANSPORT",
+    subgroups: [
+      {
+        subtitle: "Lái xe cơ giới",
+        skills: [
+          { id: "motorbike", label: "Lái xe máy" },
+          { id: "motorbike-flood", label: "Lái xe máy trong điều kiện ngập nước" },
+          { id: "car", label: "Lái ô tô" },
+          { id: "offroad-car", label: "Lái ô tô địa hình" },
+        ],
+      },
+      {
+        subtitle: "Lái phương tiện thủy",
+        skills: [
+          { id: "boat-ghe", label: "Lái ghe" },
+          { id: "boat-xuong", label: "Lái xuồng" },
+          { id: "speedboat", label: "Lái ca nô" },
+        ],
+      },
+      {
+        subtitle: "Kỹ năng điều khiển đặc biệt",
+        skills: [
+          { id: "night-driving", label: "Điều khiển phương tiện ban đêm" },
+          { id: "rain-driving", label: "Điều khiển phương tiện trong mưa lớn" },
+        ],
+      },
+      {
+        subtitle: "Vận chuyển",
+        skills: [
+          { id: "victim-transport", label: "Vận chuyển nạn nhân" },
+          { id: "relief-transport", label: "Vận chuyển hàng cứu trợ" },
+          { id: "heavy-transport", label: "Vận chuyển hàng nặng" },
+        ],
+      },
+    ],
+  },
+  // ==================== IV. KINH NGHIỆM & CHỨNG CHỈ ====================
+  {
+    id: "experience-certificates",
+    title: "IV. KINH NGHIỆM & CHỨNG CHỈ",
+    titleEn: "EXPERIENCE & CERTIFICATES (OPTIONAL)",
+    subgroups: [
+      {
+        subtitle: "Kinh nghiệm thực tế",
+        skills: [
+          { id: "disaster-relief-exp", label: "Đã tham gia cứu trợ thiên tai" },
+          { id: "flood-rescue-exp", label: "Kinh nghiệm cứu hộ lũ lụt" },
+          { id: "community-rescue-exp", label: "Kinh nghiệm cứu hộ cộng đồng" },
+        ],
+      },
+      {
+        subtitle: "Chứng chỉ",
+        skills: [
+          { id: "rescue-certificate", label: "Chứng chỉ cứu hộ" },
+          { id: "first-aid-certificate", label: "Chứng chỉ sơ cứu / y tế" },
+        ],
+      },
+      {
+        subtitle: "Tổ chức",
+        skills: [
+          { id: "local-rescue-team", label: "Thành viên đội cứu hộ địa phương" },
+          { id: "volunteer-org", label: "Thành viên tổ chức thiện nguyện" },
+        ],
+      },
     ],
   },
 ];

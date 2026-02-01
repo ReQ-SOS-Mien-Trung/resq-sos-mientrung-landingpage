@@ -7,16 +7,20 @@ import {
   HeartIcon,
   MagnifyingGlassIcon,
   UserIcon,
+  BellIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import SearchOverlay from "./SearchOverlay";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, onboardingStatus, getNextOnboardingPath } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   // GSAP refs
   const menuOverlayRef = useRef<HTMLDivElement>(null);
@@ -207,10 +211,62 @@ const Header = () => {
 
         {/* Bottom Icons */}
         <div className="border-t border-white/10 py-3 lg:py-4 flex flex-col items-center gap-3 lg:gap-4">
-          <button className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors">
-            <HeartIcon className="w-4 h-4 lg:w-5 lg:h-5" />
-          </button>
-          <button className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+          {isAuthenticated && !onboardingStatus.isComplete ? (
+            /* Show bell with notification when onboarding incomplete */
+            <div className="relative">
+              <button
+                onClick={() => setShowNotification(!showNotification)}
+                className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-[#FF5722] hover:text-white transition-colors relative"
+              >
+                <BellIcon className="w-4 h-4 lg:w-5 lg:h-5" weight="fill" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#FF5722] rounded-full animate-pulse" />
+              </button>
+              {/* Notification Popup */}
+              {showNotification && (
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 bg-white text-black p-4 rounded-lg shadow-xl z-50 border-2 border-black">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-[#FF5722]/10 rounded-full flex items-center justify-center shrink-0">
+                      <BellIcon className="w-5 h-5 text-[#FF5722]" weight="fill" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-black text-black mb-1">
+                        Hoàn tất hồ sơ
+                      </p>
+                      <p className="text-xs text-black/60 leading-relaxed">
+                        Bạn cần hoàn tất thông tin để tham gia mạng lưới cứu hộ ResQ SOS.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowNotification(false);
+                      navigate(getNextOnboardingPath());
+                    }}
+                    className="w-full mt-3 px-3 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors rounded"
+                  >
+                    Tiếp tục đăng ký →
+                  </button>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-white" style={{ filter: 'drop-shadow(0 1px 0 black)' }} />
+                </div>
+              )}
+            </div>
+          ) : (
+            <button className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+              <HeartIcon className="w-4 h-4 lg:w-5 lg:h-5" />
+            </button>
+          )}
+          <button
+            onClick={() => {
+              if (isAuthenticated && onboardingStatus.isComplete) {
+                navigate("/profile");
+              } else if (isAuthenticated) {
+                navigate(getNextOnboardingPath());
+              } else {
+                navigate("/auth/register");
+              }
+            }}
+            className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+          >
             <UserIcon className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
         </div>
@@ -275,13 +331,34 @@ const Header = () => {
 
           {/* Mobile Right Icons */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
+            {/* Notification bell for mobile */}
+            {isAuthenticated && !onboardingStatus.isComplete && (
+              <button
+                onClick={() => navigate(getNextOnboardingPath())}
+                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-[#FF5722] hover:text-black transition-colors relative"
+              >
+                <BellIcon className="w-4 h-4 sm:w-5 sm:h-5" weight="fill" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-[#FF5722] rounded-full animate-pulse" />
+              </button>
+            )}
             <button
               onClick={() => setIsSearchOpen(true)}
               className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors"
             >
               <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
-            <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors">
+            <button
+              onClick={() => {
+                if (isAuthenticated && onboardingStatus.isComplete) {
+                  navigate("/profile");
+                } else if (isAuthenticated) {
+                  navigate(getNextOnboardingPath());
+                } else {
+                  navigate("/auth/register");
+                }
+              }}
+              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-black/70 hover:text-black transition-colors"
+            >
               <UserIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>

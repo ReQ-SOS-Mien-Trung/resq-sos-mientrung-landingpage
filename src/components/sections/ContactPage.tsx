@@ -213,10 +213,10 @@ const ContactPage = () => {
       </section>
 
       {/* Quick Links */}
-      <section ref={linksRef} className="grid grid-cols-1 lg:grid-cols-3">
+      <section ref={linksRef} className="grid grid-cols-1 sm:grid-cols-3">
         <Link 
           to="/help-center"
-          className="link-item p-8 sm:p-12 border-b-2 lg:border-b-0 lg:border-r-2 border-black hover:bg-black hover:text-white transition-colors group"
+          className="link-item p-8 sm:p-12 border-b-2 sm:border-b-0 sm:border-r-2 border-black hover:bg-black hover:text-white transition-colors group"
         >
           <Question className="w-8 h-8 mb-4 text-[#FF5722]" />
           <h3 className="font-black mb-2">TRUNG TÂM TRỢ GIÚP</h3>
@@ -224,7 +224,7 @@ const ContactPage = () => {
         </Link>
         <Link 
           to="/register"
-          className="link-item p-8 sm:p-12 border-b-2 lg:border-b-0 lg:border-r-2 border-black hover:bg-black hover:text-white transition-colors group"
+          className="link-item p-8 sm:p-12 border-b-2 sm:border-b-0 sm:border-r-2 border-black hover:bg-black hover:text-white transition-colors group"
         >
           <ArrowUpRight className="w-8 h-8 mb-4 text-[#FF5722]" />
           <h3 className="font-black mb-2">THAM GIA CỘNG ĐỒNG</h3>

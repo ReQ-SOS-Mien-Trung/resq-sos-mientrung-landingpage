@@ -65,9 +65,10 @@ const RegisterHero = () => {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <button 
+                onClick={() => navigate("/auth/register")}
                 className="px-6 sm:px-8 py-4 border border-black text-black text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
               >
-                Tìm hiểu thêm
+                Đăng ký ngay
               </button>
             </div>
           </div>

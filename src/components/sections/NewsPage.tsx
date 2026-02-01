@@ -167,7 +167,7 @@ const NewsPage = () => {
             <a
               key={article.id}
               href={article.link}
-              className={`news-item p-6 sm:p-8 ${index < 3 ? 'border-r-2' : ''} border-b-2 lg:border-b-0 border-black hover:bg-black hover:text-white transition-colors group`}
+              className={`news-item p-6 sm:p-8 border-b-2 lg:border-b-0 ${index % 2 === 0 ? 'sm:border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black hover:bg-black hover:text-white transition-colors group`}
             >
               <div className="aspect-video bg-black/10 mb-4 flex items-center justify-center group-hover:bg-white/10">
                 <Newspaper className="w-8 h-8 text-black/20 group-hover:text-white/20" />

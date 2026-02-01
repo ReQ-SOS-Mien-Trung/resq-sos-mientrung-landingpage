@@ -199,7 +199,7 @@ const AboutPage = () => {
           {aboutValues.map((value, index) => (
             <div 
               key={index}
-              className={`value-item p-6 sm:p-8 lg:p-10 ${index < 3 ? 'border-r-2' : ''} border-black hover:bg-black hover:text-white transition-colors group`}
+              className={`value-item p-6 sm:p-8 lg:p-10 border-b-2 sm:border-b-0 ${index % 2 === 0 ? 'sm:border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black hover:bg-black hover:text-white transition-colors group`}
             >
               <value.icon className="w-8 h-8 mb-4 text-[#FF5722]" weight="fill" />
               <h3 className="text-sm font-black tracking-wider mb-2">{value.title}</h3>
@@ -219,7 +219,7 @@ const AboutPage = () => {
           {aboutTeam.map((member, index) => (
             <div 
               key={index}
-              className={`team-item p-6 sm:p-8 ${index < 4 ? 'border-r-2' : ''} border-black`}
+              className={`team-item p-4 sm:p-6 lg:p-8 border-b-2 lg:border-b-0 ${index % 2 === 0 ? 'border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black`}
             >
               <div className="aspect-square bg-black/10 mb-4 overflow-hidden">
                 <img 
