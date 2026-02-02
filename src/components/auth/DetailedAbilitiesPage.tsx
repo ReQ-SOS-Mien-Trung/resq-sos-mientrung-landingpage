@@ -16,7 +16,7 @@ interface RescueSkillSubgroup {
 const DetailedAbilitiesPage = () => {
   const navigate = useNavigate();
   const { completeOnboarding, isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
-  
+
   // Initialize selectedSkills from localStorage
   const [selectedSkills, setSelectedSkills] = useState<string[]>(() => {
     try {
@@ -29,7 +29,7 @@ const DetailedAbilitiesPage = () => {
     }
     return [];
   });
-  
+
   const [currentCategory, setCurrentCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +39,7 @@ const DetailedAbilitiesPage = () => {
   // Redirect if not authenticated or already completed onboarding
   useEffect(() => {
     if (authLoading) return; // Wait until auth state is loaded
-    
+
     if (!isAuthenticated) {
       navigate("/auth/register");
       return;
@@ -69,7 +69,7 @@ const DetailedAbilitiesPage = () => {
         localStorage.setItem("selectedSkills", JSON.stringify(newSkills));
         return newSkills;
       }
-      
+
       // Nếu subgroup là singleSelect, bỏ các skill khác trong cùng subgroup
       let newSkills: string[];
       if (subgroup?.singleSelect) {
@@ -79,7 +79,7 @@ const DetailedAbilitiesPage = () => {
       } else {
         newSkills = [...prev, skillId];
       }
-      
+
       // Save to localStorage
       localStorage.setItem("selectedSkills", JSON.stringify(newSkills));
       return newSkills;
@@ -97,7 +97,7 @@ const DetailedAbilitiesPage = () => {
   const handleContinue = () => {
     // Save current progress
     localStorage.setItem("selectedSkills", JSON.stringify(selectedSkills));
-    
+
     if (currentCategory < rescueSkillCategories.length - 1) {
       // Move to next category
       setCurrentCategory((prev) => prev + 1);
@@ -133,8 +133,12 @@ const DetailedAbilitiesPage = () => {
     <div ref={containerRef} className="min-h-screen bg-white">
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
-        <Link to="/" className="text-lg font-black tracking-tight">
-          ResQ SOS
+        <Link to="/" className="hover:opacity-70 transition-opacity">
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
           Bước 3/3 - Kỹ năng chi tiết
@@ -144,7 +148,7 @@ const DetailedAbilitiesPage = () => {
       <div className="flex flex-col lg:grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]">
         {/* Left - Skills Selection */}
         <div className="flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 py-8 sm:py-12 lg:py-16 border-b lg:border-b-0 lg:border-r border-black/10">
-          
+
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
@@ -202,7 +206,7 @@ const DetailedAbilitiesPage = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   {/* Skills Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {subgroup.skills.map((skill) => {
@@ -211,11 +215,10 @@ const DetailedAbilitiesPage = () => {
                         <button
                           key={skill.id}
                           onClick={() => toggleSkill(skill.id, subgroup)}
-                          className={`relative px-4 py-3 border-2 rounded-full text-left text-sm font-medium transition-all ${
-                            isSelected
-                              ? "border-[#00A650] bg-[#00A650]/10 text-black"
-                              : "border-black/20 hover:border-black/40 text-black/70"
-                          }`}
+                          className={`relative px-4 py-3 border-2 rounded-full text-left text-sm font-medium transition-all ${isSelected
+                            ? "border-[#00A650] bg-[#00A650]/10 text-black"
+                            : "border-black/20 hover:border-black/40 text-black/70"
+                            }`}
                         >
                           <div className="flex items-center gap-2">
                             <span className="flex-1">{skill.label}</span>
@@ -242,7 +245,7 @@ const DetailedAbilitiesPage = () => {
                 <ArrowLeft className="w-4 h-4" />
                 {currentCategory === 0 ? "Quay lại câu hỏi" : "Quay lại"}
               </button>
-              
+
               <button
                 onClick={handleContinue}
                 disabled={isLoading}
@@ -317,18 +320,16 @@ const DetailedAbilitiesPage = () => {
                 return (
                   <div
                     key={cat.id}
-                    className={`p-4 rounded-lg transition-all ${
-                      index === currentCategory
-                        ? "bg-[#FF5722] text-white"
-                        : index < currentCategory
+                    className={`p-4 rounded-lg transition-all ${index === currentCategory
+                      ? "bg-[#FF5722] text-white"
+                      : index < currentCategory
                         ? "bg-white/10 text-white/80"
                         : "bg-white/5 text-white/40"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded ${
-                        index < currentCategory ? "bg-[#00A650] text-white" : "bg-white/10"
-                      }`}>
+                      <span className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded ${index < currentCategory ? "bg-[#00A650] text-white" : "bg-white/10"
+                        }`}>
                         {index < currentCategory ? <Check className="w-4 h-4" weight="bold" /> : index + 1}
                       </span>
                       <div className="flex-1">

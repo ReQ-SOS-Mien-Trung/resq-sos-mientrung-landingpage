@@ -106,6 +106,9 @@ export const useAuth = () => {
     localStorage.removeItem(STORAGE_KEYS.ABILITY_ANSWERS);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_SKILLS);
     localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETE);
+    // Clear authentication tokens
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setUser(null);
     setOnboardingStatus({
       isRegistered: false,

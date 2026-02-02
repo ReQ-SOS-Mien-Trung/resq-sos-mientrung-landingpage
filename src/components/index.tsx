@@ -10,7 +10,7 @@ export {
   PrivacyPolicyPage,
   TermsOfServicePage,
 } from "./sections";
-export { RegisterHero, RegisterPage, RescuerForm } from "./forms";
+export { RegisterHero, RegisterPage } from "./forms";
 export { Services, ServicesSection, WaysToBePartner } from "./services";
 export { default as DownloadAppPage } from "./sections/DownloadAppPage";
 export { AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DetailedAbilitiesPage, ProfilePage } from "./auth";

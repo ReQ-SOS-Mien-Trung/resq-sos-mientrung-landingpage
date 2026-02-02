@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowRight, 
-  User, 
+import {
+  ArrowRight,
+  User,
   ArrowLeft,
   Phone,
   MapPin,
@@ -14,21 +14,12 @@ import {
   X
 } from "@phosphor-icons/react";
 import { ArrowLeftIcon, ArrowRightIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
-import { useRegisterRescuer, useGoogleLogin } from "@/services/auth/hooks";
-import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { useRegisterRescuer } from "@/services/auth/hooks";
 import { useAuth } from "@/hooks/useAuth";
-import { jwtDecode } from "jwt-decode";
-
-interface GoogleJwtPayload {
-  email: string;
-  name?: string;
-  picture?: string;
-}
 
 const AuthRegisterPage = () => {
   const navigate = useNavigate();
   const registerMutation = useRegisterRescuer();
-  const googleLoginMutation = useGoogleLogin();
   const { registerUser, isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
   const [step, setStep] = useState<"auth" | "profile">("auth");
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
@@ -37,7 +28,7 @@ const AuthRegisterPage = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
-  
+
   const [authData, setAuthData] = useState({
     email: "",
     password: "",
@@ -63,7 +54,7 @@ const AuthRegisterPage = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (authLoading) return; // Wait until auth state is loaded
-    
+
     if (isAuthenticated) {
       if (onboardingStatus.isComplete) {
         navigate("/profile");
@@ -87,12 +78,12 @@ const AuthRegisterPage = () => {
   const handleAuthInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAuthData((prev) => ({ ...prev, [name]: value }));
-    
+
     // Validate email on change
     if (name === "email" && emailTouched) {
       validateEmail(value);
     }
-    
+
     // Validate password on change
     if (name === "password") {
       validatePassword(value);
@@ -105,13 +96,13 @@ const AuthRegisterPage = () => {
       setEmailError(null);
       return true;
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setEmailError("Định dạng email không hợp lệ");
       return false;
     }
-    
+
     setEmailError(null);
     return true;
   };
@@ -125,7 +116,7 @@ const AuthRegisterPage = () => {
   // Validate password requirements
   const validatePassword = (password: string) => {
     const errors: string[] = [];
-    
+
     if (password.length < 6) {
       errors.push("Tối thiểu 6 ký tự");
     }
@@ -141,7 +132,7 @@ const AuthRegisterPage = () => {
     if (!/[0-9]/.test(password)) {
       errors.push("Ít nhất 1 số");
     }
-    
+
     setPasswordErrors(errors);
     return errors.length === 0;
   };
@@ -154,7 +145,7 @@ const AuthRegisterPage = () => {
   // Lấy vị trí GPS từ thiết bị và reverse geocoding
   const handleGetLocation = () => {
     setLocationError(null);
-    
+
     if (!navigator.geolocation) {
       setLocationError("Trình duyệt không hỗ trợ định vị");
       return;
@@ -172,20 +163,20 @@ const AuthRegisterPage = () => {
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=vi&addressdetails=1`
           );
           const data = await response.json();
-          
+
           if (data.address) {
             const addr = data.address;
-            
+
             // Lấy các thông tin địa chỉ
             const road = addr.road || addr.street || addr.pedestrian || "";
             const houseNumber = addr.house_number || "";
             const ward = addr.suburb || addr.quarter || addr.neighbourhood || addr.village || "";
             const district = addr.city_district || addr.district || addr.county || addr.town || "";
             const city = addr.city || addr.state || addr.province || "";
-            
+
             // Tạo địa chỉ đường đầy đủ
             const fullAddress = [houseNumber, road].filter(Boolean).join(" ").trim();
-            
+
             setProfileData(prev => ({
               ...prev,
               address: fullAddress,
@@ -193,7 +184,7 @@ const AuthRegisterPage = () => {
               district: district,
               city: city,
             }));
-            
+
             setLocationError(null);
           } else {
             setLocationError("Không thể xác định địa chỉ. Vui lòng nhập thủ công.");
@@ -201,7 +192,7 @@ const AuthRegisterPage = () => {
         } catch {
           setLocationError("Lỗi kết nối. Vui lòng nhập thủ công.");
         }
-        
+
         setIsGettingLocation(false);
       },
       (error) => {
@@ -240,58 +231,26 @@ const AuthRegisterPage = () => {
     setLocationError(null);
   };
 
-  const handleGoogleSignUp = (credentialResponse: CredentialResponse) => {
-    if (credentialResponse.credential) {
-      // Decode JWT to get user info
-      try {
-        const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential);
-        
-        // Register user locally
-        registerUser({
-          email: decoded.email,
-          name: decoded.name,
-          avatar: decoded.picture,
-          authMethod: "google",
-        });
 
-        // Call API
-        googleLoginMutation.mutate(
-          { idToken: credentialResponse.credential },
-          {
-            onSuccess: () => {
-              // Navigate to personal info step
-              navigate("/auth/personal-info");
-            },
-            onError: () => {
-              // Still navigate to personal info even if API fails (for demo)
-              navigate("/auth/personal-info");
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Failed to decode Google JWT:", error);
-      }
-    }
-  };
 
   const handleEmailSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate email and password
     if (!validateEmail(authData.email)) {
       return;
     }
-    
+
     if (!validatePassword(authData.password)) {
       return;
     }
-    
+
     // Register user locally
     registerUser({
       email: authData.email,
       authMethod: "email",
     });
-    
+
     // Call the register mutation
     registerMutation.mutate(
       {
@@ -341,7 +300,7 @@ const AuthRegisterPage = () => {
 
       {/* Header */}
       <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
-        Bước 1/2 - Tạo tài khoản
+        Tạo tài khoản
       </p>
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-[1.1] mb-4">
         ĐĂNG KÝ
@@ -355,29 +314,6 @@ const AuthRegisterPage = () => {
       {/* Auth Methods */}
       {authMethod === "choice" ? (
         <div className="space-y-4">
-          {/* Google Sign Up */}
-          <div className="w-full">
-            <GoogleLogin
-              onSuccess={handleGoogleSignUp}
-              onError={() => {
-                console.error('Google Login Failed');
-              }}
-              useOneTap
-              theme="outline"
-              size="large"
-              text="signup_with"
-              shape="rectangular"
-              width="100%"
-            />
-          </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-black/10" />
-            <span className="text-xs text-black/40 uppercase tracking-wider">Hoặc</span>
-            <div className="flex-1 h-px bg-black/10" />
-          </div>
-
           {/* Email Sign Up */}
           <button
             onClick={() => setAuthMethod("email")}
@@ -406,13 +342,12 @@ const AuthRegisterPage = () => {
                 onBlur={handleEmailBlur}
                 placeholder="email@example.com"
                 required
-                className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${
-                  emailError && emailTouched 
-                    ? 'border-red-500 focus:border-red-500' 
-                    : authData.email && !emailError && emailTouched
+                className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${emailError && emailTouched
+                  ? 'border-red-500 focus:border-red-500'
+                  : authData.email && !emailError && emailTouched
                     ? 'border-green-500'
                     : 'border-black/20'
-                }`}
+                  }`}
               />
               <AnimatePresence>
                 {authData.email && (
@@ -465,13 +400,12 @@ const AuthRegisterPage = () => {
                 required
                 minLength={6}
                 maxLength={20}
-                className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${
-                  passwordErrors.length > 0 && authData.password
-                    ? 'border-red-500 focus:border-red-500'
-                    : authData.password && passwordErrors.length === 0
+                className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${passwordErrors.length > 0 && authData.password
+                  ? 'border-red-500 focus:border-red-500'
+                  : authData.password && passwordErrors.length === 0
                     ? 'border-green-500'
                     : 'border-black/20'
-                }`}
+                  }`}
               />
               <button
                 type="button"
@@ -630,9 +564,9 @@ const AuthRegisterPage = () => {
           <div className="flex gap-3">
             {/* Country Code */}
             <div className="flex items-center gap-2 px-4 py-4 border-2 border-black/20 rounded-lg bg-gray-50 min-w-[100px]">
-              <img 
-                src="https://flagcdn.com/w20/vn.png" 
-                alt="Vietnam" 
+              <img
+                src="https://flagcdn.com/w20/vn.png"
+                alt="Vietnam"
                 className="w-5 h-auto"
               />
               <span className="text-sm font-medium">+84</span>
@@ -689,7 +623,7 @@ const AuthRegisterPage = () => {
               </button>
             </div>
           </div>
-          
+
           {locationError && (
             <p className="text-xs text-red-500">{locationError}</p>
           )}
@@ -792,11 +726,15 @@ const AuthRegisterPage = () => {
     <div ref={containerRef} className="min-h-screen bg-white">
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
-        <Link to="/" className="text-lg font-black tracking-tight">
-          ResQ SOS
+        <Link to="/" className="hover:opacity-70 transition-opacity">
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
-        <Link 
-          to="/auth/login" 
+        <Link
+          to="/auth/login"
           className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60 hover:text-black transition-colors"
         >
           Đã có tài khoản? Đăng nhập
@@ -863,7 +801,7 @@ const AuthRegisterPage = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Stats */}
           <div className="grid grid-cols-3 border-t border-white/10">
             <div className="p-6 xl:p-8 border-r border-white/10 text-center">

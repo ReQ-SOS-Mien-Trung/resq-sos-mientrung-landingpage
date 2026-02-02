@@ -223,7 +223,7 @@ const Header = () => {
               </button>
               {/* Notification Popup */}
               {showNotification && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 bg-white text-black p-4 rounded-lg shadow-xl z-50 border-2 border-black">
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 w-72 bg-white text-black p-4 rounded-lg shadow-xl z-50 border-2 border-black">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-[#FF5722]/10 rounded-full flex items-center justify-center shrink-0">
                       <BellIcon className="w-5 h-5 text-[#FF5722]" weight="fill" />
@@ -246,7 +246,8 @@ const Header = () => {
                   >
                     Tiếp tục đăng ký →
                   </button>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-white" style={{ filter: 'drop-shadow(0 1px 0 black)' }} />
+                  {/* Arrow pointing left */}
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-white" style={{ filter: 'drop-shadow(-1px 0 0 black)' }} />
                 </div>
               )}
             </div>
@@ -295,9 +296,11 @@ const Header = () => {
               onClick={handleHomeClick}
               className="flex items-center gap-2 sm:gap-3 hover:opacity-70 transition-opacity"
             >
-              <span className="text-sm sm:text-base lg:text-lg font-black tracking-tight">
-                ResQ SOS
-              </span>
+              <img
+                src="/resq_typo_logo.svg"
+                alt="ResQ SOS"
+                className="h-12 sm:h-14 lg:h-16 w-auto"
+              />
             </Link>
           </div>
 
@@ -404,20 +407,18 @@ const Header = () => {
                       >
                         <button
                           onMouseEnter={() => handleMenuMouseEnter(item.id)}
-                          className={`relative w-full text-left py-4 text-sm font-bold uppercase tracking-wider transition-all duration-300 group ${
-                            activeMenu === item.id
-                              ? "text-black pl-3"
-                              : "text-black/40 hover:text-black hover:pl-3"
-                          }`}
+                          className={`relative w-full text-left py-4 text-sm font-bold uppercase tracking-wider transition-all duration-300 group ${activeMenu === item.id
+                            ? "text-black pl-3"
+                            : "text-black/40 hover:text-black hover:pl-3"
+                            }`}
                         >
                           {item.label}
                           {/* Underline indicator */}
                           <span
-                            className={`absolute bottom-3 left-0 h-0.5 bg-[#FF5722] transition-all duration-300 ${
-                              activeMenu === item.id
-                                ? "w-8"
-                                : "w-0 group-hover:w-6"
-                            }`}
+                            className={`absolute bottom-3 left-0 h-0.5 bg-[#FF5722] transition-all duration-300 ${activeMenu === item.id
+                              ? "w-8"
+                              : "w-0 group-hover:w-6"
+                              }`}
                           />
                         </button>
                       </li>

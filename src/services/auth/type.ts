@@ -9,7 +9,7 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface GoogleLoginRequest {
+export interface GoogleAuthRequest {
   idToken: string;
 }
 
@@ -32,6 +32,20 @@ export interface LoginResponse {
     email: string;
     firstName?: string;
     lastName?: string;
+  };
+}
+
+// Unified Google Auth Response
+export interface GoogleAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    avatar?: string;
+    isOnboarded: boolean;
   };
 }
 

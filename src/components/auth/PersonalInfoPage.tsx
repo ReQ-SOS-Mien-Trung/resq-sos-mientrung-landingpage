@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion } from "framer-motion";
-import { 
-  ArrowRight, 
-  User, 
+import {
+  ArrowRight,
+  User,
   Phone,
   MapPin,
   Check,
@@ -39,7 +39,7 @@ const PersonalInfoPage = () => {
   // Redirect if not authenticated or already completed onboarding
   useEffect(() => {
     if (authLoading) return; // Wait until auth state is loaded
-    
+
     if (!isAuthenticated) {
       navigate("/auth/register");
       return;
@@ -76,26 +76,26 @@ const PersonalInfoPage = () => {
 
   const handleProfileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     // Validate phone number
     if (name === "phone") {
       // Only allow digits and remove leading zeros
       const digitsOnly = value.replace(/\D/g, "").replace(/^0+/, "");
-      
+
       // Check validation - only show error for length
       if (digitsOnly.length > 0 && digitsOnly.length !== 9) {
         setPhoneError("Số điện thoại phải có đúng 9 chữ số");
       } else {
         setPhoneError(null);
       }
-      
+
       // Limit to 9 digits
       const cleanedValue = digitsOnly.slice(0, 9);
-      
+
       setProfileData((prev) => ({ ...prev, [name]: cleanedValue }));
       return;
     }
-    
+
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -115,23 +115,23 @@ const PersonalInfoPage = () => {
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
-          
+
           // Use Nominatim API (OpenStreetMap) for reverse geocoding
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=vi`
           );
-          
+
           if (!response.ok) throw new Error("Failed to fetch location");
-          
+
           const data = await response.json();
           const address = data.address;
-          
+
           // Build street address
           let streetAddress = "";
           if (address.house_number) streetAddress += address.house_number + " ";
           if (address.road) streetAddress += address.road;
           if (!streetAddress && address.neighbourhood) streetAddress = address.neighbourhood;
-          
+
           setProfileData((prev) => ({
             ...prev,
             address: streetAddress.trim() || "",
@@ -139,7 +139,7 @@ const PersonalInfoPage = () => {
             district: address.city_district || address.county || address.town || "",
             city: address.city || address.state || address.province || "",
           }));
-          
+
         } catch {
           setLocationError("Không thể lấy địa chỉ. Vui lòng nhập thủ công.");
         } finally {
@@ -187,12 +187,12 @@ const PersonalInfoPage = () => {
       alert("Vui lòng đồng ý với điều khoản để tiếp tục");
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     // Save profile data to localStorage for later use
     localStorage.setItem("personalInfo", JSON.stringify(profileData));
-    
+
     // Navigate to ability questions
     setTimeout(() => {
       setIsLoading(false);
@@ -224,8 +224,12 @@ const PersonalInfoPage = () => {
     <div ref={containerRef} className="min-h-screen bg-white">
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
-        <Link to="/" className="text-lg font-black tracking-tight">
-          ResQ SOS
+        <Link to="/" className="hover:opacity-70 transition-opacity">
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
           Thông tin cá nhân
@@ -235,7 +239,7 @@ const PersonalInfoPage = () => {
       <div className="flex flex-col lg:grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]">
         {/* Left - Form Section */}
         <div className="flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 py-8 sm:py-12 lg:py-16 border-b lg:border-b-0 lg:border-r border-black/10">
-          
+
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
@@ -283,9 +287,8 @@ const PersonalInfoPage = () => {
                     onChange={handleProfileInputChange}
                     placeholder="Văn A"
                     required
-                    className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${
-                      profileData.firstName ? 'border-[#00A650]' : 'border-black/20'
-                    }`}
+                    className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.firstName ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
                   />
                 </div>
               </div>
@@ -316,9 +319,9 @@ const PersonalInfoPage = () => {
                 <div className="flex gap-3">
                   {/* Country Code */}
                   <div className="flex items-center gap-2 px-4 py-4 border-2 border-black/20 rounded-lg bg-gray-50 min-w-25">
-                    <img 
-                      src="https://flagcdn.com/w20/vn.png" 
-                      alt="Vietnam" 
+                    <img
+                      src="https://flagcdn.com/w20/vn.png"
+                      alt="Vietnam"
                       className="w-5 h-auto"
                     />
                     <span className="text-sm font-medium">+84</span>
@@ -333,9 +336,8 @@ const PersonalInfoPage = () => {
                       onChange={handleProfileInputChange}
                       placeholder="xxxxxxxxx"
                       maxLength={9}
-                      className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${
-                        phoneError ? 'border-red-500' : profileData.phone.length === 9 ? 'border-[#00A650]' : 'border-black/20'
-                      }`}
+                      className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${phoneError ? 'border-red-500' : profileData.phone.length === 9 ? 'border-[#00A650]' : 'border-black/20'
+                        }`}
                     />
                   </div>
                 </div>
@@ -381,7 +383,7 @@ const PersonalInfoPage = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {locationError && (
                   <p className="text-xs text-red-500">{locationError}</p>
                 )}
@@ -508,7 +510,7 @@ const PersonalInfoPage = () => {
                   <p className="text-sm text-white/60">Đang thực hiện</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
                 <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded">
                   2
@@ -518,7 +520,7 @@ const PersonalInfoPage = () => {
                   <p className="text-sm text-white/60">4 câu hỏi đánh giá</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
                 <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded">
                   3

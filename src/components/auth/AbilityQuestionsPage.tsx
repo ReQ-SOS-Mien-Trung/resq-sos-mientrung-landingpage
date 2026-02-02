@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowRight, 
+import {
+  ArrowRight,
   ArrowLeft,
   Check,
   X,
@@ -33,14 +33,14 @@ const AbilityQuestionsPage = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const questionRef = useRef<HTMLDivElement>(null);
 
   // Redirect if not authenticated or already completed onboarding
   useEffect(() => {
     if (authLoading) return; // Wait until auth state is loaded
-    
+
     if (!isAuthenticated) {
       navigate("/auth/register");
       return;
@@ -71,7 +71,7 @@ const AbilityQuestionsPage = () => {
 
     // Save "Yes" answer and move to next question
     setAnswers((prev) => ({ ...prev, [currentQuestion]: true }));
-    
+
     if (currentQuestion < prerequisiteQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
@@ -120,8 +120,12 @@ const AbilityQuestionsPage = () => {
     <div ref={containerRef} className="min-h-screen bg-white">
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
-        <Link to="/" className="text-lg font-black tracking-tight">
-          ResQ SOS
+        <Link to="/" className="hover:opacity-70 transition-opacity">
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
           Bước 2/3 - Câu hỏi tiên quyết
@@ -131,7 +135,7 @@ const AbilityQuestionsPage = () => {
       <div className="flex flex-col lg:grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]">
         {/* Left - Questions Section */}
         <div className="flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 py-8 sm:py-12 lg:py-16 border-b lg:border-b-0 lg:border-r border-black/10">
-          
+
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
@@ -225,13 +229,12 @@ const AbilityQuestionsPage = () => {
                   {prerequisiteQuestions.map((_, index) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentQuestion
-                          ? "bg-[#FF5722]"
-                          : answers[index]
+                      className={`w-2 h-2 rounded-full transition-colors ${index === currentQuestion
+                        ? "bg-[#FF5722]"
+                        : answers[index]
                           ? "bg-[#00A650]"
                           : "bg-black/20"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -283,18 +286,16 @@ const AbilityQuestionsPage = () => {
               {prerequisiteQuestions.map((q, index) => (
                 <div
                   key={q.id}
-                  className={`p-4 rounded-lg transition-all ${
-                    index === currentQuestion && !isCompleted
-                      ? "bg-[#FF5722] text-white"
-                      : answers[index]
+                  className={`p-4 rounded-lg transition-all ${index === currentQuestion && !isCompleted
+                    ? "bg-[#FF5722] text-white"
+                    : answers[index]
                       ? "bg-white/10 text-white/80"
                       : "bg-white/5 text-white/40"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded ${
-                      answers[index] ? "bg-[#00A650] text-white" : "bg-white/10"
-                    }`}>
+                    <span className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded ${answers[index] ? "bg-[#00A650] text-white" : "bg-white/10"
+                      }`}>
                       {answers[index] ? <Check className="w-4 h-4" weight="bold" /> : index + 1}
                     </span>
                     <div>
@@ -334,7 +335,7 @@ const AbilityQuestionsPage = () => {
                   Không đủ điều kiện
                 </h3>
               </div>
-              
+
               <p className="text-black/70 mb-6 leading-relaxed">
                 {warningMessage}
               </p>

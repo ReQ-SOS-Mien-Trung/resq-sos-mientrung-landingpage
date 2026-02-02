@@ -1,5 +1,5 @@
 import api from "@/config/axios";
-import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, GoogleLoginRequest } from "./type";
+import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, GoogleAuthRequest, GoogleAuthResponse } from "./type";
 
 // Register rescuer
 export const registerRescuer = async (data: RegisterRequest): Promise<RegisterResponse> => {
@@ -14,8 +14,8 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
 };
 
 // Google Login
-export const googleLogin = async (data: GoogleLoginRequest): Promise<LoginResponse> => {
-  const response = await api.post<LoginResponse>("/api/auth/google-login", data);
+export const googleAuth = async (data: GoogleAuthRequest): Promise<GoogleAuthResponse> => {
+  const response = await api.post<GoogleAuthResponse>("/api/auth/google-login", data);
   return response.data;
 };
 

@@ -4,16 +4,18 @@ import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon, ArrowRightIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
 import { ArrowRight, EnvelopeSimple, X } from "@phosphor-icons/react";
-import { useGoogleLogin } from "@/services/auth/hooks";
+import { useGoogleAuth } from "@/services/auth/hooks";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { useAuth } from "@/hooks/useAuth";
 
 const AuthLoginPage = () => {
   const navigate = useNavigate();
-  const googleLoginMutation = useGoogleLogin();
+  const googleAuthMutation = useGoogleAuth();
+  const { registerUser, completeOnboarding } = useAuth();
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -39,7 +41,7 @@ const AuthLoginPage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
     // Validate email on change
     if (name === "email" && emailTouched) {
       validateEmail(value);
@@ -52,13 +54,13 @@ const AuthLoginPage = () => {
       setEmailError(null);
       return true;
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setEmailError("Định dạng email không hợp lệ");
       return false;
     }
-    
+
     setEmailError(null);
     return true;
   };
@@ -69,14 +71,32 @@ const AuthLoginPage = () => {
     validateEmail(formData.email);
   };
 
-  const handleGoogleSignIn = (credentialResponse: CredentialResponse) => {
+  const handleGoogleAuth = (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
-      googleLoginMutation.mutate(
+      // Call unified Google Auth API - backend decodes the token
+      googleAuthMutation.mutate(
         { idToken: credentialResponse.credential },
         {
-          onSuccess: () => {
-            // Navigate to home or dashboard after successful login
-            navigate("/");
+          onSuccess: (data) => {
+            // Register user locally with API response data
+            registerUser({
+              email: data.user.email,
+              name: data.user.firstName || data.user.lastName || "",
+              avatar: data.user.avatar,
+              authMethod: "google",
+            });
+
+            // Navigate based on isOnboarded from backend
+            if (data.user.isOnboarded) {
+              // Mark onboarding complete for existing users
+              completeOnboarding();
+              navigate("/profile");
+            } else {
+              navigate("/auth/personal-info");
+            }
+          },
+          onError: (error) => {
+            console.error("Google Auth failed:", error);
           },
         }
       );
@@ -97,11 +117,15 @@ const AuthLoginPage = () => {
     <div ref={containerRef} className="min-h-screen bg-white">
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
-        <Link to="/" className="text-lg font-black tracking-tight">
-          ResQ SOS
+        <Link to="/" className="hover:opacity-70 transition-opacity">
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
-        <Link 
-          to="/auth/register" 
+        <Link
+          to="/auth/register"
           className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60 hover:text-black transition-colors"
         >
           Chưa có tài khoản? Đăng ký
@@ -139,17 +163,17 @@ const AuthLoginPage = () => {
             {/* Auth Methods */}
             {authMethod === "choice" ? (
               <div className="space-y-4">
-                {/* Google Sign In */}
+                {/* Google Auth - Unified flow */}
                 <div className="w-full">
                   <GoogleLogin
-                    onSuccess={handleGoogleSignIn}
+                    onSuccess={handleGoogleAuth}
                     onError={() => {
-                      console.error('Google Login Failed');
+                      console.error('Google Auth Failed');
                     }}
                     useOneTap
                     theme="outline"
                     size="large"
-                    text="signin_with"
+                    text="continue_with"
                     shape="rectangular"
                     width="100%"
                   />
@@ -190,13 +214,12 @@ const AuthLoginPage = () => {
                       onBlur={handleEmailBlur}
                       placeholder="email@example.com"
                       required
-                      className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${
-                        emailError && emailTouched 
-                          ? 'border-red-500 focus:border-red-500' 
-                          : formData.email && !emailError && emailTouched
+                      className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${emailError && emailTouched
+                        ? 'border-red-500 focus:border-red-500'
+                        : formData.email && !emailError && emailTouched
                           ? 'border-green-500'
                           : 'border-black/20'
-                      }`}
+                        }`}
                     />
                     <AnimatePresence>
                       {formData.email && (
@@ -239,8 +262,8 @@ const AuthLoginPage = () => {
                     <label className="block text-xs font-bold uppercase tracking-wider text-black/60">
                       Mật khẩu
                     </label>
-                    <Link 
-                      to="/auth/forgot-password" 
+                    <Link
+                      to="/auth/forgot-password"
                       className="text-xs text-[#FF5722] hover:underline"
                     >
                       Quên mật khẩu?
@@ -309,11 +332,11 @@ const AuthLoginPage = () => {
               Đăng nhập để tiếp tục tham gia các hoạt động cứu hộ và hỗ trợ cộng đồng miền Trung.
             </p>
           </div>
-          
+
           {/* Image */}
           <div className="h-70 xl:h-86 relative overflow-hidden">
-            <img 
-              src="/images/tnv.png" 
+            <img
+              src="/images/tnv.png"
               alt="Tình nguyện viên"
               className="w-full h-full object-cover"
             />
