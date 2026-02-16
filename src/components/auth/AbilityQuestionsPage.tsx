@@ -16,6 +16,7 @@ import {
 import { prerequisiteQuestions } from "@/constants";
 import { PersonSimpleSwimIcon } from "@phosphor-icons/react/dist/ssr";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubmitRescuerConsent } from "@/services/form/hooks";
 
 // Icon mapping
 const iconMap = {
@@ -28,6 +29,7 @@ const iconMap = {
 const AbilityQuestionsPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const consentMutation = useSubmitRescuerConsent();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: boolean | null }>({});
   const [showWarning, setShowWarning] = useState(false);
@@ -98,8 +100,21 @@ const AbilityQuestionsPage = () => {
     // Save ability answers to localStorage
     const answersArray = Object.values(answers);
     localStorage.setItem("abilityAnswers", JSON.stringify(answersArray));
-    // Navigate to detailed abilities page
-    navigate("/auth/detailed-abilities");
+
+    // Call consent API - all 4 must be true
+    consentMutation.mutate(
+      {
+        agreeMedicalFitness: true,
+        agreeLegalResponsibility: true,
+        agreeTraining: true,
+        agreeCodeOfConduct: true,
+      },
+      {
+        onSuccess: () => {
+          navigate("/auth/detailed-abilities");
+        },
+      }
+    );
   };
 
   const progress = ((currentQuestion + (isCompleted ? 1 : 0)) / prerequisiteQuestions.length) * 100;

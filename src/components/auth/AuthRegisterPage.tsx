@@ -245,12 +245,6 @@ const AuthRegisterPage = () => {
       return;
     }
 
-    // Register user locally
-    registerUser({
-      email: authData.email,
-      authMethod: "email",
-    });
-
     // Call the register mutation
     registerMutation.mutate(
       {
@@ -259,11 +253,8 @@ const AuthRegisterPage = () => {
       },
       {
         onSuccess: () => {
-          navigate("/auth/personal-info");
-        },
-        onError: () => {
-          // Still navigate to personal info even if API fails (for demo)
-          navigate("/auth/personal-info");
+          // Always redirect to email verification pending page after registration
+          navigate(`/auth/email-verification-pending?email=${encodeURIComponent(authData.email)}`);
         },
       }
     );

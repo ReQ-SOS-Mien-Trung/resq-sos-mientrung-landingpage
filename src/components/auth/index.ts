@@ -4,3 +4,5 @@ export { default as AbilityQuestionsPage } from "./AbilityQuestionsPage";
 export { default as PersonalInfoPage } from "./PersonalInfoPage";
 export { default as DetailedAbilitiesPage } from "./DetailedAbilitiesPage";
 export { default as ProfilePage } from "./ProfilePage";
+export { default as ResendVerificationPage } from "./ResendVerificationPage";
+export { default as EmailVerificationPendingPage } from "./EmailVerificationPendingPage";

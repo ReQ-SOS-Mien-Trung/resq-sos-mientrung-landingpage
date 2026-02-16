@@ -13,6 +13,7 @@ import {
   X
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
+import { useUpdateRescuerProfile } from "@/services/form/hooks";
 
 const PersonalInfoPage = () => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const PersonalInfoPage = () => {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
 
+  const updateProfileMutation = useUpdateRescuerProfile();
+
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -31,6 +34,8 @@ const PersonalInfoPage = () => {
     ward: "",
     district: "",
     city: "",
+    latitude: 0,
+    longitude: 0,
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -138,6 +143,8 @@ const PersonalInfoPage = () => {
             ward: address.suburb || address.quarter || address.village || "",
             district: address.city_district || address.county || address.town || "",
             city: address.city || address.state || address.province || "",
+            latitude,
+            longitude,
           }));
 
         } catch {
@@ -177,6 +184,8 @@ const PersonalInfoPage = () => {
       ward: "",
       district: "",
       city: "",
+      latitude: 0,
+      longitude: 0,
     }));
     setLocationError(null);
   };
@@ -193,11 +202,28 @@ const PersonalInfoPage = () => {
     // Save profile data to localStorage for later use
     localStorage.setItem("personalInfo", JSON.stringify(profileData));
 
-    // Navigate to ability questions
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/auth/ability-check");
-    }, 500);
+    // Call API to update rescuer profile
+    updateProfileMutation.mutate(
+      {
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        phone: profileData.phone.startsWith("0") ? profileData.phone : `0${profileData.phone}`,
+        address: profileData.address,
+        ward: profileData.ward,
+        city: profileData.city,
+        latitude: profileData.latitude,
+        longitude: profileData.longitude,
+      },
+      {
+        onSuccess: () => {
+          setIsLoading(false);
+          navigate("/auth/ability-check");
+        },
+        onError: () => {
+          setIsLoading(false);
+        },
+      }
+    );
   };
 
   // Calculate progress

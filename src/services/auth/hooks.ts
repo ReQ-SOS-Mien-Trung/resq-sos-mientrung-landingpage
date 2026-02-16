@@ -1,5 +1,5 @@
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
-import { registerRescuer, login, logout, googleAuth } from "./api";
+import { registerRescuer, login, logout, googleAuth, resendVerificationEmail } from "./api";
 import type {
   RegisterRequest,
   RegisterResponse,
@@ -8,6 +8,8 @@ import type {
   AuthError,
   GoogleAuthRequest,
   GoogleAuthResponse,
+  ResendVerificationRequest,
+  ResendVerificationResponse,
 } from "./type";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -148,11 +150,11 @@ export const useGoogleAuth = (): UseMutationResult<
     mutationFn: googleAuth,
     onSuccess: (data: GoogleAuthResponse) => {
       // Save tokens to localStorage
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
+      if (data.accessToken) localStorage.setItem("accessToken", data.accessToken);
+      if (data.refreshToken) localStorage.setItem("refreshToken", data.refreshToken);
 
       // Show appropriate message based on isOnboarded status
-      if (data.user.isOnboarded) {
+      if (data.user?.isOnboarded) {
         toast.success("Đăng nhập thành công!", {
           description: "Chào mừng bạn quay trở lại.",
           duration: 3000,
@@ -175,6 +177,44 @@ export const useGoogleAuth = (): UseMutationResult<
       });
       console.error(
         "Google auth failed:",
+        error.response?.data?.message || error.message,
+      );
+    },
+  });
+};
+
+// Resend Verification Email
+export const useResendVerification = (): UseMutationResult<
+  ResendVerificationResponse,
+  AxiosError<AuthError>,
+  ResendVerificationRequest
+> => {
+  return useMutation({
+    mutationFn: resendVerificationEmail,
+    onSuccess: (data: ResendVerificationResponse) => {
+      if (data.success) {
+        toast.success("Gửi email thành công!", {
+          description: data.message || "Vui lòng kiểm tra hộp thư của bạn.",
+          duration: 5000,
+        });
+      } else {
+        toast.error("Gửi email thất bại", {
+          description: data.message,
+          duration: 4000,
+        });
+      }
+      console.log("Resend verification:", data);
+    },
+    onError: (error: AxiosError<AuthError>) => {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Gửi email xác thực thất bại. Vui lòng thử lại.";
+      toast.error("Gửi email thất bại", {
+        description: errorMessage,
+        duration: 4000,
+      });
+      console.error(
+        "Resend verification failed:",
         error.response?.data?.message || error.message,
       );
     },

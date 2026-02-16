@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { Contributions, DownloadAppPage, RegisterPage, Services, PrivacyPolicyPage, TermsOfServicePage, AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DetailedAbilitiesPage, ProfilePage } from "@/components";
+import { Contributions, DownloadAppPage, RegisterPage, Services, PrivacyPolicyPage, TermsOfServicePage, AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage } from "@/components";
 import MainLayout from "@/layouts/MainLayout";
 import { HeroSection, Newsroom, Features, AboutPage, NewsPage, ServicesPage, ContactPage, DonatePage, HelpCenterPage } from "./components/sections";
 import ScrollToTop from "./components/ScrollToTop";
@@ -118,6 +118,8 @@ function App() {
           />
           <Route path="/auth/register" element={<AuthRegisterPage />} />
           <Route path="/auth/login" element={<AuthLoginPage />} />
+          <Route path="/auth/resend-verification" element={<ResendVerificationPage />} />
+          <Route path="/auth/email-verification-pending" element={<EmailVerificationPendingPage />} />
           <Route path="/auth/personal-info" element={<PersonalInfoPage />} />
           <Route path="/auth/ability-check" element={<AbilityQuestionsPage />} />
           <Route path="/auth/detailed-abilities" element={<DetailedAbilitiesPage />} />

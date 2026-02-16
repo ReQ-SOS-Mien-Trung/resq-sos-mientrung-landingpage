@@ -7,12 +7,14 @@ import { ArrowRight, EnvelopeSimple, X } from "@phosphor-icons/react";
 import { useGoogleAuth } from "@/services/auth/hooks";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useAuth } from "@/hooks/useAuth";
+import { getUserMe } from "@/services/user/api";
 
 const AuthLoginPage = () => {
   const navigate = useNavigate();
   const googleAuthMutation = useGoogleAuth();
   const { registerUser, completeOnboarding } = useAuth();
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,27 +73,32 @@ const AuthLoginPage = () => {
     validateEmail(formData.email);
   };
 
-  const handleGoogleAuth = (credentialResponse: CredentialResponse) => {
+  const handleGoogleAuth = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
       // Call unified Google Auth API - backend decodes the token
       googleAuthMutation.mutate(
         { idToken: credentialResponse.credential },
         {
-          onSuccess: (data) => {
+          onSuccess: async (data) => {
             // Register user locally with API response data
             registerUser({
-              email: data.user.email,
-              name: data.user.firstName || data.user.lastName || "",
-              avatar: data.user.avatar,
+              email: data.user?.email || "",
+              name: data.user?.firstName || data.user?.lastName || "",
+              avatar: data.user?.avatar,
               authMethod: "google",
             });
 
-            // Navigate based on isOnboarded from backend
-            if (data.user.isOnboarded) {
-              // Mark onboarding complete for existing users
-              completeOnboarding();
-              navigate("/profile");
-            } else {
+            // Fetch user profile to check isOnboarded
+            try {
+              const userProfile = await getUserMe();
+              if (userProfile.isOnboarded) {
+                completeOnboarding();
+                navigate("/profile");
+              } else {
+                navigate("/auth/personal-info");
+              }
+            } catch {
+              // Fallback: navigate to personal-info if getUserMe fails
               navigate("/auth/personal-info");
             }
           },

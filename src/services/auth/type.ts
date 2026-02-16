@@ -56,3 +56,13 @@ export interface AuthError {
   };
   statusCode?: number;
 }
+
+// Resend Verification Email
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+export interface ResendVerificationResponse {
+  success: boolean;
+  message: string;
+}
