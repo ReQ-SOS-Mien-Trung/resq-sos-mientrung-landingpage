@@ -78,15 +78,15 @@ const ProfilePage = () => {
       const categorySkillIds = category.subgroups.flatMap((sg) =>
         sg.skills.map((s) => s.id)
       );
-      const selectedInCategory = selectedSkills.filter((id: string) =>
+      const selectedInCategory = selectedSkills.filter((id: number) =>
         categorySkillIds.includes(id)
       );
-      const skillLabels = selectedInCategory.map((id: string) => {
+      const skillLabels = selectedInCategory.map((id: number) => {
         for (const subgroup of category.subgroups) {
           const skill = subgroup.skills.find((s) => s.id === id);
           if (skill) return skill.label;
         }
-        return id;
+        return String(id);
       });
       return {
         id: category.id,

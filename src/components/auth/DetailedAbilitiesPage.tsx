@@ -5,30 +5,22 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check } from "@phosphor-icons/react";
 import { rescueSkillCategories } from "@/constants";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubmitRescuerAbilities } from "@/services/abilities/hooks";
 
 // Inline type definition
 interface RescueSkillSubgroup {
   subtitle: string;
   singleSelect?: boolean;
-  skills: { id: string; label: string }[];
+  skills: { id: number; label: string }[];
 }
 
 const DetailedAbilitiesPage = () => {
   const navigate = useNavigate();
   const { completeOnboarding, isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const submitAbilitiesMutation = useSubmitRescuerAbilities();
 
-  // Initialize selectedSkills from localStorage
-  const [selectedSkills, setSelectedSkills] = useState<string[]>(() => {
-    try {
-      const savedSkills = localStorage.getItem("selectedSkills");
-      if (savedSkills) {
-        return JSON.parse(savedSkills);
-      }
-    } catch (error) {
-      console.error("Error loading saved skills:", error);
-    }
-    return [];
-  });
+  // Selected skills state
+  const [selectedSkills, setSelectedSkills] = useState<number[]>([]);
 
   const [currentCategory, setCurrentCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,17 +53,16 @@ const DetailedAbilitiesPage = () => {
     return () => ctx.revert();
   }, [currentCategory]);
 
-  const toggleSkill = (skillId: string, subgroup?: RescueSkillSubgroup) => {
+  const toggleSkill = (skillId: number, subgroup?: RescueSkillSubgroup) => {
     setSelectedSkills((prev) => {
       // Nếu đã chọn thì bỏ chọn
       if (prev.includes(skillId)) {
         const newSkills = prev.filter((id) => id !== skillId);
-        localStorage.setItem("selectedSkills", JSON.stringify(newSkills));
         return newSkills;
       }
 
       // Nếu subgroup là singleSelect, bỏ các skill khác trong cùng subgroup
-      let newSkills: string[];
+      let newSkills: number[];
       if (subgroup?.singleSelect) {
         const subgroupSkillIds = subgroup.skills.map((s) => s.id);
         const filteredPrev = prev.filter((id) => !subgroupSkillIds.includes(id));
@@ -81,7 +72,6 @@ const DetailedAbilitiesPage = () => {
       }
 
       // Save to localStorage
-      localStorage.setItem("selectedSkills", JSON.stringify(newSkills));
       return newSkills;
     });
   };
@@ -95,20 +85,26 @@ const DetailedAbilitiesPage = () => {
   };
 
   const handleContinue = () => {
-    // Save current progress
-    localStorage.setItem("selectedSkills", JSON.stringify(selectedSkills));
 
     if (currentCategory < rescueSkillCategories.length - 1) {
       // Move to next category
       setCurrentCategory((prev) => prev + 1);
     } else {
-      // Last category, complete onboarding
+      // Last category, submit abilities via API
       setIsLoading(true);
-      setTimeout(() => {
-        completeOnboarding();
-        setIsLoading(false);
-        navigate("/profile");
-      }, 500);
+      submitAbilitiesMutation.mutate(
+        { abilities: selectedSkills.map((id) => ({ abilityId: id, level: 1 })) },
+        {
+          onSuccess: () => {
+            completeOnboarding();
+            setIsLoading(false);
+            navigate("/profile");
+          },
+          onError: () => {
+            setIsLoading(false);
+          },
+        }
+      );
     }
   };
 

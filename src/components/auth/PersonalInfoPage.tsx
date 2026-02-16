@@ -55,18 +55,7 @@ const PersonalInfoPage = () => {
     }
   }, [authLoading, isAuthenticated, onboardingStatus.isComplete, navigate]);
 
-  // Load saved data from localStorage on mount
-  useEffect(() => {
-    const savedData = localStorage.getItem("personalInfo");
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setProfileData(parsed);
-      } catch (error) {
-        console.error("Error loading saved profile data:", error);
-      }
-    }
-  }, []);
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -199,8 +188,7 @@ const PersonalInfoPage = () => {
 
     setIsLoading(true);
 
-    // Save profile data to localStorage for later use
-    localStorage.setItem("personalInfo", JSON.stringify(profileData));
+
 
     // Call API to update rescuer profile
     updateProfileMutation.mutate(

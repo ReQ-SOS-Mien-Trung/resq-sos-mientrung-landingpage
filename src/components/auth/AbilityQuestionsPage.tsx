@@ -97,10 +97,6 @@ const AbilityQuestionsPage = () => {
   };
 
   const handleContinue = () => {
-    // Save ability answers to localStorage
-    const answersArray = Object.values(answers);
-    localStorage.setItem("abilityAnswers", JSON.stringify(answersArray));
-
     // Call consent API - all 4 must be true
     consentMutation.mutate(
       {

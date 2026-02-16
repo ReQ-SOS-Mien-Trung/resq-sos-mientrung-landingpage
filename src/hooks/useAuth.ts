@@ -28,9 +28,6 @@ export interface OnboardingStatus {
 
 const STORAGE_KEYS = {
   USER: "resq_user",
-  PERSONAL_INFO: "personalInfo",
-  ABILITY_ANSWERS: "abilityAnswers",
-  SELECTED_SKILLS: "selectedSkills",
   ONBOARDING_COMPLETE: "resq_onboarding_complete",
 };
 
@@ -49,26 +46,19 @@ export const useAuth = () => {
   const loadUserData = useCallback(() => {
     try {
       const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
-      const personalInfo = localStorage.getItem(STORAGE_KEYS.PERSONAL_INFO);
-      const abilityAnswers = localStorage.getItem(STORAGE_KEYS.ABILITY_ANSWERS);
-      const selectedSkills = localStorage.getItem(STORAGE_KEYS.SELECTED_SKILLS);
       const onboardingComplete = localStorage.getItem(STORAGE_KEYS.ONBOARDING_COMPLETE);
 
       if (savedUser) {
         setUser(JSON.parse(savedUser));
       }
 
-      // Check onboarding status
-      const hasPersonalInfo = !!personalInfo && JSON.parse(personalInfo).firstName;
-      const hasAbilityCheck = !!abilityAnswers && JSON.parse(abilityAnswers).length > 0;
-      const hasDetailedAbilities = !!selectedSkills && JSON.parse(selectedSkills).length > 0;
       const isComplete = onboardingComplete === "true";
 
       setOnboardingStatus({
         isRegistered: !!savedUser,
-        hasPersonalInfo,
-        hasAbilityCheck,
-        hasDetailedAbilities,
+        hasPersonalInfo: isComplete,
+        hasAbilityCheck: isComplete,
+        hasDetailedAbilities: isComplete,
         isComplete,
       });
     } catch (error) {
@@ -102,9 +92,6 @@ export const useAuth = () => {
   // Logout
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEYS.USER);
-    localStorage.removeItem(STORAGE_KEYS.PERSONAL_INFO);
-    localStorage.removeItem(STORAGE_KEYS.ABILITY_ANSWERS);
-    localStorage.removeItem(STORAGE_KEYS.SELECTED_SKILLS);
     localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETE);
     // Clear authentication tokens
     localStorage.removeItem("accessToken");
