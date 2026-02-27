@@ -1,6 +1,6 @@
 import { useQuery, useMutation, type UseQueryResult, type UseMutationResult } from "@tanstack/react-query";
-import { getAbilities, submitRescuerAbilities } from "./api";
-import type { AbilitiesResponse, SubmitAbilitiesRequest, SubmitAbilitiesResponse } from "./type";
+import { getAbilities, submitRescuerAbilities, getRescuerAbilities } from "./api";
+import type { AbilitiesResponse, SubmitAbilitiesRequest, SubmitAbilitiesResponse, RescuerAbilitiesResponse } from "./type";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 
@@ -13,6 +13,14 @@ export const useGetAbilities = (): UseQueryResult<AbilitiesResponse, AxiosError<
   return useQuery({
     queryKey: ["abilities"],
     queryFn: getAbilities,
+  });
+};
+
+// Get rescuer's own abilities
+export const useGetRescuerAbilities = (): UseQueryResult<RescuerAbilitiesResponse, AxiosError<AbilitiesError>> => {
+  return useQuery({
+    queryKey: ["rescuer-abilities"],
+    queryFn: getRescuerAbilities,
   });
 };
 

@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon, ArrowRightIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
 import { ArrowRight, EnvelopeSimple, X } from "@phosphor-icons/react";
-import { useGoogleAuth } from "@/services/auth/hooks";
+import { useGoogleAuth, useLogin } from "@/services/auth/hooks";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserMe } from "@/services/user/api";
@@ -12,11 +12,11 @@ import { getUserMe } from "@/services/user/api";
 const AuthLoginPage = () => {
   const navigate = useNavigate();
   const googleAuthMutation = useGoogleAuth();
+  const loginMutation = useLogin();
   const { registerUser, completeOnboarding } = useAuth();
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -112,12 +112,36 @@ const AuthLoginPage = () => {
 
   const handleEmailSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // Simulate login - Replace with actual implementation
-    setTimeout(() => {
-      console.log("Email Sign In:", formData);
-      setIsLoading(false);
-    }, 1500);
+
+    if (!validateEmail(formData.email)) return;
+
+    loginMutation.mutate(
+      { email: formData.email, password: formData.password },
+      {
+        onSuccess: async (data) => {
+          // Register user in auth context
+          registerUser({
+            email: data.user.email,
+            name: `${data.user.firstName || ""} ${data.user.lastName || ""}`.trim(),
+            authMethod: "email",
+          });
+
+          // Fetch user profile to check onboarding status
+          try {
+            const userProfile = await getUserMe();
+            if (userProfile.isOnboarded) {
+              completeOnboarding();
+              navigate("/");
+            } else {
+              navigate("/auth/personal-info");
+            }
+          } catch {
+            // Fallback: navigate to personal-info if getUserMe fails
+            navigate("/auth/personal-info");
+          }
+        },
+      }
+    );
   };
 
   return (
@@ -300,11 +324,14 @@ const AuthLoginPage = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isLoading || !!emailError || !formData.email || !formData.password}
+                  disabled={loginMutation.isPending || !!emailError || !formData.email || !formData.password}
                   className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
                 >
-                  {isLoading ? (
-                    "Đang xử lý..."
+                  {loginMutation.isPending ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Đang xử lý...
+                    </>
                   ) : (
                     <>
                       Đăng nhập

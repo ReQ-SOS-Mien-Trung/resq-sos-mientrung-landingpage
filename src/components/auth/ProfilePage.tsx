@@ -18,10 +18,14 @@ import {
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
 import { rescueSkillCategories } from "@/constants";
+import { useGetRescuerAbilities } from "@/services/abilities/hooks";
+import { useUserMe } from "@/services/user/hooks";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, onboardingStatus, logout, isLoading: authLoading } = useAuth();
+  const { data: rescuerAbilities } = useGetRescuerAbilities();
+  const { data: userProfile } = useUserMe();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Redirect if not authenticated or onboarding not complete
@@ -42,19 +46,16 @@ const ProfilePage = () => {
   useEffect(() => {
     if (authLoading) return;
     const ctx = gsap.context(() => {
-      // Hero text animation
       gsap.fromTo(
         ".hero-text",
         { y: 100, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" }
       );
-      // Stats animation
       gsap.fromTo(
         ".stat-item",
         { scale: 0.8, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.5, stagger: 0.1, delay: 0.3, ease: "back.out(1.7)" }
       );
-      // Cards animation
       gsap.fromTo(
         ".skill-card",
         { y: 60, opacity: 0 },
@@ -64,24 +65,29 @@ const ProfilePage = () => {
     return () => ctx.revert();
   }, [authLoading]);
 
-  // Load saved data from localStorage
-  const personalInfo = JSON.parse(localStorage.getItem("personalInfo") || "{}");
-  const selectedSkills = JSON.parse(localStorage.getItem("selectedSkills") || "[]");
+  // Get selected ability IDs from API data
+  const selectedAbilityIds = useMemo(() => {
+    return rescuerAbilities?.abilities?.map((a) => a.abilityId) || [];
+  }, [rescuerAbilities]);
 
   // Generate stable IDs - MUST be before any early returns (Rules of Hooks)
   const volunteerId = useMemo(() => String(Date.now()).slice(-6), []);
   const profileId = useMemo(() => String(Date.now()).slice(-8), []);
 
-  // Get skills by category
+  // Get skills by category using API data
   const getSkillsByCategory = () => {
     return rescueSkillCategories.map((category) => {
       const categorySkillIds = category.subgroups.flatMap((sg) =>
         sg.skills.map((s) => s.id)
       );
-      const selectedInCategory = selectedSkills.filter((id: number) =>
+      const selectedInCategory = selectedAbilityIds.filter((id: number) =>
         categorySkillIds.includes(id)
       );
       const skillLabels = selectedInCategory.map((id: number) => {
+        // First try to get label from API response
+        const apiAbility = rescuerAbilities?.abilities?.find((a) => a.abilityId === id);
+        if (apiAbility) return apiAbility.description;
+        // Fallback to constants
         for (const subgroup of category.subgroups) {
           const skill = subgroup.skills.find((s) => s.id === id);
           if (skill) return skill.label;
@@ -120,9 +126,9 @@ const ProfilePage = () => {
   }
 
   const skillsByCategory = getSkillsByCategory();
-  const totalSkills = selectedSkills.length;
+  const totalSkills = selectedAbilityIds.length;
   const categoryIcons = [Shield, FirstAid, Car, Certificate];
-  const fullName = `${personalInfo.firstName || ""} ${personalInfo.lastName || ""}`.trim() || "Tình nguyện viên";
+  const fullName = userProfile?.fullName || `${userProfile?.firstName || ""} ${userProfile?.lastName || ""}`.trim() || "Tình nguyện viên";
 
   return (
     <div ref={containerRef} className="min-h-screen bg-white">
@@ -207,10 +213,10 @@ const ProfilePage = () => {
               {/* Name - Editorial Typography */}
               <div className="hero-text mb-8">
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-[-0.03em] leading-none">
-                  {personalInfo.firstName?.toUpperCase() || "TÌNH NGUYỆN"}
+                  {(userProfile?.firstName || fullName.split(" ")[0])?.toUpperCase() || "TÌNH NGUYỆN"}
                 </h1>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-[-0.03em] leading-none text-black/20">
-                  {personalInfo.lastName?.toUpperCase() || "VIÊN"}
+                  {(userProfile?.lastName || fullName.split(" ").slice(1).join(" "))?.toUpperCase() || "VIÊN"}
                 </h1>
               </div>
 
@@ -220,16 +226,16 @@ const ProfilePage = () => {
                   <Envelope className="w-4 h-4" />
                   {user.email}
                 </p>
-                {personalInfo.phone && (
+                {userProfile?.phone && (
                   <p className="flex items-center gap-4 text-sm text-black/60">
                     <Phone className="w-4 h-4" />
-                    0{personalInfo.phone}
+                    {userProfile.phone}
                   </p>
                 )}
-                {personalInfo.city && (
+                {userProfile?.city && (
                   <p className="flex items-center gap-4 text-sm text-black/60">
                     <MapPin className="w-4 h-4" />
-                    {[personalInfo.district, personalInfo.city].filter(Boolean).join(", ")}
+                    {[userProfile.ward, userProfile.city].filter(Boolean).join(", ")}
                   </p>
                 )}
               </div>

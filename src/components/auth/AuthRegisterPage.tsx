@@ -252,9 +252,14 @@ const AuthRegisterPage = () => {
         password: authData.password,
       },
       {
-        onSuccess: () => {
-          // Always redirect to email verification pending page after registration
-          navigate(`/auth/email-verification-pending?email=${encodeURIComponent(authData.email)}`);
+        onSuccess: (data) => {
+          if (data.isEmailVerified) {
+            // Email already verified — skip verification screen, go to survey
+            navigate("/auth/personal-info");
+          } else {
+            // Email not verified — go to verification pending page
+            navigate(`/auth/email-verification-pending?email=${encodeURIComponent(authData.email)}`);
+          }
         },
       }
     );

@@ -24,3 +24,16 @@ export interface SubmitAbilitiesRequest {
 export interface SubmitAbilitiesResponse {
   message?: string;
 }
+
+// GET /identity/abilities/rescuer/me - rescuer's own abilities
+export interface RescuerAbilityDetail {
+  abilityId: number;
+  code: string;
+  description: string;
+  level: number;
+}
+
+export interface RescuerAbilitiesResponse {
+  userId: string;
+  abilities: RescuerAbilityDetail[];
+}

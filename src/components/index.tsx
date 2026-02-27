@@ -13,4 +13,4 @@ export {
 export { RegisterHero, RegisterPage } from "./forms";
 export { Services, ServicesSection, WaysToBePartner } from "./services";
 export { default as DownloadAppPage } from "./sections/DownloadAppPage";
-export { AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage } from "./auth";
+export { AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage, EmailVerificationSuccessPage } from "./auth";
