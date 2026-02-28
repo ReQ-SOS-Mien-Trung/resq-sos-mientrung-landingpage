@@ -121,22 +121,16 @@ const AuthLoginPage = () => {
         onSuccess: async (data) => {
           // Register user in auth context
           registerUser({
-            email: data.user.email,
-            name: `${data.user.firstName || ""} ${data.user.lastName || ""}`.trim(),
+            email: data.email,
+            name: `${data.firstName || ""} ${data.lastName || ""}`.trim(),
             authMethod: "email",
           });
 
-          // Fetch user profile to check onboarding status
-          try {
-            const userProfile = await getUserMe();
-            if (userProfile.isOnboarded) {
-              completeOnboarding();
-              navigate("/");
-            } else {
-              navigate("/auth/personal-info");
-            }
-          } catch {
-            // Fallback: navigate to personal-info if getUserMe fails
+          // Use isOnboarded directly from login response
+          if (data.isOnboarded) {
+            completeOnboarding();
+            navigate("/");
+          } else {
             navigate("/auth/personal-info");
           }
         },

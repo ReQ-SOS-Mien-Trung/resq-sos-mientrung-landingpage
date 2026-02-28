@@ -10,7 +10,8 @@ import {
   Check,
   Crosshair,
   SpinnerGap,
-  X
+  X,
+  CaretDown
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUpdateRescuerProfile } from "@/services/form/hooks";
@@ -23,6 +24,19 @@ const PersonalInfoPage = () => {
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
+
+  // Province / District / Ward dropdown state
+  const [provinces, setProvinces] = useState<{ code: number; name: string }[]>([]);
+  const [districts, setDistricts] = useState<{ code: number; name: string }[]>([]);
+  const [wards, setWards] = useState<{ code: number; name: string }[]>([]);
+  const [selectedProvinceCode, setSelectedProvinceCode] = useState<number | null>(null);
+  const [selectedDistrictCode, setSelectedDistrictCode] = useState<number | null>(null);
+  const [cityOpen, setCityOpen] = useState(false);
+  const [districtOpen, setDistrictOpen] = useState(false);
+  const [wardOpen, setWardOpen] = useState(false);
+  const [citySearch, setCitySearch] = useState("");
+  const [districtSearch, setDistrictSearch] = useState("");
+  const [wardSearch, setWardSearch] = useState("");
 
   const updateProfileMutation = useUpdateRescuerProfile();
 
@@ -40,10 +54,12 @@ const PersonalInfoPage = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+  const districtDropdownRef = useRef<HTMLDivElement>(null);
+  const wardDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Redirect if not authenticated or already completed onboarding
   useEffect(() => {
-    if (authLoading) return; // Wait until auth state is loaded
+    if (authLoading) return; 
 
     if (!isAuthenticated) {
       navigate("/auth/register");
@@ -66,6 +82,43 @@ const PersonalInfoPage = () => {
       );
     }, containerRef);
     return () => ctx.revert();
+  }, []);
+
+  // Fetch provinces on mount
+  useEffect(() => {
+    fetch("https://provinces.open-api.vn/api/v1/")
+      .then(r => r.json())
+      .then(data => setProvinces(data))
+      .catch(() => {});
+  }, []);
+
+  // Fetch districts when province changes
+  useEffect(() => {
+    if (!selectedProvinceCode) { setDistricts([]); setWards([]); return; }
+    fetch(`https://provinces.open-api.vn/api/v1/p/${selectedProvinceCode}?depth=2`)
+      .then(r => r.json())
+      .then(data => setDistricts(data.districts || []))
+      .catch(() => {});
+  }, [selectedProvinceCode]);
+
+  // Fetch wards when district changes
+  useEffect(() => {
+    if (!selectedDistrictCode) { setWards([]); return; }
+    fetch(`https://provinces.open-api.vn/api/v1/d/${selectedDistrictCode}?depth=2`)
+      .then(r => r.json())
+      .then(data => setWards(data.wards || []))
+      .catch(() => {});
+  }, [selectedDistrictCode]);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(e.target as Node)) setCityOpen(false);
+      if (districtDropdownRef.current && !districtDropdownRef.current.contains(e.target as Node)) setDistrictOpen(false);
+      if (wardDropdownRef.current && !wardDropdownRef.current.contains(e.target as Node)) setWardOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleProfileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,6 +229,10 @@ const PersonalInfoPage = () => {
       latitude: 0,
       longitude: 0,
     }));
+    setSelectedProvinceCode(null);
+    setSelectedDistrictCode(null);
+    setDistricts([]);
+    setWards([]);
     setLocationError(null);
   };
 
@@ -415,43 +472,148 @@ const PersonalInfoPage = () => {
                   />
                 </div>
 
-                {/* Ward & District Row */}
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Ward */}
-                  <div>
+                {/* City/Province Searchable Dropdown */}
+                <div className="relative" ref={cityDropdownRef}>
+                  <div className="relative">
                     <input
                       type="text"
-                      name="ward"
-                      value={profileData.ward}
-                      onChange={handleProfileInputChange}
-                      placeholder="Phường/Xã"
-                      className={`w-full px-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.ward ? 'border-[#00A650]' : 'border-black/20'}`}
+                      value={citySearch || profileData.city}
+                      onChange={e => { setCitySearch(e.target.value); setCityOpen(true); setProfileData(prev => ({ ...prev, city: "", district: "", ward: "" })); setSelectedProvinceCode(null); setSelectedDistrictCode(null); setDistricts([]); setWards([]); }}
+                      onFocus={() => { setCityOpen(true); setCitySearch(""); }}
+                      placeholder="Tỉnh/Thành phố *"
+                      readOnly={!!profileData.city && !cityOpen}
+                      className={`w-full px-4 pr-10 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg cursor-pointer ${
+                        cityOpen ? 'border-black' : profileData.city ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
                     />
+                    <CaretDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40 transition-transform pointer-events-none ${cityOpen ? 'rotate-180' : ''}`} />
                   </div>
-                  {/* District */}
-                  <div>
-                    <input
-                      type="text"
-                      name="district"
-                      value={profileData.district}
-                      onChange={handleProfileInputChange}
-                      placeholder="Quận/Huyện"
-                      className={`w-full px-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.district ? 'border-[#00A650]' : 'border-black/20'}`}
-                    />
-                  </div>
+                  {cityOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border-2 border-black rounded-lg shadow-xl overflow-y-auto" style={{ maxHeight: '220px' }}>
+                      {provinces.length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Đang tải...</p>
+                      )}
+                      {provinces
+                        .filter(p => p.name.toLowerCase().includes((citySearch || "").toLowerCase()))
+                        .map(p => (
+                          <button
+                            key={p.code}
+                            type="button"
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => {
+                              setProfileData(prev => ({ ...prev, city: p.name, district: "", ward: "" }));
+                              setSelectedProvinceCode(p.code);
+                              setSelectedDistrictCode(null);
+                              setWards([]);
+                              setCityOpen(false);
+                              setCitySearch("");
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-black/5 transition-colors ${
+                              profileData.city === p.name ? 'bg-[#FF5722]/10 text-[#FF5722] font-bold' : ''
+                            }`}
+                          >
+                            {p.name}
+                          </button>
+                        ))
+                      }
+                      {provinces.length > 0 && provinces.filter(p => p.name.toLowerCase().includes((citySearch || "").toLowerCase())).length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Không tìm thấy</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* City/Province */}
-                <div>
-                  <input
-                    type="text"
-                    name="city"
-                    value={profileData.city}
-                    onChange={handleProfileInputChange}
-                    placeholder="Tỉnh/Thành phố *"
-                    required
-                    className={`w-full px-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.city ? 'border-[#00A650]' : 'border-black/20'}`}
-                  />
+                {/* District Searchable Dropdown */}
+                <div className="relative" ref={districtDropdownRef}>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={districtSearch || profileData.district}
+                      disabled={!selectedProvinceCode}
+                      onChange={e => { setDistrictSearch(e.target.value); setDistrictOpen(true); setProfileData(prev => ({ ...prev, district: "", ward: "" })); setSelectedDistrictCode(null); setWards([]); }}
+                      onFocus={() => { setDistrictOpen(true); setDistrictSearch(""); }}
+                      placeholder="Quận/Huyện"
+                      readOnly={!!profileData.district && !districtOpen}
+                      className={`w-full px-4 pr-10 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                        districtOpen ? 'border-black' : profileData.district ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
+                    />
+                    <CaretDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40 transition-transform pointer-events-none ${districtOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {districtOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border-2 border-black rounded-lg shadow-xl overflow-y-auto" style={{ maxHeight: '220px' }}>
+                      {districts
+                        .filter(d => d.name.toLowerCase().includes((districtSearch || "").toLowerCase()))
+                        .map(d => (
+                          <button
+                            key={d.code}
+                            type="button"
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => {
+                              setProfileData(prev => ({ ...prev, district: d.name, ward: "" }));
+                              setSelectedDistrictCode(d.code);
+                              setDistrictOpen(false);
+                              setDistrictSearch("");
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-black/5 transition-colors ${
+                              profileData.district === d.name ? 'bg-[#FF5722]/10 text-[#FF5722] font-bold' : ''
+                            }`}
+                          >
+                            {d.name}
+                          </button>
+                        ))
+                      }
+                      {districts.filter(d => d.name.toLowerCase().includes((districtSearch || "").toLowerCase())).length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Không tìm thấy</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Ward Searchable Dropdown */}
+                <div className="relative" ref={wardDropdownRef}>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={wardSearch || profileData.ward}
+                      disabled={!selectedDistrictCode}
+                      onChange={e => { setWardSearch(e.target.value); setWardOpen(true); setProfileData(prev => ({ ...prev, ward: "" })); }}
+                      onFocus={() => { setWardOpen(true); setWardSearch(""); }}
+                      placeholder="Phường/Xã"
+                      readOnly={!!profileData.ward && !wardOpen}
+                      className={`w-full px-4 pr-10 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                        wardOpen ? 'border-black' : profileData.ward ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
+                    />
+                    <CaretDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40 transition-transform pointer-events-none ${wardOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {wardOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border-2 border-black rounded-lg shadow-xl overflow-y-auto" style={{ maxHeight: '220px' }}>
+                      {wards
+                        .filter(w => w.name.toLowerCase().includes((wardSearch || "").toLowerCase()))
+                        .map(w => (
+                          <button
+                            key={w.code}
+                            type="button"
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => {
+                              setProfileData(prev => ({ ...prev, ward: w.name }));
+                              setWardOpen(false);
+                              setWardSearch("");
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-black/5 transition-colors ${
+                              profileData.ward === w.name ? 'bg-[#FF5722]/10 text-[#FF5722] font-bold' : ''
+                            }`}
+                          >
+                            {w.name}
+                          </button>
+                        ))
+                      }
+                      {wards.filter(w => w.name.toLowerCase().includes((wardSearch || "").toLowerCase())).length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Không tìm thấy</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

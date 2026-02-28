@@ -27,12 +27,15 @@ export interface RegisterResponse {
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-  };
+  tokenType: string;
+  expiresIn: number;
+  userId: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  roleId: number;
+  isEmailVerified: boolean;
+  isOnboarded: boolean;
 }
 
 // Unified Google Auth Response
