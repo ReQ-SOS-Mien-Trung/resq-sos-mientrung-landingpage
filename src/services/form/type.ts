@@ -1,3 +1,16 @@
+// Document file type - GET /identity/document-file-types
+export interface DocumentFileType {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  isActive: boolean;
+}
+
+export interface DocumentFileTypesResponse {
+  items: DocumentFileType[];
+}
+
 // Rescuer profile update request - PUT /identity/user/rescuer/profile
 export interface RescuerProfileRequest {
   firstName: string;
@@ -33,7 +46,7 @@ export interface RescuerProfileResponse {
 // Rescuer apply request - POST /identity/user/rescuer/apply
 export interface RescuerApplyDocument {
   fileUrl: string;
-  fileType: string;
+  fileTypeId: number;
 }
 
 export interface RescuerApplyRequest {

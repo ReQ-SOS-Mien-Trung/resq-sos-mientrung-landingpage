@@ -17,27 +17,15 @@ import {
   Info,
 } from "@phosphor-icons/react";
 import { uploadFile } from "@/utils/uploadFile";
-import { useSubmitDocuments } from "@/services/form/hooks";
+import { useSubmitDocuments, useDocumentFileTypes } from "@/services/form/hooks";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-
-/* ── Cert type catalogue ─────────────────────────────────────── */
-const CERT_TYPES = [
-  { value: "WATER_SAFETY_CERT", label: "Chứng chỉ Cứu hộ dưới nước" },
-  { value: "WATER_RESCUE_CERT", label: "Chứng chỉ Cứu hộ dòng nước / lũ lụt" },
-  { value: "TECHNICAL_RESCUE_CERT", label: "Chứng chỉ Cứu hộ kỹ thuật" },
-  { value: "DISASTER_RESPONSE_CERT", label: "Chứng chỉ Ứng phó thiên tai" },
-  { value: "BASIC_MEDICAL_CERT", label: "Chứng chỉ Sơ cứu & Hồi sức tim phổi" },
-  { value: "ADVANCED_MEDICAL_LICENSE", label: "Giấy phép Y tế chuyên môn" },
-  { value: "LAND_VEHICLE_LICENSE", label: "Giấy phép lái xe đường bộ" },
-  { value: "WATER_VEHICLE_LICENSE", label: "Giấy phép điều khiển phương tiện đường thủy" },
-  { value: "OTHER", label: "Khác" },
-] as const;
 
 /* ── Types ───────────────────────────────────────────────────── */
 interface CertEntry {
   id: string;
   certType: string;
+  certTypeId: number;
   certTypeLabel: string;
   fileUrl: string;
   fileName: string;
@@ -59,6 +47,7 @@ const DocumentsUploadPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const submitDocsMutation = useSubmitDocuments();
+  const { data: certTypes = [], isLoading: certTypesLoading } = useDocumentFileTypes();
 
   /* State */
   const [certEntries, setCertEntries] = useState<CertEntry[]>([]);
@@ -122,7 +111,7 @@ const DocumentsUploadPage = () => {
     const file = e.target.files?.[0];
     if (!file || !pendingCertType) return;
 
-    const certType = CERT_TYPES.find((t) => t.value === pendingCertType);
+    const certType = certTypes.find((t) => t.code === pendingCertType);
     if (!certType) return;
 
     const entryId = crypto.randomUUID();
@@ -132,8 +121,9 @@ const DocumentsUploadPage = () => {
       ...prev,
       {
         id: entryId,
-        certType: certType.value,
-        certTypeLabel: certType.label,
+        certType: certType.code,
+        certTypeId: certType.id,
+        certTypeLabel: certType.name,
         fileUrl: "",
         fileName: file.name,
         isUploading: true,
@@ -168,14 +158,15 @@ const DocumentsUploadPage = () => {
   const handleSubmit = (skipDocuments = false) => {
     setIsSubmitting(true);
 
+    const payload = {
+      documents: skipDocuments
+        ? []
+        : certEntries
+            .filter((e) => e.fileUrl)
+            .map((e) => ({ fileUrl: e.fileUrl, fileTypeId: e.certTypeId })),
+    };
     submitDocsMutation.mutate(
-      {
-        documents: skipDocuments
-          ? []
-          : certEntries
-              .filter((e) => e.fileUrl)
-              .map((e) => ({ fileUrl: e.fileUrl, fileType: e.certType })),
-      },
+      payload,
       {
         onSuccess: () => {
           setIsSubmitting(false);
@@ -353,21 +344,28 @@ const DocumentsUploadPage = () => {
                       </p>
                     </div>
                     <ul className="py-1 max-h-64 overflow-y-auto">
-                      {CERT_TYPES.map((ct) => (
-                        <li key={ct.value}>
-                          <button
-                            type="button"
-                            onClick={() => handleCertTypeSelect(ct.value)}
-                            className="w-full text-left px-4 py-2.5 text-sm font-medium text-black/80 hover:bg-[#FF5722]/8 hover:text-[#FF5722] transition-colors flex items-center gap-3"
-                          >
-                            <Certificate
-                              className="w-4 h-4 shrink-0 text-[#FF5722]/60"
-                              weight="duotone"
-                            />
-                            {ct.label}
-                          </button>
+                      {certTypesLoading ? (
+                        <li className="px-4 py-3 text-sm text-black/40 flex items-center gap-2">
+                          <SpinnerGap className="w-4 h-4 animate-spin" weight="bold" />
+                          Đang tải...
                         </li>
-                      ))}
+                      ) : (
+                        certTypes.map((ct) => (
+                          <li key={ct.code}>
+                            <button
+                              type="button"
+                              onClick={() => handleCertTypeSelect(ct.code)}
+                              className="w-full text-left px-4 py-2.5 text-sm font-medium text-black/80 hover:bg-[#FF5722]/8 hover:text-[#FF5722] transition-colors flex items-center gap-3"
+                            >
+                              <Certificate
+                                className="w-4 h-4 shrink-0 text-[#FF5722]/60"
+                                weight="duotone"
+                              />
+                              {ct.name}
+                            </button>
+                          </li>
+                        ))
+                      )}
                     </ul>
                   </motion.div>
                 )}

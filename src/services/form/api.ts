@@ -8,7 +8,21 @@ import type {
   RescuerApplyResponse,
   SubmitDocumentsRequest,
   SubmitDocumentsResponse,
+  DocumentFileTypesResponse,
 } from "./type";
+
+// Get document file types - GET /identity/document-file-types
+export const getDocumentFileTypes = async (
+  activeOnly = true,
+): Promise<DocumentFileTypesResponse> => {
+  const response = await api.get<DocumentFileTypesResponse>(
+    "/identity/document-file-types",
+    {
+      params: { activeOnly },
+    },
+  );
+  return response.data;
+};
 
 // Update rescuer profile
 export const updateRescuerProfile = async (

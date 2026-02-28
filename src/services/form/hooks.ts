@@ -1,9 +1,16 @@
-import { useMutation, type UseMutationResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  type UseMutationResult,
+} from "@tanstack/react-query";
+import type { AxiosError } from "axios";
+import { toast } from "sonner";
 import {
   updateRescuerProfile,
   submitRescuerConsent,
   applyRescuer,
   submitDocuments,
+  getDocumentFileTypes,
 } from "./api";
 import type {
   RescuerProfileRequest,
@@ -14,14 +21,25 @@ import type {
   RescuerApplyResponse,
   SubmitDocumentsRequest,
   SubmitDocumentsResponse,
+  DocumentFileType,
 } from "./type";
-import type { AxiosError } from "axios";
-import { toast } from "sonner";
 
 interface FormError {
   message?: string;
   errors?: Record<string, string[]>;
 }
+
+// Fetch document file types
+export const useDocumentFileTypes = () => {
+  return useQuery<DocumentFileType[]>({
+    queryKey: ["document-file-types"],
+    queryFn: async () => {
+      const data = await getDocumentFileTypes(true);
+      return data.items;
+    },
+    staleTime: 1000 * 60 * 10, // cache 10 min
+  });
+};
 
 // Update rescuer profile
 export const useUpdateRescuerProfile = (): UseMutationResult<
