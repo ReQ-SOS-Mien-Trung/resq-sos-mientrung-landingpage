@@ -43,15 +43,20 @@ export interface RescuerApplyRequest {
   phone: string;
   address: string;
   ward: string;
-  district: string;
   province: string;
   latitude: number;
   longitude: number;
   note?: string;
-  documents: RescuerApplyDocument[];
 }
 
 export type RescuerApplyResponse = RescuerProfileResponse;
+
+// Submit rescuer documents - POST /identity/user/rescuer/documents
+export interface SubmitDocumentsRequest {
+  documents: RescuerApplyDocument[];
+}
+
+export type SubmitDocumentsResponse = RescuerProfileResponse;
 
 // Rescuer consent request - POST /identity/user/rescuer/consent
 export interface RescuerConsentRequest {

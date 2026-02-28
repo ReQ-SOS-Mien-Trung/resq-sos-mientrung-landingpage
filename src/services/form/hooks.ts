@@ -3,6 +3,7 @@ import {
   updateRescuerProfile,
   submitRescuerConsent,
   applyRescuer,
+  submitDocuments,
 } from "./api";
 import type {
   RescuerProfileRequest,
@@ -11,6 +12,8 @@ import type {
   RescuerConsentResponse,
   RescuerApplyRequest,
   RescuerApplyResponse,
+  SubmitDocumentsRequest,
+  SubmitDocumentsResponse,
 } from "./type";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -127,6 +130,30 @@ export const useApplyRescuer = (): UseMutationResult<
       }
       console.error(
         "Apply rescuer failed:",
+        error.response?.data?.message || error.message,
+      );
+    },
+  });
+};
+
+// Submit rescuer documents
+export const useSubmitDocuments = (): UseMutationResult<
+  SubmitDocumentsResponse,
+  AxiosError<FormError>,
+  SubmitDocumentsRequest
+> => {
+  return useMutation({
+    mutationFn: submitDocuments,
+    onError: (error: AxiosError<FormError>) => {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Tải lên chứng chỉ thất bại. Vui lòng thử lại.";
+      toast.error("Lỗi nộp chứng chỉ", {
+        description: errorMessage,
+        duration: 4000,
+      });
+      console.error(
+        "Submit documents failed:",
         error.response?.data?.message || error.message,
       );
     },

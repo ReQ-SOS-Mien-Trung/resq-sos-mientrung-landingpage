@@ -107,7 +107,7 @@ const AbilityQuestionsPage = () => {
       },
       {
         onSuccess: () => {
-          navigate("/auth/detailed-abilities");
+          navigate("/auth/documents");
         },
       }
     );
@@ -139,7 +139,7 @@ const AbilityQuestionsPage = () => {
           />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
-          Bước 2/3 - Câu hỏi tiên quyết
+          Bước 2/4 - Câu hỏi tiên quyết
         </span>
       </header>
 

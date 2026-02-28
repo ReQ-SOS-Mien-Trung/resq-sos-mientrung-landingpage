@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,20 +17,20 @@ import {
   Info,
 } from "@phosphor-icons/react";
 import { uploadFile } from "@/utils/uploadFile";
-import { useApplyRescuer } from "@/services/form/hooks";
+import { useSubmitDocuments } from "@/services/form/hooks";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
 /* ── Cert type catalogue ─────────────────────────────────────── */
 const CERT_TYPES = [
-  { value: "LIFEGUARD_CERT", label: "Chứng chỉ Cứu hộ dưới nước" },
-  { value: "SWIFTWATER_RESCUE_CERT", label: "Chứng chỉ Cứu hộ dòng nước / lũ lụt" },
+  { value: "WATER_SAFETY_CERT", label: "Chứng chỉ Cứu hộ dưới nước" },
+  { value: "WATER_RESCUE_CERT", label: "Chứng chỉ Cứu hộ dòng nước / lũ lụt" },
   { value: "TECHNICAL_RESCUE_CERT", label: "Chứng chỉ Cứu hộ kỹ thuật" },
   { value: "DISASTER_RESPONSE_CERT", label: "Chứng chỉ Ứng phó thiên tai" },
-  { value: "FIRST_AID_CPR_CERT", label: "Chứng chỉ Sơ cứu & Hồi sức tim phổi" },
+  { value: "BASIC_MEDICAL_CERT", label: "Chứng chỉ Sơ cứu & Hồi sức tim phổi" },
   { value: "ADVANCED_MEDICAL_LICENSE", label: "Giấy phép Y tế chuyên môn" },
-  { value: "DRIVING_LICENSE", label: "Giấy phép lái xe đường bộ" },
-  { value: "BOAT_OPERATOR_LICENSE", label: "Giấy phép điều khiển phương tiện đường thủy" },
+  { value: "LAND_VEHICLE_LICENSE", label: "Giấy phép lái xe đường bộ" },
+  { value: "WATER_VEHICLE_LICENSE", label: "Giấy phép điều khiển phương tiện đường thủy" },
   { value: "OTHER", label: "Khác" },
 ] as const;
 
@@ -44,17 +44,6 @@ interface CertEntry {
   isUploading: boolean;
 }
 
-interface PersonalInfoState {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  address: string;
-  ward: string;
-  district: string;
-  city: string;
-  latitude: number;
-  longitude: number;
-}
 
 /* ── File icon helper ─────────────────────────────────────────── */
 const FileTypeIcon = ({ name }: { name: string }) => {
@@ -68,11 +57,8 @@ const FileTypeIcon = ({ name }: { name: string }) => {
 /* ═══════════════════════════════════════════════════════════════ */
 const DocumentsUploadPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const applyMutation = useApplyRescuer();
-
-  const personalInfo = (location.state as { profileData?: PersonalInfoState })?.profileData;
+  const submitDocsMutation = useSubmitDocuments();
 
   /* State */
   const [certEntries, setCertEntries] = useState<CertEntry[]>([]);
@@ -93,8 +79,7 @@ const DocumentsUploadPage = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!isAuthenticated) { navigate("/auth/login"); return; }
-    if (!personalInfo) { navigate("/auth/personal-info"); return; }
-  }, [authLoading, isAuthenticated, personalInfo, navigate]);
+  }, [authLoading, isAuthenticated, navigate]);
 
   /* ── Entrance animation ── */
   useEffect(() => {
@@ -181,21 +166,10 @@ const DocumentsUploadPage = () => {
 
   /* ── Submit ── */
   const handleSubmit = (skipDocuments = false) => {
-    if (!personalInfo) return;
     setIsSubmitting(true);
 
-    applyMutation.mutate(
+    submitDocsMutation.mutate(
       {
-        rescuerType: "normal",
-        firstName: personalInfo.firstName,
-        lastName: personalInfo.lastName,
-        phone: personalInfo.phone,
-        address: personalInfo.address,
-        ward: personalInfo.ward,
-        district: personalInfo.district,
-        province: personalInfo.city,
-        latitude: personalInfo.latitude,
-        longitude: personalInfo.longitude,
         documents: skipDocuments
           ? []
           : certEntries
@@ -205,7 +179,7 @@ const DocumentsUploadPage = () => {
       {
         onSuccess: () => {
           setIsSubmitting(false);
-          navigate("/auth/ability-check");
+          navigate("/auth/detailed-abilities");
         },
         onError: () => {
           setIsSubmitting(false);
@@ -257,14 +231,14 @@ const DocumentsUploadPage = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold uppercase tracking-wider text-black/60">
-                Bước 2/4 — Chứng chỉ &amp; Tài liệu
+                Bước 3/4 — Chứng chỉ &amp; Tài liệu
               </span>
             </div>
             <div className="h-2 bg-black/10 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-[#FF5722]"
-                initial={{ width: "25%" }}
-                animate={{ width: "50%" }}
+                initial={{ width: "50%" }}
+                animate={{ width: "75%" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               />
             </div>
@@ -274,9 +248,7 @@ const DocumentsUploadPage = () => {
             {/* Back */}
             <button
               type="button"
-              onClick={() =>
-                navigate("/auth/personal-info", { state: { profileData: personalInfo } })
-              }
+              onClick={() => navigate("/auth/ability-check")}
               className="flex items-center gap-1.5 text-sm text-black/50 hover:text-black transition-colors mb-6 group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -304,8 +276,8 @@ const DocumentsUploadPage = () => {
                     transition={{ duration: 0.2 }}
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 ${
                       entry.isUploading
-                        ? "border-black/10 bg-black/[0.03]"
-                        : "border-[#FF5722]/30 bg-[#FF5722]/[0.04]"
+                        ? "border-black/10 bg-black/3"
+                        : "border-[#FF5722]/30 bg-[#FF5722]/4"
                     }`}
                   >
                     {/* Status icon */}
@@ -375,7 +347,7 @@ const DocumentsUploadPage = () => {
                     transition={{ duration: 0.15 }}
                     className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 bg-white border border-black/10 rounded-xl shadow-xl overflow-hidden"
                   >
-                    <div className="px-4 py-2.5 border-b border-black/5 bg-black/[0.02]">
+                    <div className="px-4 py-2.5 border-b border-black/5 bg-black/2">
                       <p className="text-xs font-bold uppercase tracking-wider text-black/40">
                         Chọn loại chứng chỉ
                       </p>
@@ -477,23 +449,23 @@ const DocumentsUploadPage = () => {
                 </div>
               </div>
 
+              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
+                <div className="w-10 h-10 bg-[#00A650] text-white flex items-center justify-center font-black rounded shrink-0">
+                  ✓
+                </div>
+                <div>
+                  <p className="font-bold">Câu hỏi tiên quyết</p>
+                  <p className="text-sm text-white/60">Đã hoàn thành</p>
+                </div>
+              </div>
+
               <div className="flex items-center gap-4 p-4 bg-white/10 rounded-lg">
                 <div className="w-10 h-10 bg-white text-[#FF5722] flex items-center justify-center font-black rounded shrink-0">
-                  2
+                  3
                 </div>
                 <div>
                   <p className="font-bold">Chứng chỉ &amp; Tài liệu</p>
                   <p className="text-sm text-white/60">Đang thực hiện</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
-                  3
-                </div>
-                <div>
-                  <p className="font-bold">Câu hỏi tiên quyết</p>
-                  <p className="text-sm text-white/60">4 câu hỏi đánh giá</p>
                 </div>
               </div>
 

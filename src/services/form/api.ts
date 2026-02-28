@@ -6,6 +6,8 @@ import type {
   RescuerConsentResponse,
   RescuerApplyRequest,
   RescuerApplyResponse,
+  SubmitDocumentsRequest,
+  SubmitDocumentsResponse,
 } from "./type";
 
 // Update rescuer profile
@@ -25,6 +27,17 @@ export const applyRescuer = async (
 ): Promise<RescuerApplyResponse> => {
   const response = await api.post<RescuerApplyResponse>(
     "/identity/user/rescuer/apply",
+    data,
+  );
+  return response.data;
+};
+
+// Submit rescuer documents - POST /identity/user/rescuer/documents
+export const submitDocuments = async (
+  data: SubmitDocumentsRequest,
+): Promise<SubmitDocumentsResponse> => {
+  const response = await api.post<SubmitDocumentsResponse>(
+    "/identity/user/rescuer/documents",
     data,
   );
   return response.data;
