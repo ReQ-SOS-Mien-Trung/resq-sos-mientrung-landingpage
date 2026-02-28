@@ -14,12 +14,10 @@ import {
   CaretDown
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
-import { useUpdateRescuerProfile } from "@/services/form/hooks";
 
 const PersonalInfoPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -37,8 +35,6 @@ const PersonalInfoPage = () => {
   const [citySearch, setCitySearch] = useState("");
   const [districtSearch, setDistrictSearch] = useState("");
   const [wardSearch, setWardSearch] = useState("");
-
-  const updateProfileMutation = useUpdateRescuerProfile();
 
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -74,6 +70,7 @@ const PersonalInfoPage = () => {
 
 
   useEffect(() => {
+    if (!containerRef.current || !formRef.current) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         formRef.current,
@@ -82,7 +79,7 @@ const PersonalInfoPage = () => {
       );
     }, containerRef);
     return () => ctx.revert();
-  }, []);
+  }, [authLoading]);
 
   // Fetch provinces on mount
   useEffect(() => {
@@ -236,39 +233,50 @@ const PersonalInfoPage = () => {
     setLocationError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreedToTerms) {
       alert("Vui lòng đồng ý với điều khoản để tiếp tục");
       return;
     }
 
-    setIsLoading(true);
+    let { latitude, longitude } = profileData;
 
-
-
-    // Call API to update rescuer profile
-    updateProfileMutation.mutate(
-      {
-        firstName: profileData.firstName,
-        lastName: profileData.lastName,
-        phone: profileData.phone.startsWith("0") ? profileData.phone : `0${profileData.phone}`,
-        address: profileData.address,
-        ward: profileData.ward,
-        city: profileData.city,
-        latitude: profileData.latitude,
-        longitude: profileData.longitude,
-      },
-      {
-        onSuccess: () => {
-          setIsLoading(false);
-          navigate("/auth/ability-check");
-        },
-        onError: () => {
-          setIsLoading(false);
-        },
+    // If no GPS coords yet, try to geocode from the typed address
+    if (latitude === 0 && longitude === 0) {
+      const query = [profileData.address, profileData.ward, profileData.district, profileData.city]
+        .filter(Boolean)
+        .join(", ");
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&accept-language=vi`
+        );
+        const data = await res.json();
+        if (data.length > 0) {
+          latitude = parseFloat(data[0].lat);
+          longitude = parseFloat(data[0].lon);
+        }
+      } catch {
+        // silently fallback to 0,0 if geocoding fails
       }
-    );
+    }
+
+    // Pass all profile data to documents page, API call happens there
+    navigate("/auth/documents", {
+      state: {
+        profileData: {
+          firstName: profileData.firstName,
+          lastName: profileData.lastName,
+          phone: profileData.phone.startsWith("0") ? profileData.phone : `0${profileData.phone}`,
+          address: profileData.address,
+          ward: profileData.ward,
+          district: profileData.district,
+          city: profileData.city,
+          latitude,
+          longitude,
+        },
+      },
+    });
   };
 
   // Calculate progress
@@ -642,20 +650,13 @@ const PersonalInfoPage = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isLoading || !agreedToTerms || !profileData.firstName || !profileData.city || !isPhoneValid}
+                disabled={!agreedToTerms || !profileData.firstName || !profileData.city || !isPhoneValid}
                 className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed rounded-lg mt-6"
               >
-                {isLoading ? (
-                  <>
-                    <SpinnerGap className="w-4 h-4 animate-spin" />
-                    Đang xử lý...
-                  </>
-                ) : (
-                  <>
-                    Tiếp tục
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
+                <>
+                  Tiếp tục
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </>
               </button>
             </form>
           </div>
@@ -678,7 +679,7 @@ const PersonalInfoPage = () => {
             {/* Steps Progress */}
             <div className="space-y-4">
               <div className="flex items-center gap-4 p-4 bg-white/10 rounded-lg">
-                <div className="w-10 h-10 bg-white text-[#FF5722] flex items-center justify-center font-black rounded">
+                <div className="w-10 h-10 bg-white text-[#FF5722] flex items-center justify-center font-black rounded shrink-0">
                   1
                 </div>
                 <div>
@@ -688,8 +689,18 @@ const PersonalInfoPage = () => {
               </div>
 
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded">
+                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
                   2
+                </div>
+                <div>
+                  <p className="font-bold">Chứng chỉ & Tài liệu</p>
+                  <p className="text-sm text-white/60">Tải lên chứng chỉ</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
+                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
+                  3
                 </div>
                 <div>
                   <p className="font-bold">Câu hỏi tiên quyết</p>
@@ -698,8 +709,8 @@ const PersonalInfoPage = () => {
               </div>
 
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded">
-                  3
+                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
+                  4
                 </div>
                 <div>
                   <p className="font-bold">Kỹ năng chi tiết</p>

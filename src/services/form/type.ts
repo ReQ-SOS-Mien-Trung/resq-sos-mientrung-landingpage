@@ -30,6 +30,29 @@ export interface RescuerProfileResponse {
   approvedAt: string | null;
 }
 
+// Rescuer apply request - POST /identity/user/rescuer/apply
+export interface RescuerApplyDocument {
+  fileUrl: string;
+  fileType: string;
+}
+
+export interface RescuerApplyRequest {
+  rescuerType?: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  address: string;
+  ward: string;
+  district: string;
+  province: string;
+  latitude: number;
+  longitude: number;
+  note?: string;
+  documents: RescuerApplyDocument[];
+}
+
+export type RescuerApplyResponse = RescuerProfileResponse;
+
 // Rescuer consent request - POST /identity/user/rescuer/consent
 export interface RescuerConsentRequest {
   agreeMedicalFitness: boolean;
