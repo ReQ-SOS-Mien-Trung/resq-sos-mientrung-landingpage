@@ -20,7 +20,7 @@ import { useAuth } from "@/hooks/useAuth";
 const AuthRegisterPage = () => {
   const navigate = useNavigate();
   const registerMutation = useRegisterRescuer();
-  const { registerUser, isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
   const [step, setStep] = useState<"auth" | "profile">("auth");
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
   const [showPassword, setShowPassword] = useState(false);
@@ -559,7 +559,7 @@ const AuthRegisterPage = () => {
           </label>
           <div className="flex gap-3">
             {/* Country Code */}
-            <div className="flex items-center gap-2 px-4 py-4 border-2 border-black/20 rounded-lg bg-gray-50 min-w-[100px]">
+            <div className="flex items-center gap-2 px-4 py-4 border-2 border-black/20 rounded-lg bg-gray-50 min-w-25">
               <img
                 src="https://flagcdn.com/w20/vn.png"
                 alt="Vietnam"
@@ -682,7 +682,7 @@ const AuthRegisterPage = () => {
           <button
             type="button"
             onClick={() => setAgreedToTerms(!agreedToTerms)}
-            className={`w-6 h-6 rounded flex items-center justify-center flex-shrink-0 transition-colors ${agreedToTerms ? 'bg-[#00A650] text-white' : 'border-2 border-black/20'}`}
+            className={`w-6 h-6 rounded flex items-center justify-center shrink-0 transition-colors ${agreedToTerms ? 'bg-[#00A650] text-white' : 'border-2 border-black/20'}`}
           >
             {agreedToTerms && <Check className="w-4 h-4" weight="bold" />}
           </button>
@@ -769,7 +769,7 @@ const AuthRegisterPage = () => {
             </h2>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 ${step === "auth" ? "bg-[#FF5722]" : "bg-[#00A650]"}`}>
+                <div className={`w-8 h-8 flex items-center justify-center shrink-0 ${step === "auth" ? "bg-[#FF5722]" : "bg-[#00A650]"}`}>
                   {step === "profile" ? <Check className="w-4 h-4" weight="bold" /> : <span className="text-sm font-bold">01</span>}
                 </div>
                 <div>
@@ -778,7 +778,7 @@ const AuthRegisterPage = () => {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 ${step === "profile" ? "bg-[#FF5722]" : "bg-white/20"}`}>
+                <div className={`w-8 h-8 flex items-center justify-center shrink-0 ${step === "profile" ? "bg-[#FF5722]" : "bg-white/20"}`}>
                   <span className="text-sm font-bold">02</span>
                 </div>
                 <div>
@@ -787,7 +787,7 @@ const AuthRegisterPage = () => {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-white/20 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-white/20 flex items-center justify-center shrink-0">
                   <span className="text-sm font-bold">03</span>
                 </div>
                 <div>
