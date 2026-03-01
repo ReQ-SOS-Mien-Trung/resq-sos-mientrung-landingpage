@@ -366,38 +366,17 @@ export const menuItems: MenuItem[] = [
       {
         title: "Giới thiệu",
         description: "Chúng tôi là ai và chúng tôi đại diện cho điều gì",
-        link: "#about",
+        link: "/about",
       },
       {
         title: "Tầm nhìn & Sứ mệnh",
         description: "Mục tiêu và giá trị cốt lõi của chúng tôi",
-        link: "#vision",
+        link: "/about",
       },
       {
         title: "Đội ngũ",
         description: "Gặp gỡ những người đang xây dựng tương lai cứu hộ",
-        link: "#team",
-      },
-    ],
-  },
-  {
-    id: "services",
-    label: "Dịch vụ",
-    subItems: [
-      {
-        title: "Cứu hộ khẩn cấp",
-        description: "Kết nối nạn nhân với đội cứu hộ trong thời gian thực",
-        link: "#emergency",
-      },
-      {
-        title: "Điều phối đội cứu hộ",
-        description: "Hệ thống quản lý và điều phối đội cứu hộ thông minh",
-        link: "#coordination",
-      },
-      {
-        title: "Đào tạo",
-        description: "Chương trình đào tạo và nâng cao kỹ năng cứu hộ",
-        link: "#training",
+        link: "/about",
       },
     ],
   },
@@ -408,17 +387,17 @@ export const menuItems: MenuItem[] = [
       {
         title: "Đăng ký đội cứu hộ",
         description: "Tham gia mạng lưới cứu hộ của chúng tôi",
-        link: "#register",
+        link: "/register",
       },
       {
         title: "Tài nguyên",
         description: "Công cụ và tài liệu hỗ trợ đội cứu hộ",
-        link: "#resources",
+        link: "/help-center",
       },
       {
         title: "Cộng đồng",
         description: "Kết nối với các đội cứu hộ khác",
-        link: "#community",
+        link: "/register",
       },
     ],
   },
@@ -429,12 +408,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Trở thành đối tác",
         description: "Hợp tác với chúng tôi để mở rộng mạng lưới cứu hộ",
-        link: "#partner",
+        link: "/contact",
       },
       {
         title: "Đối tác hiện tại",
         description: "Các tổ chức đang hợp tác với chúng tôi",
-        link: "#partners",
+        link: "/contact",
       },
     ],
   },
@@ -445,28 +424,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Tin tức mới nhất",
         description: "Cập nhật về hoạt động và sự kiện của chúng tôi",
-        link: "#news",
+        link: "/news",
       },
       {
         title: "Blog",
         description: "Câu chuyện và chia sẻ từ cộng đồng cứu hộ",
-        link: "#blog",
-      },
-    ],
-  },
-  {
-    id: "ability-check",
-    label: "🧪 Test Khảo sát",
-    subItems: [
-      {
-        title: "1. Thông tin cá nhân",
-        description: "Test trang nhập thông tin cá nhân (Dev only)",
-        link: "/auth/personal-info",
-      },
-      {
-        title: "2. Câu hỏi tiên quyết",
-        description: "Test trang khảo sát năng lực cứu hộ (Dev only)",
-        link: "/auth/ability-check",
+        link: "/news",
       },
     ],
   },

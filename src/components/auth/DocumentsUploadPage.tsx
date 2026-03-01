@@ -14,7 +14,7 @@ import {
   File as FileIcon,
   CaretDown,
   CheckCircle,
-  Info,
+  Warning,
 } from "@phosphor-icons/react";
 import { uploadFile } from "@/utils/uploadFile";
 import { useSubmitDocuments, useDocumentFileTypes } from "@/services/form/hooks";
@@ -252,7 +252,7 @@ const DocumentsUploadPage = () => {
               <span className="text-black/30">&amp; TÀI LIỆU</span>
             </h1>
             <p className="text-sm sm:text-base text-black/60 mb-8">
-              Tải lên các chứng chỉ, bằng cấp hoặc giấy phép liên quan đến kỹ năng cứu hộ của bạn.
+              Tải lên ít nhất <span className="font-semibold text-black">1 chứng chỉ</span> liên quan đến kỹ năng cứu hộ của bạn. Hỗ trợ định dạng <span className="font-semibold">JPG, PNG, PDF</span>.
             </p>
 
             {/* ── Cert list ── */}
@@ -372,14 +372,30 @@ const DocumentsUploadPage = () => {
               </AnimatePresence>
             </div>
 
-            {/* Info note */}
-            <div className="flex gap-3 p-4 bg-[#FF5722]/5 border border-[#FF5722]/20 rounded-xl mb-8">
-              <Info className="w-5 h-5 text-[#FF5722] shrink-0 mt-0.5" weight="duotone" />
-              <p className="text-xs text-black/60 leading-relaxed">
-                Bước này{" "}
-                <span className="font-semibold text-black/80">không bắt buộc</span>.
-                Bạn có thể bỏ qua và bổ sung chứng chỉ sau khi được chấp thuận.
-                Hỗ trợ định dạng <span className="font-semibold">JPG, PNG, PDF</span>.
+            {/* Required note */}
+            <div className={`flex gap-3 p-4 rounded-xl mb-8 border transition-colors ${
+              certEntries.filter(e => e.fileUrl).length > 0
+                ? "bg-[#00A650]/8 border-[#00A650]/30"
+                : "bg-amber-50 border-amber-300"
+            }`}>
+              <Warning className={`w-5 h-5 shrink-0 mt-0.5 ${
+                certEntries.filter(e => e.fileUrl).length > 0 ? "text-[#00A650]" : "text-amber-500"
+              }`} weight="fill" />
+              <p className="text-sm leading-relaxed text-black/70">
+                {certEntries.filter(e => e.fileUrl).length > 0 ? (
+                  <>
+                    Đã có{" "}
+                    <span className="font-semibold text-[#00A650]">
+                      {certEntries.filter(e => e.fileUrl).length} chứng chỉ
+                    </span>
+                    . Bạn có thể thêm hoặc tiếp tục.
+                  </>
+                ) : (
+                  <>
+                    <span className="font-semibold text-black">Bắt buộc</span> — Vui lòng tải lên ít nhất
+                    {" "}<span className="font-semibold">1 chứng chỉ</span> để tiếp tục.
+                  </>
+                )}
               </p>
             </div>
 
@@ -387,9 +403,9 @@ const DocumentsUploadPage = () => {
             <div className="flex flex-col gap-3">
               <button
                 type="button"
-                disabled={isSubmitting || isAnyUploading}
+                disabled={isSubmitting || isAnyUploading || certEntries.filter((e) => e.fileUrl).length === 0}
                 onClick={() => handleSubmit(false)}
-                className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"
+                className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group disabled:opacity-40 disabled:cursor-not-allowed rounded-xl"
               >
                 {isSubmitting ? (
                   <>
@@ -400,19 +416,10 @@ const DocumentsUploadPage = () => {
                   <>
                     {certEntries.filter((e) => e.fileUrl).length > 0
                       ? `Tiếp tục với ${certEntries.filter((e) => e.fileUrl).length} chứng chỉ`
-                      : "Tiếp tục"}
+                      : "Thêm ít nhất 1 chứng chỉ để tiếp tục"}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
-              </button>
-
-              <button
-                type="button"
-                disabled={isSubmitting}
-                onClick={() => handleSubmit(true)}
-                className="w-full px-6 py-3 border-2 border-black/20 text-sm font-medium text-black/60 hover:border-black hover:text-black transition-colors rounded-xl"
-              >
-                Bỏ qua, nộp hồ sơ không có chứng chỉ
               </button>
             </div>
           </div>

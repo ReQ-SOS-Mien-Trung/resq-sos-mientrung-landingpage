@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { Contributions, DownloadAppPage, RegisterPage, Services, PrivacyPolicyPage, TermsOfServicePage, AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DocumentsUploadPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage, EmailVerificationSuccessPage } from "@/components";
 import MainLayout from "@/layouts/MainLayout";
 import { HeroSection, Newsroom, Features, AboutPage, NewsPage, ServicesPage, ContactPage, DonatePage, HelpCenterPage } from "./components/sections";
 import ScrollToTop from "./components/ScrollToTop";
+import SplashScreen from "./components/SplashScreen";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -35,9 +37,20 @@ function FeaturesPage() {
   );
 }
 
+// Show splash only once per browser session
+const hasSeen = sessionStorage.getItem("splash_seen");
+
 function App() {
+  const [showSplash, setShowSplash] = useState(!hasSeen);
+
+  const handleSplashComplete = () => {
+    sessionStorage.setItem("splash_seen", "1");
+    setShowSplash(false);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       <BrowserRouter>
         <ScrollToTop />
         <Routes>

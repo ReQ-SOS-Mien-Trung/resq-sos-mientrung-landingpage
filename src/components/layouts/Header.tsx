@@ -438,7 +438,11 @@ const Header = () => {
                           key={index}
                           onClick={() => {
                             if (subItem.link) {
-                              scrollToSection(subItem.link.replace("#", ""));
+                              if (subItem.link.startsWith("/")) {
+                                handleNavigate(subItem.link);
+                              } else {
+                                scrollToSection(subItem.link.replace("#", ""));
+                              }
                             }
                           }}
                           className="sub-item text-left group py-4 border-b border-black/10 hover:border-[#FF5722] transition-all duration-300"
@@ -466,16 +470,9 @@ const Header = () => {
           <div className="border-b border-black">
             {menuItems.map((item) => (
               <div key={item.id} className="border-b border-black/10">
-                <button
-                  onClick={() => {
-                    if (item.subItems?.[0]?.link) {
-                      scrollToSection(item.subItems[0].link.replace("#", ""));
-                    }
-                  }}
-                  className="w-full text-left px-4 sm:px-6 py-4 sm:py-5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:text-[#FF5722] transition-colors"
-                >
+                <p className="px-4 sm:px-6 pt-4 sm:pt-5 pb-1 text-[10px] font-bold uppercase tracking-widest text-black/40">
                   {item.label}
-                </button>
+                </p>
                 {item.subItems && (
                   <div className="px-4 sm:px-6 pb-3 sm:pb-4 space-y-1 sm:space-y-2">
                     {item.subItems.map((subItem, index) => (
@@ -483,10 +480,14 @@ const Header = () => {
                         key={index}
                         onClick={() => {
                           if (subItem.link) {
-                            scrollToSection(subItem.link.replace("#", ""));
+                            if (subItem.link.startsWith("/")) {
+                              handleNavigate(subItem.link);
+                            } else {
+                              scrollToSection(subItem.link.replace("#", ""));
+                            }
                           }
                         }}
-                        className="block w-full text-left text-xs sm:text-sm text-black/50 hover:text-[#FF5722] py-1.5 sm:py-2 transition-colors"
+                        className="block w-full text-left text-sm sm:text-base font-medium text-black hover:text-[#FF5722] py-1.5 sm:py-2 transition-colors"
                       >
                         {subItem.title}
                       </button>

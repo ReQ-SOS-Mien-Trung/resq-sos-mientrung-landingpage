@@ -2,13 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, LockSimple } from "@phosphor-icons/react";
+import { ArrowRight, ArrowLeft, Check, LockSimple, Warning } from "@phosphor-icons/react";
 import { rescueSkillCategories } from "@/constants";
 import {
   ALL_SKILLS_FLAT,
   getSkillLabel,
   getDominantsFor,
   computeImplied,
+  VEHICLE_SKILL_IDS,
 } from "@/constants/skillConflicts";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubmitRescuerAbilities } from "@/services/abilities/hooks";
@@ -218,20 +219,28 @@ const DetailedAbilitiesPage = () => {
                     {subgroup.skills.map((skill) => {
                       const isManual = selectedSkills.includes(skill.id);
                       const isImplied = impliedSkills.includes(skill.id);
-                      // Which dominant skill(s) are causing this to be implied
                       const activeDominants = getDominantsFor(skill.id).filter(d => selectedSkills.includes(d));
+
+                      // Special-conditions gate: skills 43 & 44 require at least 1 vehicle selected
+                      const isVehicleGated = [43, 44].includes(skill.id);
+                      const hasVehicle = allSelectedSkills.some(id => VEHICLE_SKILL_IDS.includes(id));
+                      const isGatedDisabled = isVehicleGated && !hasVehicle;
+
+                      const isDisabled = isImplied || isGatedDisabled;
 
                       return (
                         <div key={skill.id} className="relative">
                           <button
                             onClick={() => toggleSkill(skill.id, subgroup)}
-                            disabled={isImplied}
+                            disabled={isDisabled}
                             className={`relative w-full px-4 py-3 border-2 rounded-full text-left text-sm font-medium transition-all ${
                               isImplied
                                 ? "border-[#00A650]/40 bg-[#00A650]/5 text-black/45 cursor-not-allowed"
-                                : isManual
-                                  ? "border-[#00A650] bg-[#00A650]/10 text-black"
-                                  : "border-black/20 hover:border-black/40 text-black/70"
+                                : isGatedDisabled
+                                  ? "border-black/10 bg-black/3 text-black/25 cursor-not-allowed"
+                                  : isManual
+                                    ? "border-[#00A650] bg-[#00A650]/10 text-black"
+                                    : "border-black/20 hover:border-black/40 text-black/70"
                             }`}
                           >
                             <div className="flex items-center gap-2">
@@ -247,12 +256,30 @@ const DetailedAbilitiesPage = () => {
                                   <div className="w-5 h-5 bg-[#00A650]/40 rounded-full flex items-center justify-center">
                                     <LockSimple className="w-3 h-3 text-[#00A650]" weight="fill" />
                                   </div>
-                                  {/* Tooltip */}
                                   {hoveredImplied === skill.id && (
                                     <div className="absolute bottom-full right-0 mb-2 z-50 w-60 bg-black text-white text-xs rounded-lg px-3 py-2 shadow-xl pointer-events-none">
                                       <span className="text-[#4ade80] font-bold">Tự động bao gồm bởi:</span>
                                       <br />
                                       <span className="font-medium">{activeDominants.map(id => getSkillLabel(id)).join(', ')}</span>
+                                      <div className="absolute top-full right-3 border-4 border-transparent border-t-black" />
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Vehicle-gated: show lock + tooltip */}
+                              {isGatedDisabled && (
+                                <div
+                                  className="relative shrink-0"
+                                  onMouseEnter={() => setHoveredImplied(skill.id)}
+                                  onMouseLeave={() => setHoveredImplied(null)}
+                                >
+                                  <Warning className="w-4 h-4 text-black/25" weight="fill" />
+                                  {hoveredImplied === skill.id && (
+                                    <div className="absolute bottom-full right-0 mb-2 z-50 w-64 bg-black text-white text-xs rounded-lg px-3 py-2 shadow-xl pointer-events-none">
+                                      <span className="text-amber-400 font-bold">Yêu cầu phương tiện</span>
+                                      <br />
+                                      <span>Chọn ít nhất 1 loại phương tiện ở trên để mở khóa kỹ năng này.</span>
                                       <div className="absolute top-full right-3 border-4 border-transparent border-t-black" />
                                     </div>
                                   )}

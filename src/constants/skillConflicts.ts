@@ -25,7 +25,18 @@ export const SKILL_CONFLICT_RULES: { dominant: number; implies: number[] }[] = [
   { dominant: 33, implies: [17, 18, 19, 20, 21, 22, 23, 27, 31] },
   // Tier 3 — Nhân viên y tế: auto-check nhóm sơ cứu cơ bản (6 kỹ năng)
   { dominant: 32, implies: [17, 18, 19, 20, 21, 22] },
+
+  // ── Nhóm phương tiện & vận chuyển ──────────────────────────────────
+  // Lái xe máy ngập nước → Lái xe máy cơ bản
+  { dominant: 37, implies: [36] },
+  // Lái ô tô địa hình → Lái ô tô
+  { dominant: 39, implies: [38] },
+  // Vận chuyển hàng nặng → Vận chuyển hàng cứu trợ
+  { dominant: 47, implies: [46] },
 ];
+
+// IDs of all "vehicle" skills (used to gate special-conditions skills 43 & 44)
+export const VEHICLE_SKILL_IDS = [36, 37, 38, 39, 40, 41, 42];
 
 // Flat list of all skills for label lookup
 export const ALL_SKILLS_FLAT = rescueSkillCategories.flatMap((cat) =>
