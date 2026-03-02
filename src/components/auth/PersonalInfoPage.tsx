@@ -2,26 +2,41 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion } from "framer-motion";
-import { 
-  ArrowRight, 
-  User, 
+import {
+  ArrowRight,
+  User,
   Phone,
   MapPin,
   Check,
   Crosshair,
   SpinnerGap,
-  X
+  X,
+  CaretDown
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
+import { useApplyRescuer } from "@/services/form/hooks";
+import { toast } from "sonner";
 
 const PersonalInfoPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const applyMutation = useApplyRescuer();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
+  const [geocodeError, setGeocodeError] = useState<string | null>(null);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
+
+  // Province / Ward dropdown state
+  const [provinces, setProvinces] = useState<{ code: number; name: string }[]>([]);
+  const [wards, setWards] = useState<{ code: number; name: string }[]>([]);
+  const [selectedProvinceCode, setSelectedProvinceCode] = useState<number | null>(null);
+  const [cityOpen, setCityOpen] = useState(false);
+  const [wardOpen, setWardOpen] = useState(false);
+  const [citySearch, setCitySearch] = useState("");
+  const [wardSearch, setWardSearch] = useState("");
 
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -29,17 +44,19 @@ const PersonalInfoPage = () => {
     phone: "",
     address: "",
     ward: "",
-    district: "",
     city: "",
+    latitude: 0,
+    longitude: 0,
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+  const wardDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Redirect if not authenticated or already completed onboarding
   useEffect(() => {
-    if (authLoading) return; // Wait until auth state is loaded
-    
+    if (authLoading) return; 
+
     if (!isAuthenticated) {
       navigate("/auth/register");
       return;
@@ -50,20 +67,10 @@ const PersonalInfoPage = () => {
     }
   }, [authLoading, isAuthenticated, onboardingStatus.isComplete, navigate]);
 
-  // Load saved data from localStorage on mount
-  useEffect(() => {
-    const savedData = localStorage.getItem("personalInfo");
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setProfileData(parsed);
-      } catch (error) {
-        console.error("Error loading saved profile data:", error);
-      }
-    }
-  }, []);
+
 
   useEffect(() => {
+    if (!containerRef.current || !formRef.current) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         formRef.current,
@@ -72,30 +79,57 @@ const PersonalInfoPage = () => {
       );
     }, containerRef);
     return () => ctx.revert();
+  }, [authLoading]);
+
+  // Fetch provinces on mount
+  useEffect(() => {
+    fetch("https://provinces.open-api.vn/api/v2/")
+      .then(r => r.json())
+      .then(data => setProvinces(data))
+      .catch(() => {});
+  }, []);
+
+  // Fetch wards when province changes
+  useEffect(() => {
+    if (!selectedProvinceCode) { setWards([]); return; }
+    fetch(`https://provinces.open-api.vn/api/v2/p/${selectedProvinceCode}?depth=2`)
+      .then(r => r.json())
+      .then(data => setWards(data.wards || []))
+      .catch(() => {});
+  }, [selectedProvinceCode]);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(e.target as Node)) setCityOpen(false);
+      if (wardDropdownRef.current && !wardDropdownRef.current.contains(e.target as Node)) setWardOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleProfileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     // Validate phone number
     if (name === "phone") {
       // Only allow digits and remove leading zeros
       const digitsOnly = value.replace(/\D/g, "").replace(/^0+/, "");
-      
+
       // Check validation - only show error for length
       if (digitsOnly.length > 0 && digitsOnly.length !== 9) {
         setPhoneError("Số điện thoại phải có đúng 9 chữ số");
       } else {
         setPhoneError(null);
       }
-      
+
       // Limit to 9 digits
       const cleanedValue = digitsOnly.slice(0, 9);
-      
+
       setProfileData((prev) => ({ ...prev, [name]: cleanedValue }));
       return;
     }
-    
+
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -115,31 +149,32 @@ const PersonalInfoPage = () => {
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
-          
+
           // Use Nominatim API (OpenStreetMap) for reverse geocoding
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=vi`
           );
-          
+
           if (!response.ok) throw new Error("Failed to fetch location");
-          
+
           const data = await response.json();
           const address = data.address;
-          
+
           // Build street address
           let streetAddress = "";
           if (address.house_number) streetAddress += address.house_number + " ";
           if (address.road) streetAddress += address.road;
           if (!streetAddress && address.neighbourhood) streetAddress = address.neighbourhood;
-          
+
           setProfileData((prev) => ({
             ...prev,
             address: streetAddress.trim() || "",
             ward: address.suburb || address.quarter || address.village || "",
-            district: address.city_district || address.county || address.town || "",
             city: address.city || address.state || address.province || "",
+            latitude,
+            longitude,
           }));
-          
+
         } catch {
           setLocationError("Không thể lấy địa chỉ. Vui lòng nhập thủ công.");
         } finally {
@@ -175,29 +210,78 @@ const PersonalInfoPage = () => {
       ...prev,
       address: "",
       ward: "",
-      district: "",
       city: "",
+      latitude: 0,
+      longitude: 0,
     }));
+    setSelectedProvinceCode(null);
+    setWards([]);
     setLocationError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreedToTerms) {
       alert("Vui lòng đồng ý với điều khoản để tiếp tục");
       return;
     }
-    
-    setIsLoading(true);
-    
-    // Save profile data to localStorage for later use
-    localStorage.setItem("personalInfo", JSON.stringify(profileData));
-    
-    // Navigate to ability questions
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/auth/ability-check");
-    }, 500);
+
+    let { latitude, longitude } = profileData;
+    setGeocodeError(null);
+
+    // If no GPS coords yet, try to geocode from the typed address
+    if (latitude === 0 && longitude === 0) {
+      const query = [profileData.address, profileData.ward, profileData.city]
+        .filter(Boolean)
+        .join(", ");
+
+      if (!query.trim()) {
+        setGeocodeError("Vui lòng nhập địa chỉ để xác định vị trí.");
+        return;
+      }
+
+      setIsGeocoding(true);
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&accept-language=vi`
+        );
+        const data = await res.json();
+        if (data.length > 0) {
+          latitude = parseFloat(data[0].lat);
+          longitude = parseFloat(data[0].lon);
+        } else {
+          toast.warning("Không xác định được tọa độ chính xác. Hồ sơ vẫn được gửi, bạn có thể cập nhật vị trí sau.");
+        }
+      } catch {
+        toast.warning("Lỗi kết nối khi tra cứu tọa độ. Hồ sơ vẫn được gửi với vị trí chưa xác định.");
+      }
+      setIsGeocoding(false);
+    }
+
+    setIsSubmitting(true);
+
+    applyMutation.mutate(
+      {
+        rescuerType: "normal",
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        phone: profileData.phone.startsWith("0") ? profileData.phone : `0${profileData.phone}`,
+        address: profileData.address,
+        ward: profileData.ward,
+        province: profileData.city,
+        latitude,
+        longitude,
+      },
+      {
+        onSuccess: () => {
+          setIsSubmitting(false);
+          navigate("/auth/ability-check");
+        },
+        onError: () => {
+          setIsSubmitting(false);
+        },
+      }
+    );
   };
 
   // Calculate progress
@@ -224,8 +308,12 @@ const PersonalInfoPage = () => {
     <div ref={containerRef} className="min-h-screen bg-white">
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
-        <Link to="/" className="text-lg font-black tracking-tight">
-          ResQ SOS
+        <Link to="/" className="hover:opacity-70 transition-opacity">
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
           Thông tin cá nhân
@@ -235,7 +323,7 @@ const PersonalInfoPage = () => {
       <div className="flex flex-col lg:grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]">
         {/* Left - Form Section */}
         <div className="flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 py-8 sm:py-12 lg:py-16 border-b lg:border-b-0 lg:border-r border-black/10">
-          
+
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
@@ -283,9 +371,8 @@ const PersonalInfoPage = () => {
                     onChange={handleProfileInputChange}
                     placeholder="Văn A"
                     required
-                    className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${
-                      profileData.firstName ? 'border-[#00A650]' : 'border-black/20'
-                    }`}
+                    className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.firstName ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
                   />
                 </div>
               </div>
@@ -316,9 +403,9 @@ const PersonalInfoPage = () => {
                 <div className="flex gap-3">
                   {/* Country Code */}
                   <div className="flex items-center gap-2 px-4 py-4 border-2 border-black/20 rounded-lg bg-gray-50 min-w-25">
-                    <img 
-                      src="https://flagcdn.com/w20/vn.png" 
-                      alt="Vietnam" 
+                    <img
+                      src="https://flagcdn.com/w20/vn.png"
+                      alt="Vietnam"
                       className="w-5 h-auto"
                     />
                     <span className="text-sm font-medium">+84</span>
@@ -333,9 +420,8 @@ const PersonalInfoPage = () => {
                       onChange={handleProfileInputChange}
                       placeholder="xxxxxxxxx"
                       maxLength={9}
-                      className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${
-                        phoneError ? 'border-red-500' : profileData.phone.length === 9 ? 'border-[#00A650]' : 'border-black/20'
-                      }`}
+                      className={`w-full pl-12 pr-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${phoneError ? 'border-red-500' : profileData.phone.length === 9 ? 'border-[#00A650]' : 'border-black/20'
+                        }`}
                     />
                   </div>
                 </div>
@@ -381,7 +467,7 @@ const PersonalInfoPage = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {locationError && (
                   <p className="text-xs text-red-500">{locationError}</p>
                 )}
@@ -399,43 +485,100 @@ const PersonalInfoPage = () => {
                   />
                 </div>
 
-                {/* Ward & District Row */}
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Ward */}
-                  <div>
+                {/* City/Province Searchable Dropdown */}
+                <div className="relative" ref={cityDropdownRef}>
+                  <div className="relative">
                     <input
                       type="text"
-                      name="ward"
-                      value={profileData.ward}
-                      onChange={handleProfileInputChange}
-                      placeholder="Phường/Xã"
-                      className={`w-full px-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.ward ? 'border-[#00A650]' : 'border-black/20'}`}
+                      value={citySearch || profileData.city}
+                      onChange={e => { setCitySearch(e.target.value); setCityOpen(true); setProfileData(prev => ({ ...prev, city: "", ward: "" })); setSelectedProvinceCode(null); setWards([]); }}
+                      onFocus={() => { setCityOpen(true); setCitySearch(""); }}
+                      placeholder="Tỉnh/Thành phố *"
+                      readOnly={!!profileData.city && !cityOpen}
+                      className={`w-full px-4 pr-10 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg cursor-pointer ${
+                        cityOpen ? 'border-black' : profileData.city ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
                     />
+                    <CaretDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40 transition-transform pointer-events-none ${cityOpen ? 'rotate-180' : ''}`} />
                   </div>
-                  {/* District */}
-                  <div>
-                    <input
-                      type="text"
-                      name="district"
-                      value={profileData.district}
-                      onChange={handleProfileInputChange}
-                      placeholder="Quận/Huyện"
-                      className={`w-full px-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.district ? 'border-[#00A650]' : 'border-black/20'}`}
-                    />
-                  </div>
+                  {cityOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border-2 border-black rounded-lg shadow-xl overflow-y-auto" style={{ maxHeight: '220px' }}>
+                      {provinces.length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Đang tải...</p>
+                      )}
+                      {provinces
+                        .filter(p => p.name.toLowerCase().includes((citySearch || "").toLowerCase()))
+                        .map(p => (
+                          <button
+                            key={p.code}
+                            type="button"
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => {
+                              setProfileData(prev => ({ ...prev, city: p.name, ward: "" }));
+                              setSelectedProvinceCode(p.code);
+                              setWards([]);
+                              setCityOpen(false);
+                              setCitySearch("");
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-black/5 transition-colors ${
+                              profileData.city === p.name ? 'bg-[#FF5722]/10 text-[#FF5722] font-bold' : ''
+                            }`}
+                          >
+                            {p.name}
+                          </button>
+                        ))
+                      }
+                      {provinces.length > 0 && provinces.filter(p => p.name.toLowerCase().includes((citySearch || "").toLowerCase())).length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Không tìm thấy</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* City/Province */}
-                <div>
-                  <input
-                    type="text"
-                    name="city"
-                    value={profileData.city}
-                    onChange={handleProfileInputChange}
-                    placeholder="Tỉnh/Thành phố *"
-                    required
-                    className={`w-full px-4 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg ${profileData.city ? 'border-[#00A650]' : 'border-black/20'}`}
-                  />
+                {/* Ward Searchable Dropdown */}
+                <div className="relative" ref={wardDropdownRef}>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={wardSearch || profileData.ward}
+                      disabled={!selectedProvinceCode}
+                      onChange={e => { setWardSearch(e.target.value); setWardOpen(true); setProfileData(prev => ({ ...prev, ward: "" })); }}
+                      onFocus={() => { setWardOpen(true); setWardSearch(""); }}
+                      placeholder="Phường/Xã"
+                      readOnly={!!profileData.ward && !wardOpen}
+                      className={`w-full px-4 pr-10 py-4 border-2 focus:border-black outline-none text-sm transition-colors rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                        wardOpen ? 'border-black' : profileData.ward ? 'border-[#00A650]' : 'border-black/20'
+                      }`}
+                    />
+                    <CaretDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40 transition-transform pointer-events-none ${wardOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {wardOpen && (
+                    <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border-2 border-black rounded-lg shadow-xl overflow-y-auto" style={{ maxHeight: '220px' }}>
+                      {wards
+                        .filter(w => w.name.toLowerCase().includes((wardSearch || "").toLowerCase()))
+                        .map(w => (
+                          <button
+                            key={w.code}
+                            type="button"
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => {
+                              setProfileData(prev => ({ ...prev, ward: w.name }));
+                              setWardOpen(false);
+                              setWardSearch("");
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-black/5 transition-colors ${
+                              profileData.ward === w.name ? 'bg-[#FF5722]/10 text-[#FF5722] font-bold' : ''
+                            }`}
+                          >
+                            {w.name}
+                          </button>
+                        ))
+                      }
+                      {wards.filter(w => w.name.toLowerCase().includes((wardSearch || "").toLowerCase())).length === 0 && (
+                        <p className="text-sm text-black/40 px-4 py-3 text-center">Không tìm thấy</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -461,16 +604,26 @@ const PersonalInfoPage = () => {
                 </p>
               </div>
 
+              {/* Geocode error */}
+              {geocodeError && (
+                <p className="text-xs text-red-500 mt-1 -mb-2">{geocodeError}</p>
+              )}
+
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isLoading || !agreedToTerms || !profileData.firstName || !profileData.city || !isPhoneValid}
+                disabled={!agreedToTerms || !profileData.firstName || !profileData.city || !isPhoneValid || isSubmitting || isGeocoding}
                 className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed rounded-lg mt-6"
               >
-                {isLoading ? (
+                {isGeocoding ? (
                   <>
                     <SpinnerGap className="w-4 h-4 animate-spin" />
-                    Đang xử lý...
+                    Đang xác định vị trí...
+                  </>
+                ) : isSubmitting ? (
+                  <>
+                    <SpinnerGap className="w-4 h-4 animate-spin" />
+                    Đang nộp hồ sơ...
                   </>
                 ) : (
                   <>
@@ -500,7 +653,7 @@ const PersonalInfoPage = () => {
             {/* Steps Progress */}
             <div className="space-y-4">
               <div className="flex items-center gap-4 p-4 bg-white/10 rounded-lg">
-                <div className="w-10 h-10 bg-white text-[#FF5722] flex items-center justify-center font-black rounded">
+                <div className="w-10 h-10 bg-white text-[#FF5722] flex items-center justify-center font-black rounded shrink-0">
                   1
                 </div>
                 <div>
@@ -508,9 +661,9 @@ const PersonalInfoPage = () => {
                   <p className="text-sm text-white/60">Đang thực hiện</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded">
+                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
                   2
                 </div>
                 <div>
@@ -518,10 +671,20 @@ const PersonalInfoPage = () => {
                   <p className="text-sm text-white/60">4 câu hỏi đánh giá</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded">
+                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
                   3
+                </div>
+                <div>
+                  <p className="font-bold">Chứng chỉ &amp; Tài liệu</p>
+                  <p className="text-sm text-white/60">Tải lên chứng chỉ</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
+                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
+                  4
                 </div>
                 <div>
                   <p className="font-bold">Kỹ năng chi tiết</p>

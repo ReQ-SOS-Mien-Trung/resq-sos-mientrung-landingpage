@@ -12,14 +12,14 @@ const RegisterHero = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (headlineRef.current) {
-        gsap.fromTo(headlineRef.current, 
-          { y: 60, opacity: 0 }, 
+        gsap.fromTo(headlineRef.current,
+          { y: 60, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
         );
       }
       if (contentRef.current) {
-        gsap.fromTo(contentRef.current, 
-          { y: 40, opacity: 0 }, 
+        gsap.fromTo(contentRef.current,
+          { y: 40, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.3 }
         );
       }
@@ -57,15 +57,15 @@ const RegisterHero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <button 
+              <button
                 onClick={() => navigate("/download-app")}
                 className="px-6 sm:px-8 py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group"
               >
                 Tải ứng dụng
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button 
-                onClick={() => navigate("/auth/register")}
+              <button
+                onClick={() => navigate("/auth/login")}
                 className="px-6 sm:px-8 py-4 border border-black text-black text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
               >
                 Đăng ký ngay
@@ -79,9 +79,9 @@ const RegisterHero = () => {
           {/* Grid Pattern */}
           <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
             <div className="border-r border-b border-black/10 relative overflow-hidden">
-              <img 
-                src="/images/tnv2.png" 
-                alt="Cứu hộ 1" 
+              <img
+                src="/images/tnv2.png"
+                alt="Cứu hộ 1"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -98,9 +98,9 @@ const RegisterHero = () => {
               </div>
             </div>
             <div className="relative overflow-hidden">
-              <img 
-                src="/images/ceo.png" 
-                alt="Cứu hộ 2" 
+              <img
+                src="/images/ceo.png"
+                alt="Cứu hộ 2"
                 className="w-full h-full object-cover"
               />
             </div>
