@@ -4,7 +4,6 @@ import { List, XIcon } from "@phosphor-icons/react";
 import { menuItems } from "@/constants";
 import gsap from "gsap";
 import {
-  HeartIcon,
   MagnifyingGlassIcon,
   UserIcon,
   BellIcon,
@@ -251,11 +250,7 @@ const Header = () => {
                 </div>
               )}
             </div>
-          ) : (
-            <button className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors">
-              <HeartIcon className="w-4 h-4 lg:w-5 lg:h-5" />
-            </button>
-          )}
+          ) : null}
           <button
             onClick={() => {
               if (isAuthenticated && onboardingStatus.isComplete) {
@@ -313,10 +308,10 @@ const Header = () => {
               Trang chủ
             </button>
             <button
-              onClick={() => handleNavigate("/features")}
+              onClick={() => handleNavigate("/donate")}
               className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
             >
-              Trung tâm trợ giúp
+              Ủng hộ đồng bào
             </button>
             <button
               onClick={() => handleNavigate("/register")}
@@ -497,7 +492,13 @@ const Header = () => {
               </div>
             ))}
           </div>
-          <div className="p-4 sm:p-6">
+          <div className="p-4 sm:p-6 flex flex-col gap-3">
+            <button
+              onClick={() => handleNavigate("/donate")}
+              className="w-full py-3 sm:py-4 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black transition-colors"
+            >
+              Ủng hộ đồng bào
+            </button>
             <button
               onClick={() => handleNavigate("/register")}
               className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"

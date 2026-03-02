@@ -58,3 +58,22 @@ export const logout = async (): Promise<void> => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
 };
+
+// Refresh token
+export const refreshToken = async (): Promise<{
+  accessToken: string;
+  refreshToken: string;
+}> => {
+  const storedAccessToken = localStorage.getItem("accessToken") ?? "";
+  const storedRefreshToken = localStorage.getItem("refreshToken");
+  if (!storedRefreshToken) throw new Error("No refresh token available");
+
+  const response = await api.post<{
+    accessToken: string;
+    refreshToken: string;
+  }>("/identity/auth/refresh-token", {
+    accessToken: storedAccessToken,
+    refreshToken: storedRefreshToken,
+  });
+  return response.data;
+};

@@ -89,8 +89,6 @@ const DetailedAbilitiesPage = () => {
   const handleBack = () => {
     if (currentCategory > 0) {
       setCurrentCategory((prev) => prev - 1);
-    } else {
-      navigate("/auth/ability-check");
     }
   };
 
@@ -304,13 +302,17 @@ const DetailedAbilitiesPage = () => {
 
             {/* Navigation */}
             <div className="mt-8 pt-8 border-t border-black/10 flex items-center justify-between gap-4">
-              <button
-                onClick={handleBack}
-                className="flex items-center gap-2 text-sm font-bold text-black/60 hover:text-black transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                {currentCategory === 0 ? "Quay lại câu hỏi" : "Quay lại"}
-              </button>
+              <div>
+                {currentCategory > 0 && (
+                  <button
+                    onClick={handleBack}
+                    className="flex items-center gap-2 text-sm font-bold text-black/60 hover:text-black transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Quay lại
+                  </button>
+                )}
+              </div>
 
               <button
                 onClick={handleContinue}
