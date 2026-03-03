@@ -197,14 +197,18 @@ const Header = () => {
 
         {/* Vertical Text - Find */}
         <button
-          onClick={() => handleNavigate("/register")}
+          onClick={() => {
+            if (isAuthenticated && onboardingStatus.isComplete) handleNavigate("/profile");
+            else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
+            else handleNavigate("/register");
+          }}
           className="flex-1 flex items-center justify-center hover:bg-white/10 transition-colors group border-t border-white/10"
         >
           <span
             className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
-            Đăng ký cứu hộ
+            {isAuthenticated && onboardingStatus.isComplete ? "Hồ sơ của tôi" : "Đăng ký cứu hộ"}
           </span>
         </button>
 
@@ -314,10 +318,14 @@ const Header = () => {
               Ủng hộ đồng bào
             </button>
             <button
-              onClick={() => handleNavigate("/register")}
+              onClick={() => {
+                if (isAuthenticated && onboardingStatus.isComplete) handleNavigate("/profile");
+                else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
+                else handleNavigate("/register");
+              }}
               className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
             >
-              Dành cho cứu hộ
+              {isAuthenticated && onboardingStatus.isComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
             </button>
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -500,10 +508,14 @@ const Header = () => {
               Ủng hộ đồng bào
             </button>
             <button
-              onClick={() => handleNavigate("/register")}
+              onClick={() => {
+                if (isAuthenticated && onboardingStatus.isComplete) handleNavigate("/profile");
+                else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
+                else handleNavigate("/register");
+              }}
               className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"
             >
-              Dành cho cứu hộ
+              {isAuthenticated && onboardingStatus.isComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
             </button>
           </div>
         </div>

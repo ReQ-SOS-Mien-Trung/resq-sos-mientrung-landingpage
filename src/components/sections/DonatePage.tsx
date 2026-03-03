@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -76,6 +77,7 @@ const QRFinder = ({ pos }: { pos: string }) => (
 
 /* ════════════════════════════════════════════════════════ */
 const DonatePage = () => {
+  const { isAuthenticated, onboardingStatus, getNextOnboardingPath } = useAuth();
   const [selectedAmount, setSelectedAmount] = useState(500_000);
   const [isCustom, setIsCustom] = useState(false);
   const [customRaw, setCustomRaw] = useState("");
@@ -544,7 +546,7 @@ const DonatePage = () => {
       {/* ── OTHER WAYS ──────────────────────────────────────── */}
       <section className="grid grid-cols-1 lg:grid-cols-2">
         <Link
-          to="/auth/register"
+          to={isAuthenticated && onboardingStatus.isComplete ? "/profile" : isAuthenticated ? getNextOnboardingPath() : "/auth/register"}
           className="p-8 sm:p-12 lg:p-16 border-b-2 lg:border-b-0 lg:border-r-2 border-black hover:bg-black hover:text-white transition-colors duration-300 group"
         >
           <Users className="w-10 h-10 mb-6 text-[#FF5722]" />

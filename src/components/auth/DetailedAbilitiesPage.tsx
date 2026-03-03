@@ -12,7 +12,7 @@ import {
   VEHICLE_SKILL_IDS,
 } from "@/constants/skillConflicts";
 import { useAuth } from "@/hooks/useAuth";
-import { useSubmitRescuerAbilities } from "@/services/abilities/hooks";
+import { useGetAbilities, useSubmitRescuerAbilities } from "@/services/abilities/hooks";
 
 // Inline type definition
 interface RescueSkillSubgroup {
@@ -25,6 +25,35 @@ const DetailedAbilitiesPage = () => {
   const navigate = useNavigate();
   const { completeOnboarding, isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
   const submitAbilitiesMutation = useSubmitRescuerAbilities();
+  const { data: abilitiesData, isLoading: abilitiesLoading } = useGetAbilities();
+
+  // Build API label map: id -> description from server
+  const apiLabelMap = new Map(abilitiesData?.items.map(a => [a.id, a.description]) ?? []);
+  const validIds = new Set(abilitiesData?.items.map(a => a.id) ?? []);
+
+  // Merge API data with constants structure:
+  // - filter out skills not returned by API (avoids sending invalid IDs)
+  // - use API description as label (source of truth)
+  // - fallback to hardcoded constants while loading
+  const apiSkillCategories = abilitiesData
+    ? rescueSkillCategories
+        .map(cat => ({
+          ...cat,
+          subgroups: cat.subgroups
+            .map(sg => ({
+              ...sg,
+              skills: sg.skills
+                .filter(s => validIds.has(s.id))
+                .map(s => ({ ...s, label: apiLabelMap.get(s.id) ?? s.label })),
+            }))
+            .filter(sg => sg.skills.length > 0),
+        }))
+        .filter(cat => cat.subgroups.length > 0)
+    : rescueSkillCategories;
+
+  // Helper: get skill label from API first, fallback to constants
+  const getApiSkillLabel = (id: number): string =>
+    apiLabelMap.get(id) ?? getSkillLabel(id);
 
   // Manually selected skills (what the user explicitly clicked)
   const [selectedSkills, setSelectedSkills] = useState<number[]>([]);
@@ -94,7 +123,7 @@ const DetailedAbilitiesPage = () => {
 
   const handleContinue = () => {
 
-    if (currentCategory < rescueSkillCategories.length - 1) {
+    if (currentCategory < apiSkillCategories.length - 1) {
       // Move to next category
       setCurrentCategory((prev) => prev + 1);
     } else {
@@ -116,13 +145,13 @@ const DetailedAbilitiesPage = () => {
     }
   };
 
-  const currentCat = rescueSkillCategories[currentCategory];
-  const categoryProgress = ((currentCategory + 1) / rescueSkillCategories.length) * 100;
+  const currentCat = apiSkillCategories[currentCategory];
+  const categoryProgress = ((currentCategory + 1) / apiSkillCategories.length) * 100;
   const allCategorySkills = currentCat.subgroups.flatMap(sg => sg.skills);
   const categorySkills = allCategorySkills.filter(skill => allSelectedSkills.includes(skill.id)).length;
 
-  // Show loading while checking auth
-  if (authLoading) {
+  // Show loading while checking auth or fetching abilities
+  if (authLoading || abilitiesLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -158,7 +187,7 @@ const DetailedAbilitiesPage = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold uppercase tracking-wider text-black/60">
-                Phần {currentCategory + 1}/{rescueSkillCategories.length}
+                Phần {currentCategory + 1}/{apiSkillCategories.length}
               </span>
               <span className="text-xs font-bold text-black">
                 {categorySkills}/{allCategorySkills.length} kỹ năng
@@ -258,7 +287,7 @@ const DetailedAbilitiesPage = () => {
                                     <div className="absolute bottom-full right-0 mb-2 z-50 w-60 bg-black text-white text-xs rounded-lg px-3 py-2 shadow-xl pointer-events-none">
                                       <span className="text-[#4ade80] font-bold">Tự động bao gồm bởi:</span>
                                       <br />
-                                      <span className="font-medium">{activeDominants.map(id => getSkillLabel(id)).join(', ')}</span>
+                                      <span className="font-medium">{activeDominants.map(id => getApiSkillLabel(id)).join(', ')}</span>
                                       <div className="absolute top-full right-3 border-4 border-transparent border-t-black" />
                                     </div>
                                   )}
@@ -321,7 +350,7 @@ const DetailedAbilitiesPage = () => {
               >
                 {isLoading ? (
                   <>Đang xử lý...</>
-                ) : currentCategory < rescueSkillCategories.length - 1 ? (
+                ) : currentCategory < apiSkillCategories.length - 1 ? (
                   <>
                     Tiếp tục
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -388,7 +417,7 @@ const DetailedAbilitiesPage = () => {
 
             {/* Category Progress Cards */}
             <div className="space-y-3 mt-8">
-              {rescueSkillCategories.map((cat, index) => {
+              {apiSkillCategories.map((cat, index) => {
                 const catAllSkills = cat.subgroups.flatMap(sg => sg.skills);
                 const catSkills = catAllSkills.filter(skill => allSelectedSkills.includes(skill.id)).length;
                 return (
