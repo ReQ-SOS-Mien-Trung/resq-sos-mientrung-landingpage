@@ -12,7 +12,6 @@ import {
   FirstAid,
   SignOut,
   ArrowUpRight,
-  CheckCircle,
   Lightning,
   ArrowLeft,
 } from "@phosphor-icons/react";
@@ -70,9 +69,9 @@ const ProfilePage = () => {
     return rescuerAbilities?.abilities?.map((a) => a.abilityId) || [];
   }, [rescuerAbilities]);
 
-  // Generate stable IDs - MUST be before any early returns (Rules of Hooks)
-  const volunteerId = useMemo(() => String(Date.now()).slice(-6), []);
-  const profileId = useMemo(() => String(Date.now()).slice(-8), []);
+  // Generate stable IDs from user UUID
+  const volunteerId = useMemo(() => userProfile?.id?.replace(/-/g, "").slice(-6).toUpperCase() ?? "------", [userProfile?.id]);
+  const profileId = useMemo(() => userProfile?.id?.replace(/-/g, "").slice(-8).toUpperCase() ?? "--------", [userProfile?.id]);
 
   // Get skills by category using API data
   const getSkillsByCategory = () => {
@@ -128,7 +127,7 @@ const ProfilePage = () => {
   const skillsByCategory = getSkillsByCategory();
   const totalSkills = selectedAbilityIds.length;
   const categoryIcons = [Shield, FirstAid, Car, Certificate];
-  const fullName = userProfile?.fullName || `${userProfile?.firstName || ""} ${userProfile?.lastName || ""}`.trim() || "Tình nguyện viên";
+  const fullName = `${userProfile?.firstName || ""} ${userProfile?.lastName || ""}`.trim() || user?.name || "Tình nguyện viên";
 
   return (
     <div ref={containerRef} className="min-h-screen bg-white">
@@ -203,12 +202,24 @@ const ProfilePage = () => {
             {/* Right - Info */}
             <div className="lg:col-span-7 flex flex-col justify-center px-8 lg:px-16 xl:px-24 py-16 lg:py-24">
               {/* Badge */}
-              <div className="hero-text mb-8">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#00A650] text-white text-[10px] font-black uppercase tracking-[0.2em]">
-                  <CheckCircle className="w-3 h-3" weight="fill" />
-                  Đã xác thực
-                </span>
-              </div>
+              {/* <div className="hero-text mb-8">
+                {userProfile?.isEligibleRescuer ? (
+                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#00A650] text-white text-[10px] font-black uppercase tracking-[0.2em]">
+                    <CheckCircle className="w-3 h-3" weight="fill" />
+                    Đủ điều kiện cứu hộ
+                  </span>
+                ) : userProfile?.isOnboarded ? (
+                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF9800] text-white text-[10px] font-black uppercase tracking-[0.2em]">
+                    <CheckCircle className="w-3 h-3" weight="fill" />
+                    Chờ duyệt
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/20 text-black text-[10px] font-black uppercase tracking-[0.2em]">
+                    <CheckCircle className="w-3 h-3" weight="fill" />
+                    Chưa hoàn thành
+                  </span>
+                )}
+              </div> */}
 
               {/* Name - Editorial Typography */}
               <div className="hero-text mb-8">
@@ -224,7 +235,7 @@ const ProfilePage = () => {
               <div className="hero-text space-y-3 mb-12">
                 <p className="flex items-center gap-4 text-sm text-black/60">
                   <Envelope className="w-4 h-4" />
-                  {user.email}
+                  {userProfile?.email || user.email}
                 </p>
                 {userProfile?.phone && (
                   <p className="flex items-center gap-4 text-sm text-black/60">
@@ -259,7 +270,7 @@ const ProfilePage = () => {
               {/* Decorative Line */}
               <div className="hero-text mt-12 pt-12 border-t border-black/10">
                 <p className="text-xs text-black/40 uppercase tracking-[0.2em]">
-                  Thành viên từ {new Date(user.registeredAt).toLocaleDateString("vi-VN", { month: "long", year: "numeric" })}
+                  Thành viên từ {new Date(userProfile?.createdAt || user.registeredAt).toLocaleDateString("vi-VN", { month: "long", year: "numeric" })}
                 </p>
               </div>
             </div>
