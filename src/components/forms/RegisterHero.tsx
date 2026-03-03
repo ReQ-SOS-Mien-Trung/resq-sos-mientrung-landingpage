@@ -2,9 +2,11 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ArrowRight } from "@phosphor-icons/react";
+import { useAuth } from "@/hooks/useAuth";
 
 const RegisterHero = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, onboardingStatus, getNextOnboardingPath } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -65,10 +67,22 @@ const RegisterHero = () => {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
-                onClick={() => navigate("/auth/login")}
+                onClick={() => {
+                  if (isAuthenticated && onboardingStatus.isComplete) {
+                    navigate("/profile");
+                  } else if (isAuthenticated) {
+                    navigate(getNextOnboardingPath());
+                  } else {
+                    navigate("/auth/login");
+                  }
+                }}
                 className="px-6 sm:px-8 py-4 border border-black text-black text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
               >
-                Đăng ký ngay
+                {isAuthenticated && onboardingStatus.isComplete
+                  ? "Xem hồ sơ"
+                  : isAuthenticated
+                  ? "Tiếp tục hồ sơ"
+                  : "Đăng ký ngay"}
               </button>
             </div>
           </div>

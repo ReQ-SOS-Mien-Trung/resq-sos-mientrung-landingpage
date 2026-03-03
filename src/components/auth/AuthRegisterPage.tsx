@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   User,
-  ArrowLeft,
   Phone,
   MapPin,
   Check,
@@ -13,7 +12,7 @@ import {
   SpinnerGap,
   X
 } from "@phosphor-icons/react";
-import { ArrowLeftIcon, ArrowRightIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeftIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
 import { useRegisterRescuer } from "@/services/auth/hooks";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -22,7 +21,7 @@ const AuthRegisterPage = () => {
   const registerMutation = useRegisterRescuer();
   const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
   const [step, setStep] = useState<"auth" | "profile">("auth");
-  const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
+  const [authMethod] = useState<"choice" | "email">("email");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -283,16 +282,6 @@ const AuthRegisterPage = () => {
 
   const renderAuthStep = () => (
     <>
-      {/* Back Button */}
-      {authMethod === "email" && (
-        <button
-          onClick={() => setAuthMethod("choice")}
-          className="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Quay lại
-        </button>
-      )}
 
       {/* Header */}
       <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FF5722] mb-4">
@@ -308,21 +297,8 @@ const AuthRegisterPage = () => {
       </p>
 
       {/* Auth Methods */}
-      {authMethod === "choice" ? (
-        <div className="space-y-4">
-          {/* Email Sign Up */}
-          <button
-            onClick={() => setAuthMethod("email")}
-            className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-3 group"
-          >
-            <EnvelopeSimpleIcon className="w-5 h-5" weight="bold" />
-            Đăng ký với Email
-            <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      ) : (
-        /* Email Form */
-        <form onSubmit={handleEmailSignUp} className="space-y-5">
+      {/* Email Form */}
+      <form onSubmit={handleEmailSignUp} className="space-y-5">
           {/* Email */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-2">
@@ -472,7 +448,6 @@ const AuthRegisterPage = () => {
             )}
           </button>
         </form>
-      )}
 
       {/* Terms */}
       <p className="text-xs text-black/40 mt-6 leading-relaxed">

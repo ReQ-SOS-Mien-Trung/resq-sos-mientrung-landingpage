@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft,
   ArrowRight,
   SpinnerGap,
   Certificate,
@@ -45,7 +44,7 @@ const FileTypeIcon = ({ name }: { name: string }) => {
 /* ═══════════════════════════════════════════════════════════════ */
 const DocumentsUploadPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, saveOnboardingStep } = useAuth();
   const submitDocsMutation = useSubmitDocuments();
   const { data: certTypes = [], isLoading: certTypesLoading } = useDocumentFileTypes();
 
@@ -170,6 +169,7 @@ const DocumentsUploadPage = () => {
       {
         onSuccess: () => {
           setIsSubmitting(false);
+          saveOnboardingStep("/auth/detailed-abilities");
           navigate("/auth/detailed-abilities");
         },
         onError: () => {
@@ -236,16 +236,6 @@ const DocumentsUploadPage = () => {
           </div>
 
           <div ref={contentRef} className="flex-1">
-            {/* Back */}
-            <button
-              type="button"
-              onClick={() => navigate("/auth/ability-check")}
-              className="flex items-center gap-1.5 text-sm text-black/50 hover:text-black transition-colors mb-6 group"
-            >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-              Quay lại
-            </button>
-
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-[1.1] mb-3">
               CHỨNG CHỈ
               <br />

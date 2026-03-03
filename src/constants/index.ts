@@ -1041,17 +1041,10 @@ export const rescueSkillCategories = [
         ],
       },
       {
-        subtitle: "Chứng chỉ",
-        skills: [
-          { id: 51, label: "Chứng chỉ cứu hộ" },
-          { id: 52, label: "Chứng chỉ sơ cứu / y tế" },
-        ],
-      },
-      {
         subtitle: "Tổ chức",
         skills: [
-          { id: 53, label: "Thành viên đội cứu hộ địa phương" },
-          { id: 54, label: "Thành viên tổ chức thiện nguyện" },
+          { id: 51, label: "Thành viên đội cứu hộ địa phương" },
+          { id: 52, label: "Thành viên tổ chức thiện nguyện" },
         ],
       },
     ],

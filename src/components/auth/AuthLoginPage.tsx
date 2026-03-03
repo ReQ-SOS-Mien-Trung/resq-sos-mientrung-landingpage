@@ -13,7 +13,7 @@ const AuthLoginPage = () => {
   const navigate = useNavigate();
   const googleAuthMutation = useGoogleAuth();
   const loginMutation = useLogin();
-  const { registerUser, completeOnboarding } = useAuth();
+  const { registerUser, completeOnboarding, getNextOnboardingPath } = useAuth();
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
 
   const [showPassword, setShowPassword] = useState(false);
@@ -95,11 +95,11 @@ const AuthLoginPage = () => {
                 completeOnboarding();
                 navigate("/profile");
               } else {
-                navigate("/auth/personal-info");
+                navigate(getNextOnboardingPath());
               }
             } catch {
-              // Fallback: navigate to personal-info if getUserMe fails
-              navigate("/auth/personal-info");
+              // Fallback
+              navigate(getNextOnboardingPath());
             }
           },
           onError: (error) => {
@@ -131,7 +131,7 @@ const AuthLoginPage = () => {
             completeOnboarding();
             navigate("/");
           } else {
-            navigate("/auth/personal-info");
+            navigate(getNextOnboardingPath());
           }
         },
       }

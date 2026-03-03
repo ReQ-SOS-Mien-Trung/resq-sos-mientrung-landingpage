@@ -8,6 +8,10 @@ import type {
   GoogleAuthResponse,
   ResendVerificationRequest,
   ResendVerificationResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from "./type";
 
 // Register rescuer
@@ -57,4 +61,45 @@ export const logout = async (): Promise<void> => {
   await api.post("/identity/auth/logout");
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
+};
+
+// Refresh token
+export const refreshToken = async (): Promise<{
+  accessToken: string;
+  refreshToken: string;
+}> => {
+  const storedAccessToken = localStorage.getItem("accessToken") ?? "";
+  const storedRefreshToken = localStorage.getItem("refreshToken");
+  if (!storedRefreshToken) throw new Error("No refresh token available");
+
+  const response = await api.post<{
+    accessToken: string;
+    refreshToken: string;
+  }>("/identity/auth/refresh-token", {
+    accessToken: storedAccessToken,
+    refreshToken: storedRefreshToken,
+  });
+  return response.data;
+};
+
+// Forgot Password
+export const forgotPassword = async (
+  data: ForgotPasswordRequest,
+): Promise<ForgotPasswordResponse> => {
+  const response = await api.post<ForgotPasswordResponse>(
+    "/identity/auth/forgot-password",
+    data,
+  );
+  return response.data;
+};
+
+// Reset Password
+export const resetPassword = async (
+  data: ResetPasswordRequest,
+): Promise<ResetPasswordResponse> => {
+  const response = await api.post<ResetPasswordResponse>(
+    "/identity/auth/reset-password",
+    data,
+  );
+  return response.data;
 };

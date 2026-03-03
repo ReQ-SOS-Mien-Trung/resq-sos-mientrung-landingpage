@@ -163,13 +163,21 @@ export const useSubmitDocuments = (): UseMutationResult<
   return useMutation({
     mutationFn: submitDocuments,
     onError: (error: AxiosError<FormError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Tải lên chứng chỉ thất bại. Vui lòng thử lại.";
-      toast.error("Lỗi nộp chứng chỉ", {
-        description: errorMessage,
-        duration: 4000,
-      });
+      if (error.response?.status === 401) {
+        // Token refresh failed — user is being redirected to login by the interceptor
+        toast.error("Phiên đăng nhập đã hết hạn", {
+          description: "Vui lòng đăng nhập lại để tiếp tục.",
+          duration: 4000,
+        });
+      } else {
+        const errorMessage =
+          error.response?.data?.message ||
+          "Tải lên chứng chỉ thất bại. Vui lòng thử lại.";
+        toast.error("Lỗi nộp chứng chỉ", {
+          description: errorMessage,
+          duration: 4000,
+        });
+      }
       console.error(
         "Submit documents failed:",
         error.response?.data?.message || error.message,

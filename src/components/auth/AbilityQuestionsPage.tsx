@@ -28,7 +28,7 @@ const iconMap = {
 
 const AbilityQuestionsPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, onboardingStatus, isLoading: authLoading, saveOnboardingStep } = useAuth();
   const consentMutation = useSubmitRescuerConsent();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: boolean | null }>({});
@@ -90,9 +90,6 @@ const AbilityQuestionsPage = () => {
   const handleBack = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1);
-    } else {
-      // At first question, go back to personal info page
-      navigate("/auth/personal-info");
     }
   };
 
@@ -107,6 +104,7 @@ const AbilityQuestionsPage = () => {
       },
       {
         onSuccess: () => {
+          saveOnboardingStep("/auth/documents");
           navigate("/auth/documents");
         },
       }
@@ -229,13 +227,17 @@ const AbilityQuestionsPage = () => {
 
               {/* Navigation */}
               <div className="mt-8 flex items-center justify-between">
-                <button
-                  onClick={handleBack}
-                  className="flex items-center gap-2 text-sm font-bold text-black/60 hover:text-black transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  {currentQuestion === 0 ? "Quay lại thông tin" : "Quay lại"}
-                </button>
+                <div>
+                  {currentQuestion > 0 && (
+                    <button
+                      onClick={handleBack}
+                      className="flex items-center gap-2 text-sm font-bold text-black/60 hover:text-black transition-colors"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      Quay lại
+                    </button>
+                  )}
+                </div>
                 <div className="flex items-center gap-2">
                   {prerequisiteQuestions.map((_, index) => (
                     <div

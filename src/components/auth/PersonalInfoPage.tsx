@@ -19,7 +19,7 @@ import { toast } from "sonner";
 
 const PersonalInfoPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, onboardingStatus, isLoading: authLoading, saveOnboardingStep } = useAuth();
   const applyMutation = useApplyRescuer();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -275,6 +275,7 @@ const PersonalInfoPage = () => {
       {
         onSuccess: () => {
           setIsSubmitting(false);
+          saveOnboardingStep("/auth/ability-check");
           navigate("/auth/ability-check");
         },
         onError: () => {
