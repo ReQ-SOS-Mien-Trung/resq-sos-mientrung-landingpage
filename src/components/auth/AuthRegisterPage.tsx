@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   User,
-  ArrowLeft,
   Phone,
   MapPin,
   Check,
@@ -13,7 +12,7 @@ import {
   SpinnerGap,
   X
 } from "@phosphor-icons/react";
-import { ArrowLeftIcon, ArrowRightIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeftIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
 import { useRegisterRescuer } from "@/services/auth/hooks";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -22,7 +21,7 @@ const AuthRegisterPage = () => {
   const registerMutation = useRegisterRescuer();
   const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
   const [step, setStep] = useState<"auth" | "profile">("auth");
-  const [authMethod, setAuthMethod] = useState<"choice" | "email">("email");
+  const [authMethod] = useState<"choice" | "email">("email");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
