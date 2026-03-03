@@ -1,5 +1,13 @@
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
-import { registerRescuer, login, logout, googleAuth, resendVerificationEmail } from "./api";
+import {
+  registerRescuer,
+  login,
+  logout,
+  googleAuth,
+  resendVerificationEmail,
+  forgotPassword,
+  resetPassword,
+} from "./api";
 import type {
   RegisterRequest,
   RegisterResponse,
@@ -10,6 +18,10 @@ import type {
   GoogleAuthResponse,
   ResendVerificationRequest,
   ResendVerificationResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from "./type";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -150,8 +162,10 @@ export const useGoogleAuth = (): UseMutationResult<
     mutationFn: googleAuth,
     onSuccess: (data: GoogleAuthResponse) => {
       // Save tokens to localStorage
-      if (data.accessToken) localStorage.setItem("accessToken", data.accessToken);
-      if (data.refreshToken) localStorage.setItem("refreshToken", data.refreshToken);
+      if (data.accessToken)
+        localStorage.setItem("accessToken", data.accessToken);
+      if (data.refreshToken)
+        localStorage.setItem("refreshToken", data.refreshToken);
 
       // Show appropriate message based on isOnboarded status
       if (data.user?.isOnboarded) {
@@ -217,6 +231,58 @@ export const useResendVerification = (): UseMutationResult<
         "Resend verification failed:",
         error.response?.data?.message || error.message,
       );
+    },
+  });
+};
+
+// Forgot Password
+export const useForgotPassword = (): UseMutationResult<
+  ForgotPasswordResponse,
+  AxiosError<AuthError>,
+  ForgotPasswordRequest
+> => {
+  return useMutation({
+    mutationFn: forgotPassword,
+    onSuccess: (data: ForgotPasswordResponse) => {
+      toast.success("Gửi yêu cầu thành công!", {
+        description: data.message,
+        duration: 6000,
+      });
+    },
+    onError: (error: AxiosError<AuthError>) => {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Gửi yêu cầu thất bại. Vui lòng thử lại.";
+      toast.error("Thất bại", {
+        description: errorMessage,
+        duration: 4000,
+      });
+    },
+  });
+};
+
+// Reset Password
+export const useResetPassword = (): UseMutationResult<
+  ResetPasswordResponse,
+  AxiosError<AuthError>,
+  ResetPasswordRequest
+> => {
+  return useMutation({
+    mutationFn: resetPassword,
+    onSuccess: (data: ResetPasswordResponse) => {
+      toast.success("Đặt lại mật khẩu thành công!", {
+        description: data.message,
+        duration: 4000,
+      });
+    },
+    onError: (error: AxiosError<AuthError>) => {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Đặt lại mật khẩu thất bại. Vui lòng thử lại.";
+      toast.error("Thất bại", {
+        description: errorMessage,
+        duration: 4000,
+      });
     },
   });
 };

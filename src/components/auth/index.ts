@@ -8,3 +8,5 @@ export { default as ProfilePage } from "./ProfilePage";
 export { default as ResendVerificationPage } from "./ResendVerificationPage";
 export { default as EmailVerificationPendingPage } from "./EmailVerificationPendingPage";
 export { default as EmailVerificationSuccessPage } from "./EmailVerificationSuccessPage";
+export { default as ForgotPasswordPage } from "./ForgotPasswordPage";
+export { default as ResetPasswordPage } from "./ResetPasswordPage";

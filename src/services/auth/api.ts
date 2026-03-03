@@ -8,6 +8,10 @@ import type {
   GoogleAuthResponse,
   ResendVerificationRequest,
   ResendVerificationResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from "./type";
 
 // Register rescuer
@@ -75,5 +79,27 @@ export const refreshToken = async (): Promise<{
     accessToken: storedAccessToken,
     refreshToken: storedRefreshToken,
   });
+  return response.data;
+};
+
+// Forgot Password
+export const forgotPassword = async (
+  data: ForgotPasswordRequest,
+): Promise<ForgotPasswordResponse> => {
+  const response = await api.post<ForgotPasswordResponse>(
+    "/identity/auth/forgot-password",
+    data,
+  );
+  return response.data;
+};
+
+// Reset Password
+export const resetPassword = async (
+  data: ResetPasswordRequest,
+): Promise<ResetPasswordResponse> => {
+  const response = await api.post<ResetPasswordResponse>(
+    "/identity/auth/reset-password",
+    data,
+  );
   return response.data;
 };
