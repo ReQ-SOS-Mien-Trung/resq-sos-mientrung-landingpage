@@ -1050,3 +1050,61 @@ export const rescueSkillCategories = [
     ],
   },
 ];
+// ==================== DONATE PAGE ====================
+export const donatePresetAmounts = [
+  { value: 50_000, label: "50K", desc: "1 suất cơm" },
+  { value: 200_000, label: "200K", desc: "1 túi cứu trợ" },
+  { value: 500_000, label: "500K", desc: "1 gia đình / tuần" },
+  { value: 1_000_000, label: "1 TRIỆU", desc: "Nhà tạm 1 tháng" },
+  { value: 5_000_000, label: "5 TRIỆU", desc: "Trang bị cứu hộ" },
+  { value: 0, label: "TỰ NHẬP", desc: "Số tiền khác" },
+];
+
+export const donateImpactStats = [
+  { number: "2.5 TỲ", unit: "VNĐ", label: "Đã quyên góp năm 2024" },
+  { number: "50,000", unit: "HỘ", label: "Gia đình được hỗ trợ" },
+  { number: "1,200+", unit: "TNV", label: "Tình nguyện viên" },
+  { number: "<48H", unit: "XỬ LÝ", label: "Thời gian triển khai" },
+];
+
+export const donateBankInfo = [
+  { label: "NGÂN HÀNG", value: "VIETCOMBANK", copy: false },
+  { label: "SỐ TÀI KHOẢN", value: "1234 5678 9012 3456", copy: true },
+  { label: "CHỦ TÀI KHOẢN", value: "QUỸ CỨU TRỢ RESQ SOS", copy: false },
+  { label: "CHI NHÁNH", value: "Chi nhánh Đà Nẵng", copy: false },
+];
+
+export const donatePaymentLabels = [
+  "Vietcombank",
+  "Techcombank",
+  "BIDV",
+  "MoMo",
+  "ZaloPay",
+  "VNPay",
+  "Agribank",
+  "ACB",
+];
+
+export const donateStories = [
+  {
+    tag: "LŨ LỤT 10/2024",
+    name: "Chị Nguyễn Thị Hoa",
+    location: "Hội An, Quảng Nam",
+    quote:
+      "Nhờ đội cứu hộ ResQ, gia đình tôi được sơ tán kịp thời trước khi lũ tràn vào nhà. Không có các bạn, chúng tôi không biết sẽ ra sao.",
+  },
+  {
+    tag: "CÔ LẬP 11/2024",
+    name: "Anh Trần Văn Minh",
+    location: "Huế, Thừa Thiên Huế",
+    quote:
+      "Những thùng hàng cứu trợ đến đúng lúc nhất — khi cả xóm bị cô lập 3 ngày không có gì ăn. Cảm ơn mọi tấm lòng.",
+  },
+  {
+    tag: "SAU LŨ 12/2024",
+    name: "Em Lê Thị Mai",
+    location: "Đồng Hới, Quảng Bình",
+    quote:
+      "Chúng tôi mất tất cả nhưng được mọi người khắp nơi gửi yêu thương về. Điều đó cho chúng tôi sức mạnh để tiếp tục.",
+  },
+];

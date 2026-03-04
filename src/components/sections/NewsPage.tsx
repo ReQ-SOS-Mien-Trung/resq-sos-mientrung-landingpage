@@ -102,7 +102,7 @@ const NewsPage = () => {
             </span>
             <div className="flex-1 h-px bg-black/20" />
           </div>
-          <h1 className="hero-anim text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.85] mb-6">
+          <h1 className="hero-anim text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.95] mb-6">
             TIN TỨC
             <br />
             <span className="text-[#FF5722]">MỚI NHẤT</span>
@@ -130,8 +130,14 @@ const NewsPage = () => {
       {/* Featured News */}
       <section ref={featuredRef} className="border-b-2 border-black">
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div className="featured-anim aspect-video lg:aspect-auto bg-black/10 border-b-2 lg:border-b-0 lg:border-r-2 border-black flex items-center justify-center">
-            <Newspaper className="w-20 h-20 text-black/20" />
+          <div className="featured-anim aspect-video lg:aspect-auto border-b-2 lg:border-b-0 lg:border-r-2 border-black overflow-hidden">
+            {featuredNews.image ? (
+              <img src={featuredNews.image} alt={featuredNews.title} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-black/10 flex items-center justify-center">
+                <Newspaper className="w-20 h-20 text-black/20" />
+              </div>
+            )}
           </div>
           <div className="featured-anim p-8 sm:p-12 lg:p-16 flex flex-col justify-center">
             <div className="flex items-center gap-4 mb-4">
@@ -169,8 +175,14 @@ const NewsPage = () => {
               href={article.link}
               className={`news-item p-6 sm:p-8 border-b-2 lg:border-b-0 ${index % 2 === 0 ? 'sm:border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black hover:bg-black hover:text-white transition-colors group`}
             >
-              <div className="aspect-video bg-black/10 mb-4 flex items-center justify-center group-hover:bg-white/10">
-                <Newspaper className="w-8 h-8 text-black/20 group-hover:text-white/20" />
+              <div className="aspect-video mb-4 overflow-hidden">
+                {article.image ? (
+                  <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                ) : (
+                  <div className="w-full h-full bg-black/10 flex items-center justify-center group-hover:bg-white/10">
+                    <Newspaper className="w-8 h-8 text-black/20 group-hover:text-white/20" />
+                  </div>
+                )}
               </div>
               <span className="text-[10px] text-black/40 group-hover:text-white/40 flex items-center gap-1 mb-2">
                 <Calendar className="w-3 h-3" />

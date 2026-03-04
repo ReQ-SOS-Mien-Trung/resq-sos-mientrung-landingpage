@@ -166,19 +166,7 @@ export const useGoogleAuth = (): UseMutationResult<
         localStorage.setItem("accessToken", data.accessToken);
       if (data.refreshToken)
         localStorage.setItem("refreshToken", data.refreshToken);
-
-      // Show appropriate message based on isOnboarded status
-      if (data.user?.isOnboarded) {
-        toast.success("Đăng nhập thành công!", {
-          description: "Chào mừng bạn quay trở lại.",
-          duration: 3000,
-        });
-      } else {
-        toast.success("Xác thực thành công!", {
-          description: "Chào mừng bạn đến với ResQ SOS. Hãy hoàn tất hồ sơ.",
-          duration: 3000,
-        });
-      }
+      // Note: toast is shown in the page after getUserMe() to get the real isOnboarded value
       console.log("Google auth successful:", data);
     },
     onError: (error: AxiosError<AuthError>) => {

@@ -3,10 +3,12 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { newsArticles } from '@/constants';
+import { useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Newsroom = () => {
+  const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const articlesRef = useRef<(HTMLElement | null)[]>([]);
@@ -189,7 +191,7 @@ const Newsroom = () => {
             <div className="w-8 sm:w-12 h-1 bg-[#FF5722]" />
             <span className="text-xs sm:text-sm text-black/40">Cập nhật tin tức mới nhất</span>
           </div>
-          <button className="px-6 sm:px-8 py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors w-full sm:w-auto text-center">
+          <button onClick={() => navigate("/news")} className="px-6 sm:px-8 py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors w-full sm:w-auto text-center">
             Xem tất cả tin tức ↗
           </button>
         </div>

@@ -11,56 +11,19 @@ import {
   Package,
   CheckCircle,
   CopySimple,
+  CaretDown,
+  Spinner,
 } from "@phosphor-icons/react";
-
-gsap.registerPlugin(ScrollTrigger);
-
-/* ── Constants ───────────────────────────────────────── */
-const PRESET_AMOUNTS = [
-  { value: 50_000, label: "50K", desc: "1 suất cơm" },
-  { value: 200_000, label: "200K", desc: "1 túi cứu trợ" },
-  { value: 500_000, label: "500K", desc: "1 gia đình / tuần" },
-  { value: 1_000_000, label: "1 TRIỆU", desc: "Nhà tạm 1 tháng" },
-  { value: 5_000_000, label: "5 TRIỆU", desc: "Trang bị cứu hộ" },
-  { value: 0, label: "TỰ NHẬP", desc: "Số tiền khác" },
-];
-
-const IMPACT_STATS = [
-  { number: "2.5 TỶ", unit: "VNĐ", label: "Đã quyên góp năm 2024" },
-  { number: "50,000", unit: "HỘ", label: "Gia đình được hỗ trợ" },
-  { number: "1,200+", unit: "TNV", label: "Tình nguyện viên" },
-  { number: "<48H", unit: "XỬ LÝ", label: "Thời gian triển khai" },
-];
-
-const BANK_INFO = [
-  { label: "NGÂN HÀNG", value: "VIETCOMBANK", copy: false },
-  { label: "SỐ TÀI KHOẢN", value: "1234 5678 9012 3456", copy: true },
-  { label: "CHỦ TÀI KHOẢN", value: "QUỸ CỨU TRỢ RESQ SOS", copy: false },
-  { label: "CHI NHÁNH", value: "Chi nhánh Đà Nẵng", copy: false },
-];
-
-const PAYMENT_LABELS = ["Vietcombank", "Techcombank", "BIDV", "MoMo", "ZaloPay", "VNPay", "Agribank", "ACB"];
-
-const STORIES = [
-  {
-    tag: "LŨ LỤT 10/2024",
-    name: "Chị Nguyễn Thị Hoa",
-    location: "Hội An, Quảng Nam",
-    quote: "Nhờ đội cứu hộ ResQ, gia đình tôi được sơ tán kịp thời trước khi lũ tràn vào nhà. Không có các bạn, chúng tôi không biết sẽ ra sao.",
-  },
-  {
-    tag: "CÔ LẬP 11/2024",
-    name: "Anh Trần Văn Minh",
-    location: "Huế, Thừa Thiên Huế",
-    quote: "Những thùng hàng cứu trợ đến đúng lúc nhất — khi cả xóm bị cô lập 3 ngày không có gì ăn. Cảm ơn mọi tấm lòng.",
-  },
-  {
-    tag: "SAU LŨ 12/2024",
-    name: "Em Lê Thị Mai",
-    location: "Đồng Hới, Quảng Bình",
-    quote: "Chúng tôi mất tất cả nhưng được mọi người khắp nơi gửi yêu thương về. Điều đó cho chúng tôi sức mạnh để tiếp tục.",
-  },
-];
+import { useGetCampaignsMetadata } from "@/services/campaign/hooks";
+import { useCreateDonation } from "@/services/donation/hooks";
+import { toast } from "sonner";
+import {
+  donatePresetAmounts,
+  donateImpactStats,
+  donateBankInfo,
+  donatePaymentLabels,
+  donateStories,
+} from "@/constants";
 
 const formatVND = (n: number) => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(".0", "")} triệu VNĐ`;
@@ -85,6 +48,10 @@ const DonatePage = () => {
   const [donorEmail, setDonorEmail] = useState("");
   const [message, setMessage] = useState("");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [fundCampaignId, setFundCampaignId] = useState<number | null>(null);
+
+  const { data: campaigns, isLoading: campaignsLoading } = useGetCampaignsMetadata();
+  const donateMutation = useCreateDonation();
 
   const heroRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLElement>(null);
@@ -173,6 +140,41 @@ const DonatePage = () => {
   const displayAmount = isCustom
     ? parseInt(customRaw.replace(/\D/g, "") || "0")
     : selectedAmount;
+
+  const handleSubmit = () => {
+    if (!fundCampaignId) {
+      toast.error("Vui lòng chọn chiến dịch quyên góp.");
+      return;
+    }
+    if (displayAmount <= 0) {
+      toast.error("Vui lòng nhập số tiền đóng góp.");
+      return;
+    }
+    if (!donorName.trim()) {
+      toast.error("Vui lòng nhập họ tên.");
+      return;
+    }
+    if (!donorEmail.trim()) {
+      toast.error("Vui lòng nhập email.");
+      return;
+    }
+    donateMutation.mutate(
+      {
+        fundCampaignId: fundCampaignId,
+        donorName: donorName.trim(),
+        donorEmail: donorEmail.trim(),
+        amount: displayAmount,
+        note: message,
+      },
+      {
+        onSuccess: (data) => {
+          if (data.checkoutUrl) {
+            window.location.href = data.checkoutUrl;
+          }
+        },
+      }
+    );
+  };
 
   /* ════════════════════════════════════════════════════════ */
   return (
@@ -307,7 +309,7 @@ const DonatePage = () => {
       {/* ── IMPACT STATS ────────────────────────────────────── */}
       <section ref={statsRef} className="border-b-2 border-black">
         <div className="grid grid-cols-2 lg:grid-cols-4">
-          {IMPACT_STATS.map((s, i) => (
+          {donateImpactStats.map((s, i) => (
             <div
               key={i}
               className={`stat-item px-8 py-12 sm:py-16 text-center ${i < 3 ? "border-r-2" : ""} border-b-2 lg:border-b-0 border-black`}
@@ -325,7 +327,7 @@ const DonatePage = () => {
         <div className="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-20">
 
           <div className="donate-anim text-center mb-12">
-            <p className="text-[9px] font-mono tracking-[0.35em] text-white/50 mb-3">ĐÓNG GÓP</p>
+            <p className="text-[10px] font-mono tracking-[0.35em] text-white/50 mb-3">ĐÓNG GÓP</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
               CHỌN MỨC ĐÓNG GÓP
             </h2>
@@ -333,7 +335,7 @@ const DonatePage = () => {
 
           {/* Presets */}
           <div className="donate-anim grid grid-cols-3 sm:grid-cols-6 gap-2 mb-8">
-            {PRESET_AMOUNTS.map((p) => {
+            {donatePresetAmounts.map((p) => {
               const active = p.value === 0 ? isCustom : (!isCustom && selectedAmount === p.value);
               return (
                 <button
@@ -347,7 +349,7 @@ const DonatePage = () => {
                   }`}
                 >
                   <span className="text-base sm:text-lg font-black leading-none">{p.label}</span>
-                  <span className={`text-[9px] mt-1.5 tracking-wide ${active ? "text-white/85" : "text-white/35 group-hover:text-white/55"}`}>
+                  <span className={`text-[12px] mt-1.5 tracking-wide ${active ? "text-white/85" : "text-white/35 group-hover:text-white/55"}`}>
                     {p.desc}
                   </span>
                 </button>
@@ -367,21 +369,44 @@ const DonatePage = () => {
                     setCustomRaw(raw ? parseInt(raw).toLocaleString("vi-VN") : "");
                   }}
                   placeholder="Nhập số tiền..."
-                  className="w-full bg-white/5 border-2 border-white/15 focus:border-[#FF5722] px-6 py-4 text-xl font-bold text-white placeholder:text-white/15 focus:outline-none transition-colors text-center"
+                  className="w-full bg-white/5 border-2 border-white/15 focus:border-[#FF5722] px-6 py-4 text-md font-bold text-white placeholder:text-white/15 focus:outline-none transition-colors text-center"
                 />
                 <span className="absolute right-5 top-1/2 -translate-y-1/2 text-sm text-white/30 font-bold">VNĐ</span>
               </div>
             </div>
           )}
 
+          {/* Campaign selector */}
+          <div className="donate-anim mb-6">
+            <label className="text-xs font-mono tracking-[0.3em] text-white/50 block mb-2">QUỸ QUYÊN GÓP *</label>
+            <div className="relative">
+              <select
+                value={fundCampaignId ?? ""}
+                onChange={(e) => setFundCampaignId(Number(e.target.value))}
+                disabled={campaignsLoading}
+                className={`w-full appearance-none bg-white/5 border-2 border-white/15 focus:border-[#FF5722] px-4 py-3 text-sm focus:outline-none transition-colors cursor-pointer disabled:opacity-50 ${fundCampaignId === null ? "text-white/15" : "text-white"}`}
+              >
+                <option value="" disabled className="bg-black text-white/50">
+                  {campaignsLoading ? "Đang tải..." : "— Chọn chiến dịch —"}
+                </option>
+                {campaigns?.map((c) => (
+                  <option key={c.key} value={c.key} className="bg-black text-white">
+                    {c.value}
+                  </option>
+                ))}
+              </select>
+              <CaretDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+            </div>
+          </div>
+
           {/* Donor info */}
           <div className="donate-anim grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {[
-              { label: "HỌ TÊN (TÙY CHỌN)", ph: "Nguyễn Văn A", val: donorName, set: setDonorName, type: "text" },
-              { label: "EMAIL (TÙY CHỌN)", ph: "email@example.com", val: donorEmail, set: setDonorEmail, type: "email" },
+              { label: "HỌ TÊN *", ph: "Nguyễn Văn A", val: donorName, set: setDonorName, type: "text" },
+              { label: "EMAIL *", ph: "email@example.com", val: donorEmail, set: setDonorEmail, type: "email" },
             ].map((field) => (
               <div key={field.label}>
-                <label className="text-[9px] font-mono tracking-[0.3em] text-white/50 block mb-2">{field.label}</label>
+                <label className="text-xs font-mono tracking-[0.3em] text-white/50 block mb-2">{field.label}</label>
                 <input
                   type={field.type}
                   value={field.val}
@@ -393,12 +418,12 @@ const DonatePage = () => {
             ))}
           </div>
           <div className="donate-anim mb-10">
-            <label className="text-[9px] font-mono tracking-[0.3em] text-white/50 block mb-2">LỜI NHẮN (TÙY CHỌN)</label>
+            <label className="text-xs font-mono tracking-[0.3em] text-white/50 block mb-2">LỜI NHẮN (TÙY CHỌN)</label>
             <textarea
               rows={2}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Gửi lời chúc đến đồng bào miền Trung..."
+              placeholder="Gửi lời nhắn đến đồng bào miền Trung..."
               className="w-full bg-white/5 border-2 border-white/15 focus:border-[#FF5722] px-4 py-3 text-sm text-white placeholder:text-white/15 focus:outline-none transition-colors resize-none"
             />
           </div>
@@ -410,13 +435,19 @@ const DonatePage = () => {
                 <span className="font-black text-[#FF5722] text-base">{formatVND(displayAmount)}</span>
               </p>
             )}
-            <button className="w-full py-5 bg-[#FF5722] text-white text-sm font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-3 group">
-              <Heart className="w-5 h-5" weight="fill" />
-              ĐÓNG GÓP NGAY
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <button
+              onClick={handleSubmit}
+              disabled={donateMutation.isPending}
+              className="w-full py-5 bg-[#FF5722] text-white text-sm font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {donateMutation.isPending ? (
+                <><Spinner className="w-5 h-5 animate-spin" />ĐANG XỬ LÝ...</>
+              ) : (
+                <><Heart className="w-5 h-5" weight="fill" />ĐÓNG GÓP NGAY<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></>
+              )}
             </button>
-            <p className="text-center text-[10px] text-white/40 mt-4 tracking-wide">
-              🔒 Giao dịch được mã hóa. Biên lai xác nhận sẽ gửi qua email.
+            <p className="text-center text-xs text-white/40 mt-4 tracking-wide">
+              Giao dịch được mã hóa. Biên lai xác nhận sẽ gửi qua email.
             </p>
           </div>
         </div>
@@ -465,7 +496,7 @@ const DonatePage = () => {
             <h2 className="text-2xl sm:text-3xl font-black mb-8">THÔNG TIN TÀI KHOẢN</h2>
 
             <div className="flex-1 space-y-0">
-              {BANK_INFO.map((row, i) => (
+              {donateBankInfo.map((row, i) => (
                 <div key={i} className="py-5 border-b border-black/10 flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <p className="text-[9px] font-mono tracking-[0.28em] text-black/30 mb-1">{row.label}</p>
@@ -507,7 +538,7 @@ const DonatePage = () => {
             <p className="text-sm font-black uppercase tracking-wider">Phương thức thanh toán</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {PAYMENT_LABELS.map((name) => (
+            {donatePaymentLabels.map((name) => (
               <span key={name} className="px-4 py-2 bg-white border-2 border-black/10 text-xs font-black text-black/50 hover:border-black hover:text-black transition-colors">
                 {name}
               </span>
@@ -523,7 +554,7 @@ const DonatePage = () => {
           <h2 className="text-2xl sm:text-3xl font-black">ĐỒNG BÀO NÓI GÌ</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3">
-          {STORIES.map((s, i) => (
+          {donateStories.map((s, i) => (
             <div
               key={i}
               className={`story-card p-8 sm:p-10 lg:p-12 ${i < 2 ? "border-b-2 md:border-b-0 md:border-r-2" : ""} border-black group hover:bg-[#FF5722] hover:text-white transition-colors duration-300`}
