@@ -172,7 +172,7 @@ const ServicesPage = () => {
           ].map((item, index) => (
             <div 
               key={index}
-              className={`process-item p-6 sm:p-8 lg:p-12 ${index < 2 ? 'border-r-2' : ''} border-black`}
+              className={`process-item p-6 sm:p-8 lg:p-12 border-b-2 sm:border-b-0 ${index < 2 ? 'sm:border-r-2' : ''} border-black`}
             >
               <span className="text-5xl font-black text-black/10 block mb-4">{item.step}</span>
               <h3 className="text-sm font-black tracking-wider mb-2">{item.title}</h3>

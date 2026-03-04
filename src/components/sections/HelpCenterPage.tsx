@@ -139,7 +139,7 @@ const HelpCenterPage = () => {
             <Link
               key={index}
               to={cat.link}
-              className={`category-item p-6 sm:p-8 lg:p-10 ${index < 3 ? 'border-r-2' : ''} border-black hover:bg-black hover:text-white transition-colors group`}
+              className={`category-item p-6 sm:p-8 lg:p-10 border-b-2 lg:border-b-0 ${index % 2 === 0 ? 'border-r-2' : ''} lg:border-r-2 last:lg:border-r-0 border-black hover:bg-black hover:text-white transition-colors group`}
             >
               <cat.icon className="w-8 h-8 mb-4 text-[#FF5722]" />
               <h3 className="text-xs font-black tracking-wider mb-1">{cat.title}</h3>
@@ -191,7 +191,7 @@ const HelpCenterPage = () => {
             <a
               key={index}
               href="#"
-              className={`guide-item p-6 sm:p-8 ${index % 2 === 0 ? 'border-r-2' : ''} ${index < 2 ? 'border-b-2' : ''} border-black hover:bg-black hover:text-white transition-colors group`}
+              className={`guide-item p-6 sm:p-8 border-b-2 last:border-b-0 sm:last:border-b-2 ${index % 2 === 0 ? 'sm:border-r-2' : ''} border-black hover:bg-black hover:text-white transition-colors group`}
             >
               <div className="flex items-start justify-between">
                 <div>

@@ -5,6 +5,7 @@ import type {
   FAQ,
   MenuItem,
   NewsArticle,
+  PrerequisiteQuestion,
   Region,
   Service,
   ServiceCategory,
@@ -64,11 +65,31 @@ export const aboutValues = [
 ];
 
 export const aboutTeam = [
-  { name: "Huỳnh Kim Cương", role: "Giám đốc điều hành", image: "public/images/team/team-1.jpeg" },
-  { name: "Lê Minh Đăng Khoa", role: "Trưởng phòng Điều phối", image: "public/images/team/team-2.jpeg" },
-  { name: "Nguyễn Trần Phương An", role: "Trưởng phòng Công nghệ", image: "public/images/team/team-3.jpeg" },
-  { name: "Nguyễn Ngọc Thảo", role: "Trưởng phòng Truyền thông", image: "public/images/team/team-4.jpeg" },
-  { name: "Lê Bảo Châu", role: "Trưởng phòng Vận hành", image: "public/images/team/team-5.jpeg" },
+  {
+    name: "Huỳnh Kim Cương",
+    role: "Giám đốc điều hành",
+    image: "public/images/team/team-1.jpeg",
+  },
+  {
+    name: "Lê Minh Đăng Khoa",
+    role: "Trưởng phòng Điều phối",
+    image: "public/images/team/team-2.jpeg",
+  },
+  {
+    name: "Nguyễn Trần Phương An",
+    role: "Trưởng phòng Công nghệ",
+    image: "public/images/team/team-3.jpeg",
+  },
+  {
+    name: "Nguyễn Ngọc Thảo",
+    role: "Trưởng phòng Truyền thông",
+    image: "public/images/team/team-4.jpeg",
+  },
+  {
+    name: "Lê Bảo Châu",
+    role: "Trưởng phòng Vận hành",
+    image: "public/images/team/team-5.jpeg",
+  },
 ];
 
 // ==================== NEWS PAGE ====================
@@ -76,12 +97,20 @@ export const featuredNews = {
   id: 0,
   image: "/images/rescuer_flood.jpg",
   date: "20/01/26",
-  title: "ResQ SOS Miền Trung chính thức ra mắt phiên bản 2.0 với nhiều tính năng mới",
-  description: "Phiên bản mới tích hợp AI để phân loại mức độ khẩn cấp tự động, cải thiện thời gian phản hồi và nâng cao trải nghiệm người dùng.",
+  title:
+    "ResQ SOS Miền Trung chính thức ra mắt phiên bản 2.0 với nhiều tính năng mới",
+  description:
+    "Phiên bản mới tích hợp AI để phân loại mức độ khẩn cấp tự động, cải thiện thời gian phản hồi và nâng cao trải nghiệm người dùng.",
   category: "SẢN PHẨM",
 };
 
-export const newsCategories = ["TẤT CẢ", "SẢN PHẨM", "CỘNG ĐỒNG", "ĐỐI TÁC", "SỰ KIỆN"];
+export const newsCategories = [
+  "TẤT CẢ",
+  "SẢN PHẨM",
+  "CỘNG ĐỒNG",
+  "ĐỐI TÁC",
+  "SỰ KIỆN",
+];
 
 // ==================== CONTACT PAGE ====================
 export const contactMethods = [
@@ -113,9 +142,21 @@ export const contactMethods = [
 
 // ==================== DONATE PAGE ====================
 export const donationOptions = [
-  { amount: "100,000", label: "VNĐ", desc: "Hỗ trợ 1 gia đình với nhu yếu phẩm cơ bản" },
-  { amount: "500,000", label: "VNĐ", desc: "Cung cấp áo phao và đèn pin cho đội cứu hộ" },
-  { amount: "1,000,000", label: "VNĐ", desc: "Hỗ trợ vận chuyển hàng cứu trợ một chuyến" },
+  {
+    amount: "100,000",
+    label: "VNĐ",
+    desc: "Hỗ trợ 1 gia đình với nhu yếu phẩm cơ bản",
+  },
+  {
+    amount: "500,000",
+    label: "VNĐ",
+    desc: "Cung cấp áo phao và đèn pin cho đội cứu hộ",
+  },
+  {
+    amount: "1,000,000",
+    label: "VNĐ",
+    desc: "Hỗ trợ vận chuyển hàng cứu trợ một chuyến",
+  },
   { amount: "Khác", label: "", desc: "Nhập số tiền bạn muốn đóng góp" },
 ];
 
@@ -130,53 +171,56 @@ export const impactStats = [
 
 export const services: Service[] = [
   {
-    id: 'sos',
+    id: "sos",
     icon: Warning,
-    title: 'Gửi tín hiệu SOS',
-    description: 'Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.',
-    region: 'Khẩn cấp',
+    title: "Gửi tín hiệu SOS",
+    description:
+      "Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.",
+    region: "Khẩn cấp",
   },
   {
-    id: 'shelter',
+    id: "shelter",
     icon: House,
-    title: 'Tìm nơi trú ẩn',
-    description: 'Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.',
-    region: 'An toàn',
+    title: "Tìm nơi trú ẩn",
+    description: "Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.",
+    region: "An toàn",
   },
   {
-    id: 'rescue',
+    id: "rescue",
     icon: Users,
-    title: 'Đội cứu hộ',
-    description: 'Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.',
-    region: 'Hỗ trợ',
+    title: "Đội cứu hộ",
+    description:
+      "Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.",
+    region: "Hỗ trợ",
   },
   {
-    id: 'supply',
+    id: "supply",
     icon: Truck,
-    title: 'Tiếp tế vật tư',
-    description: 'Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.',
-    region: 'Cứu trợ',
+    title: "Tiếp tế vật tư",
+    description:
+      "Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.",
+    region: "Cứu trợ",
   },
   {
-    id: 'medical',
+    id: "medical",
     icon: Heart,
-    title: 'Hỗ trợ y tế',
-    description: 'Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.',
-    region: 'Y tế',
+    title: "Hỗ trợ y tế",
+    description: "Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.",
+    region: "Y tế",
   },
   {
-    id: 'hotline',
+    id: "hotline",
     icon: Phone,
-    title: 'Đường dây nóng',
-    description: 'Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.',
-    region: 'Liên lạc',
+    title: "Đường dây nóng",
+    description: "Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.",
+    region: "Liên lạc",
   },
 ];
 
 export const regions: Region[] = [
-  { id: 'mien-trung', name: 'Miền Trung', image: '/images/mien-trung.jpg' },
-  { id: 'mien-bac', name: 'Miền Bắc', image: '/images/mien-bac.jpg' },
-  { id: 'mien-nam', name: 'Miền Nam', image: '/images/mien-nam.jpg' },
+  { id: "mien-trung", name: "Miền Trung", image: "/images/mien-trung.jpg" },
+  { id: "mien-bac", name: "Miền Bắc", image: "/images/mien-bac.jpg" },
+  { id: "mien-nam", name: "Miền Nam", image: "/images/mien-nam.jpg" },
 ];
 
 export const serviceCategories: ServiceCategory[] = [
@@ -307,8 +351,7 @@ export const contributions: ContributionCard[] = [
   {
     id: 3,
     image: "/images/quan_doi.png",
-    title:
-      "Các đơn vị Quân đội tập trung ứng phó lũ đặc biệt lớn",
+    title: "Các đơn vị Quân đội tập trung ứng phó lũ đặc biệt lớn",
     description:
       "Ngày 20-11, Bộ Quốc phòng có Công điện số 7453/CĐ-BQP về việc tập trung ứng phó lũ đặc biệt lớn tại Khánh Hòa, Đắk Lắk và Gia Lai",
     link: "https://www.qdnd.vn/quoc-phong-an-ninh/tin-tuc/cac-don-vi-quan-doi-tap-trung-ung-pho-lu-dac-biet-lon-1012970",
@@ -323,38 +366,17 @@ export const menuItems: MenuItem[] = [
       {
         title: "Giới thiệu",
         description: "Chúng tôi là ai và chúng tôi đại diện cho điều gì",
-        link: "#about",
+        link: "/about",
       },
       {
         title: "Tầm nhìn & Sứ mệnh",
         description: "Mục tiêu và giá trị cốt lõi của chúng tôi",
-        link: "#vision",
+        link: "/about",
       },
       {
         title: "Đội ngũ",
         description: "Gặp gỡ những người đang xây dựng tương lai cứu hộ",
-        link: "#team",
-      },
-    ],
-  },
-  {
-    id: "services",
-    label: "Dịch vụ",
-    subItems: [
-      {
-        title: "Cứu hộ khẩn cấp",
-        description: "Kết nối nạn nhân với đội cứu hộ trong thời gian thực",
-        link: "#emergency",
-      },
-      {
-        title: "Điều phối đội cứu hộ",
-        description: "Hệ thống quản lý và điều phối đội cứu hộ thông minh",
-        link: "#coordination",
-      },
-      {
-        title: "Đào tạo",
-        description: "Chương trình đào tạo và nâng cao kỹ năng cứu hộ",
-        link: "#training",
+        link: "/about",
       },
     ],
   },
@@ -365,17 +387,17 @@ export const menuItems: MenuItem[] = [
       {
         title: "Đăng ký đội cứu hộ",
         description: "Tham gia mạng lưới cứu hộ của chúng tôi",
-        link: "#register",
+        link: "/register",
       },
       {
         title: "Tài nguyên",
         description: "Công cụ và tài liệu hỗ trợ đội cứu hộ",
-        link: "#resources",
+        link: "/help-center",
       },
       {
         title: "Cộng đồng",
         description: "Kết nối với các đội cứu hộ khác",
-        link: "#community",
+        link: "/register",
       },
     ],
   },
@@ -386,12 +408,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Trở thành đối tác",
         description: "Hợp tác với chúng tôi để mở rộng mạng lưới cứu hộ",
-        link: "#partner",
+        link: "/contact",
       },
       {
         title: "Đối tác hiện tại",
         description: "Các tổ chức đang hợp tác với chúng tôi",
-        link: "#partners",
+        link: "/contact",
       },
     ],
   },
@@ -402,12 +424,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Tin tức mới nhất",
         description: "Cập nhật về hoạt động và sự kiện của chúng tôi",
-        link: "#news",
+        link: "/news",
       },
       {
         title: "Blog",
         description: "Câu chuyện và chia sẻ từ cộng đồng cứu hộ",
-        link: "#blog",
+        link: "/news",
       },
     ],
   },
@@ -484,8 +506,7 @@ export const newsArticles: NewsArticle[] = [
     id: 3,
     image: "/images/cong_an.png",
     date: "04/12/25",
-    title:
-      "Công an Lâm Đồng chủ động ứng phó, xuyên đêm cứu dân trong mưa lũ",
+    title: "Công an Lâm Đồng chủ động ứng phó, xuyên đêm cứu dân trong mưa lũ",
     link: "https://bocongan.gov.vn/bai-viet/cong-an-lam-dong-chu-dong-ung-pho-xuyen-dem-cuu-dan-trong-mua-lu-1764835632",
   },
   {
@@ -599,11 +620,26 @@ export const termsOfServiceSections = [
       "ResQ SOS Miền Trung là nền tảng kết nối người dân gặp nạn trong thiên tai với đội ngũ cứu hộ.",
     ],
     list: [
-      { label: "GỬI TÍN HIỆU SOS", desc: "Gửi yêu cầu cứu hộ khẩn cấp kèm vị trí GPS" },
-      { label: "TÌM NƠI TRÚ ẨN", desc: "Xác định các điểm sơ tán an toàn gần nhất" },
-      { label: "YÊU CẦU TIẾP TẾ", desc: "Đăng ký nhu cầu về lương thực, nước uống, thuốc men" },
-      { label: "CẬP NHẬT THÔNG TIN", desc: "Nhận thông tin về tình hình thiên tai" },
-      { label: "KẾT NỐI CỘNG ĐỒNG", desc: "Liên lạc với tình nguyện viên và đội cứu hộ" },
+      {
+        label: "GỬI TÍN HIỆU SOS",
+        desc: "Gửi yêu cầu cứu hộ khẩn cấp kèm vị trí GPS",
+      },
+      {
+        label: "TÌM NƠI TRÚ ẨN",
+        desc: "Xác định các điểm sơ tán an toàn gần nhất",
+      },
+      {
+        label: "YÊU CẦU TIẾP TẾ",
+        desc: "Đăng ký nhu cầu về lương thực, nước uống, thuốc men",
+      },
+      {
+        label: "CẬP NHẬT THÔNG TIN",
+        desc: "Nhận thông tin về tình hình thiên tai",
+      },
+      {
+        label: "KẾT NỐI CỘNG ĐỒNG",
+        desc: "Liên lạc với tình nguyện viên và đội cứu hộ",
+      },
     ],
   },
   {
@@ -620,9 +656,7 @@ export const termsOfServiceSections = [
   {
     number: "04",
     title: "HÀNH VI BỊ CẤM",
-    content: [
-      "Các hành vi sau đây bị nghiêm cấm:",
-    ],
+    content: ["Các hành vi sau đây bị nghiêm cấm:"],
     warnings: [
       "Gửi tín hiệu SOS giả — có thể bị xử lý theo quy định pháp luật",
       "Cố ý cung cấp thông tin sai lệch về vị trí hoặc tình trạng khẩn cấp",
@@ -630,7 +664,8 @@ export const termsOfServiceSections = [
       "Cố gắng truy cập trái phép vào hệ thống hoặc dữ liệu",
       "Phát tán virus, mã độc hoặc nội dung có hại",
     ],
-    footer: "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
+    footer:
+      "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
   },
   {
     number: "05",
@@ -659,10 +694,30 @@ export const termsOfServiceSections = [
 ];
 
 export const termsOfServiceAdditionalTerms = [
-  { number: "07", title: "QUYỀN SỞ HỮU TRÍ TUỆ", content: "Tất cả nội dung, thiết kế, logo, mã nguồn thuộc quyền sở hữu của ResQ SOS và được bảo vệ bởi luật sở hữu trí tuệ." },
-  { number: "08", title: "CHẤM DỨT DỊCH VỤ", content: "Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập nếu bạn vi phạm điều khoản hoặc gây hại cho cộng đồng." },
-  { number: "09", title: "LUẬT ÁP DỤNG", content: "Các điều khoản được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền." },
-  { number: "10", title: "ĐIỀU KHOẢN RIÊNG BIỆT", content: "Nếu bất kỳ điều khoản nào bị tuyên bố vô hiệu, các điều khoản còn lại vẫn có hiệu lực đầy đủ." },
+  {
+    number: "07",
+    title: "QUYỀN SỞ HỮU TRÍ TUỆ",
+    content:
+      "Tất cả nội dung, thiết kế, logo, mã nguồn thuộc quyền sở hữu của ResQ SOS và được bảo vệ bởi luật sở hữu trí tuệ.",
+  },
+  {
+    number: "08",
+    title: "CHẤM DỨT DỊCH VỤ",
+    content:
+      "Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập nếu bạn vi phạm điều khoản hoặc gây hại cho cộng đồng.",
+  },
+  {
+    number: "09",
+    title: "LUẬT ÁP DỤNG",
+    content:
+      "Các điều khoản được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền.",
+  },
+  {
+    number: "10",
+    title: "ĐIỀU KHOẢN RIÊNG BIỆT",
+    content:
+      "Nếu bất kỳ điều khoản nào bị tuyên bố vô hiệu, các điều khoản còn lại vẫn có hiệu lực đầy đủ.",
+  },
 ];
 
 // Privacy Policy Page Constants
@@ -670,12 +725,25 @@ export const privacyPolicySections = [
   {
     number: "01",
     title: "THU THẬP THÔNG TIN",
-    intro: "Khi bạn sử dụng ứng dụng ResQ SOS Miền Trung, chúng tôi có thể thu thập:",
+    intro:
+      "Khi bạn sử dụng ứng dụng ResQ SOS Miền Trung, chúng tôi có thể thu thập:",
     items: [
-      { label: "THÔNG TIN CÁ NHÂN", desc: "Họ tên, số điện thoại, địa chỉ email khi đăng ký tài khoản hoặc gửi yêu cầu SOS" },
-      { label: "THÔNG TIN VỊ TRÍ", desc: "Vị trí GPS để xác định chính xác nơi cần cứu hộ và kết nối với đội cứu trợ gần nhất" },
-      { label: "THÔNG TIN THIẾT BỊ", desc: "Loại thiết bị, hệ điều hành, mã nhận dạng để đảm bảo ứng dụng hoạt động tối ưu" },
-      { label: "THÔNG TIN SỨC KHỎE", desc: "Trong trường hợp khẩn cấp, thông tin y tế để đội cứu trợ chuẩn bị phương án phù hợp" },
+      {
+        label: "THÔNG TIN CÁ NHÂN",
+        desc: "Họ tên, số điện thoại, địa chỉ email khi đăng ký tài khoản hoặc gửi yêu cầu SOS",
+      },
+      {
+        label: "THÔNG TIN VỊ TRÍ",
+        desc: "Vị trí GPS để xác định chính xác nơi cần cứu hộ và kết nối với đội cứu trợ gần nhất",
+      },
+      {
+        label: "THÔNG TIN THIẾT BỊ",
+        desc: "Loại thiết bị, hệ điều hành, mã nhận dạng để đảm bảo ứng dụng hoạt động tối ưu",
+      },
+      {
+        label: "THÔNG TIN SỨC KHỎE",
+        desc: "Trong trường hợp khẩn cấp, thông tin y tế để đội cứu trợ chuẩn bị phương án phù hợp",
+      },
     ],
   },
   {
@@ -708,19 +776,35 @@ export const privacyPolicySections = [
     title: "CHIA SẺ THÔNG TIN",
     intro: "Chúng tôi có thể chia sẻ thông tin trong các trường hợp:",
     shares: [
-      { to: "ĐỘI NGŨ CỨU HỘ", reason: "Chia sẻ vị trí và thông tin liên lạc để thực hiện cứu trợ" },
-      { to: "CƠ QUAN CHỨC NĂNG", reason: "Khi có yêu cầu từ cơ quan nhà nước theo quy định pháp luật" },
-      { to: "ĐỐI TÁC Y TẾ", reason: "Trong trường hợp khẩn cấp cần hỗ trợ y tế" },
+      {
+        to: "ĐỘI NGŨ CỨU HỘ",
+        reason: "Chia sẻ vị trí và thông tin liên lạc để thực hiện cứu trợ",
+      },
+      {
+        to: "CƠ QUAN CHỨC NĂNG",
+        reason: "Khi có yêu cầu từ cơ quan nhà nước theo quy định pháp luật",
+      },
+      {
+        to: "ĐỐI TÁC Y TẾ",
+        reason: "Trong trường hợp khẩn cấp cần hỗ trợ y tế",
+      },
     ],
-    warning: "Chúng tôi KHÔNG bán hoặc cho thuê thông tin cá nhân cho bên thứ ba vì mục đích thương mại.",
+    warning:
+      "Chúng tôi KHÔNG bán hoặc cho thuê thông tin cá nhân cho bên thứ ba vì mục đích thương mại.",
   },
   {
     number: "05",
     title: "QUYỀN CỦA NGƯỜI DÙNG",
     intro: "Bạn có các quyền sau đối với thông tin cá nhân:",
     rights: [
-      { right: "QUYỀN TRUY CẬP", desc: "Yêu cầu xem thông tin cá nhân chúng tôi đang lưu trữ" },
-      { right: "QUYỀN CHỈNH SỬA", desc: "Cập nhật hoặc sửa đổi thông tin không chính xác" },
+      {
+        right: "QUYỀN TRUY CẬP",
+        desc: "Yêu cầu xem thông tin cá nhân chúng tôi đang lưu trữ",
+      },
+      {
+        right: "QUYỀN CHỈNH SỬA",
+        desc: "Cập nhật hoặc sửa đổi thông tin không chính xác",
+      },
       { right: "QUYỀN XÓA", desc: "Yêu cầu xóa thông tin cá nhân" },
       { right: "QUYỀN HẠN CHẾ", desc: "Yêu cầu hạn chế việc xử lý thông tin" },
       { right: "QUYỀN PHẢN ĐỐI", desc: "Phản đối việc sử dụng thông tin" },
@@ -731,8 +815,16 @@ export const privacyPolicySections = [
     title: "COOKIE & THEO DÕI",
     intro: "Website và ứng dụng của chúng tôi sử dụng:",
     cookies: [
-      { type: "CẦN THIẾT", desc: "Để đảm bảo ứng dụng hoạt động bình thường", required: true },
-      { type: "PHÂN TÍCH", desc: "Để hiểu cách người dùng sử dụng dịch vụ", required: false },
+      {
+        type: "CẦN THIẾT",
+        desc: "Để đảm bảo ứng dụng hoạt động bình thường",
+        required: true,
+      },
+      {
+        type: "PHÂN TÍCH",
+        desc: "Để hiểu cách người dùng sử dụng dịch vụ",
+        required: false,
+      },
     ],
   },
   {
@@ -740,9 +832,221 @@ export const privacyPolicySections = [
     title: "LƯU TRỮ DỮ LIỆU",
     intro: "Thời gian lưu trữ thông tin:",
     timeline: [
-      { period: "ĐANG SỬ DỤNG", desc: "Thông tin được lưu trữ trong thời gian bạn sử dụng dịch vụ" },
-      { period: "SAU KHI XÓA", desc: "Xóa hoặc ẩn danh hóa trong vòng 30 ngày" },
-      { period: "THEO PHÁP LUẬT", desc: "Một số thông tin có thể được giữ lâu hơn nếu được yêu cầu" },
+      {
+        period: "ĐANG SỬ DỤNG",
+        desc: "Thông tin được lưu trữ trong thời gian bạn sử dụng dịch vụ",
+      },
+      {
+        period: "SAU KHI XÓA",
+        desc: "Xóa hoặc ẩn danh hóa trong vòng 30 ngày",
+      },
+      {
+        period: "THEO PHÁP LUẬT",
+        desc: "Một số thông tin có thể được giữ lâu hơn nếu được yêu cầu",
+      },
+    ],
+  },
+];
+
+// ==================== ABILITY CHECK PAGE ====================
+export const prerequisiteQuestions: PrerequisiteQuestion[] = [
+  {
+    id: 1,
+    category: "Kỹ năng bơi",
+    categoryEn: "Swimming Ability",
+    question:
+      "Bạn có thể tự bơi và giữ an toàn cho bản thân trong môi trường nước ngập không?",
+    yesAnswer: "Có, tôi có thể tự bơi và không hoảng loạn khi ở dưới nước",
+    noAnswer: "Không",
+    warningMessage:
+      'Nếu chọn "Không" → không thể tham gia cứu hộ lũ. Khả năng bơi là yêu cầu bắt buộc để đảm bảo an toàn cho chính bạn trong các tình huống ngập nước.',
+    iconName: "PersonSimpleSwimIcon",
+  },
+  {
+    id: 2,
+    category: "Nhận thức an toàn cá nhân",
+    categoryEn: "Personal Safety Awareness",
+    question:
+      "Trong tình huống nguy hiểm (nước xiết, điện giật, sạt lở), bạn có sẵn sàng rút lui và không cố cứu vượt khả năng của mình không?",
+    yesAnswer: "Có, tôi ưu tiên an toàn cho bản thân và đội",
+    noAnswer: "Không / Tôi sẽ cố cứu bằng mọi giá",
+    warningMessage:
+      "Chọn phương án này → không đủ điều kiện. Việc cố cứu vượt khả năng có thể gây nguy hiểm cho cả bạn và người được cứu, đồng thời tạo thêm gánh nặng cho đội cứu hộ.",
+    iconName: "ShieldCheck",
+  },
+  {
+    id: 3,
+    category: "Giao tiếp & tuân thủ điều phối",
+    categoryEn: "Communication & Coordination",
+    question:
+      "Khi tham gia cứu hộ, bạn có cam kết tuân thủ sự điều phối của hệ thống và người điều phối, không tự ý hành động ngoài nhiệm vụ được giao không?",
+    yesAnswer: "Có, tôi cam kết tuân thủ điều phối",
+    noAnswer: "Không",
+    warningMessage:
+      "Không tuân thủ → không thể tham gia hệ thống ResQ. Sự phối hợp nhịp nhàng giữa các thành viên là yếu tố quyết định thành công của mỗi nhiệm vụ cứu hộ.",
+    iconName: "Handshake",
+  },
+  {
+    id: 4,
+    category: "Khả năng học nhanh & tuân thủ quy trình",
+    categoryEn: "Trainability",
+    question:
+      "Bạn có sẵn sàng học và tuân thủ quy trình cứu hộ do ResQ hướng dẫn trước khi tham gia nhiệm vụ không?",
+    yesAnswer: "Có, tôi sẵn sàng học và làm theo quy trình",
+    noAnswer: "Không",
+    warningMessage:
+      "Không sẵn sàng học → rủi ro cao cho toàn đội. Quy trình cứu hộ được thiết kế để bảo vệ tất cả mọi người, việc không tuân thủ có thể dẫn đến hậu quả nghiêm trọng.",
+    iconName: "GraduationCap",
+  },
+];
+
+// ==================== DETAILED ABILITIES ====================
+// Skill IDs match the API response from GET /identity/abilities
+export const rescueSkillCategories = [
+  {
+    id: "rescue-survival",
+    title: "I. CỨU HỘ & SINH TỒN",
+    titleEn: "RESCUE & SURVIVAL",
+    subgroups: [
+      {
+        subtitle: "Kỹ năng bơi lội",
+        skills: [
+          { id: 1, label: "Bơi cơ bản" },
+          { id: 2, label: "Bơi thành thạo" },
+          { id: 3, label: "Cứu hộ dưới nước" },
+          { id: 4, label: "Di chuyển trong nước ngập sâu" },
+          { id: 5, label: "Di chuyển trong dòng nước chảy xiết" },
+          { id: 6, label: "Lặn cơ bản" },
+          { id: 7, label: "Thoát hiểm trong môi trường ngập nước" },
+        ],
+      },
+      {
+        subtitle: "Kỹ năng cứu người",
+        skills: [
+          { id: 8, label: "Cứu người bị mắc kẹt trong nhà ngập" },
+          { id: 9, label: "Cứu người bị mắc kẹt trên mái nhà" },
+          { id: 10, label: "Cứu người bị kẹt trong phương tiện (xe, ghe)" },
+          { id: 11, label: "Sử dụng dây thừng cứu hộ" },
+          { id: 12, label: "Sử dụng áo phao, phao cứu sinh" },
+        ],
+      },
+      {
+        subtitle: "Cứu hộ trong điều kiện khắc nghiệt",
+        skills: [
+          { id: 13, label: "Cứu hộ ban đêm / tầm nhìn kém" },
+          { id: 14, label: "Cứu hộ trong mưa lớn / bão" },
+          { id: 15, label: "Cứu hộ tại khu vực đổ nát" },
+          { id: 16, label: "Cứu hộ trong môi trường nguy hiểm" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "medical-first-aid",
+    title: "II. Y TẾ & SƠ CỨU",
+    titleEn: "MEDICAL & FIRST AID",
+    subgroups: [
+      {
+        subtitle: "Y tế chuyên môn",
+        singleSelect: true,
+        skills: [
+          { id: 32, label: "Nhân viên y tế" },
+          { id: 33, label: "Y tá" },
+          { id: 34, label: "Bác sĩ" },
+          { id: 35, label: "Cấp cứu tiền viện" },
+        ],
+      },
+      {
+        subtitle: "Sơ cứu cơ bản",
+        skills: [
+          { id: 17, label: "Sơ cứu cơ bản" },
+          { id: 18, label: "Sơ cứu vết thương hở" },
+          { id: 19, label: "Cầm máu" },
+          { id: 20, label: "Băng bó vết thương" },
+          { id: 21, label: "Xử lý trầy xước, chấn thương nhẹ" },
+          { id: 22, label: "Xử lý bỏng nhẹ" },
+        ],
+      },
+      {
+        subtitle: "Cấp cứu",
+        skills: [
+          { id: 23, label: "Hồi sức tim phổi (CPR)" },
+          { id: 24, label: "Xử lý đuối nước" },
+          { id: 25, label: "Xử lý sốc" },
+          { id: 26, label: "Xử lý hạ thân nhiệt" },
+          { id: 27, label: "Theo dõi dấu hiệu sinh tồn" },
+          { id: 28, label: "Đánh giá mức độ nguy kịch nạn nhân" },
+        ],
+      },
+      {
+        subtitle: "Chấn thương",
+        skills: [
+          { id: 29, label: "Cố định gãy xương tạm thời" },
+          { id: 30, label: "Xử lý chấn thương cột sống (cơ bản)" },
+          { id: 31, label: "Vận chuyển người bị thương an toàn" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "mobility-transport",
+    title: "III. PHƯƠNG TIỆN & VẬN CHUYỂN",
+    titleEn: "MOBILITY & TRANSPORT",
+    subgroups: [
+      {
+        subtitle: "Lái xe cơ giới",
+        skills: [
+          { id: 36, label: "Lái xe máy" },
+          { id: 37, label: "Lái xe máy trong điều kiện ngập nước" },
+          { id: 38, label: "Lái ô tô" },
+          { id: 39, label: "Lái ô tô địa hình" },
+        ],
+      },
+      {
+        subtitle: "Lái phương tiện thủy",
+        skills: [
+          { id: 40, label: "Lái ghe" },
+          { id: 41, label: "Lái xuồng" },
+          { id: 42, label: "Lái ca nô" },
+        ],
+      },
+      {
+        subtitle: "Kỹ năng điều khiển đặc biệt",
+        skills: [
+          { id: 43, label: "Điều khiển phương tiện ban đêm" },
+          { id: 44, label: "Điều khiển phương tiện trong mưa lớn" },
+        ],
+      },
+      {
+        subtitle: "Vận chuyển",
+        skills: [
+          { id: 45, label: "Vận chuyển nạn nhân" },
+          { id: 46, label: "Vận chuyển hàng cứu trợ" },
+          { id: 47, label: "Vận chuyển hàng nặng" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "experience-certificates",
+    title: "IV. KINH NGHIỆM & CHỨNG CHỈ",
+    titleEn: "EXPERIENCE & CERTIFICATES (OPTIONAL)",
+    subgroups: [
+      {
+        subtitle: "Kinh nghiệm thực tế",
+        skills: [
+          { id: 48, label: "Đã tham gia cứu trợ thiên tai" },
+          { id: 49, label: "Kinh nghiệm cứu hộ lũ lụt" },
+          { id: 50, label: "Kinh nghiệm cứu hộ cộng đồng" },
+        ],
+      },
+      {
+        subtitle: "Tổ chức",
+        skills: [
+          { id: 51, label: "Thành viên đội cứu hộ địa phương" },
+          { id: 52, label: "Thành viên tổ chức thiện nguyện" },
+        ],
+      },
     ],
   },
 ];
