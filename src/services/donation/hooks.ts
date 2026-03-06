@@ -1,12 +1,24 @@
-import { useMutation, type UseMutationResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  type UseMutationResult,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { createDonation } from "./api";
-import type { DonationRequest, DonationResponse, DonationError } from "./type";
+import { isApiErrorResponse } from "@/types/api";
+import { createDonation, getPublicDonations } from "./api";
+import type {
+  DonationRequest,
+  DonationResponse,
+  PublicDonationsParams,
+  PublicDonationsResponse,
+  ApiErrorResponse,
+} from "./type";
 
 export const useCreateDonation = (): UseMutationResult<
   DonationResponse,
-  AxiosError<DonationError>,
+  AxiosError<ApiErrorResponse>,
   DonationRequest
 > => {
   return useMutation({
@@ -18,16 +30,29 @@ export const useCreateDonation = (): UseMutationResult<
       });
       console.log("Donation created:", data);
     },
-    onError: (error: AxiosError<DonationError>) => {
-      const errorMessage =
-        error.response?.data?.detail ||
-        error.response?.data?.title ||
-        "Tạo đơn quyên góp thất bại. Vui lòng thử lại.";
-      toast.error("Thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
+    onError: (error: AxiosError<ApiErrorResponse>) => {
+      // ApiErrorResponse errors are already handled by the global interceptor (toast shown).
+      // Only show a fallback toast for non-ApiErrorResponse errors (e.g. network errors).
+      if (!isApiErrorResponse(error.response?.data)) {
+        toast.error("Thất bại", {
+          description: "Tạo đơn quyên góp thất bại. Vui lòng thử lại.",
+          duration: 4000,
+        });
+      }
       console.error("Donation failed:", error.response?.data || error.message);
     },
+  });
+};
+
+/** Fetch public donations with optional smart polling (refetchInterval in ms) */
+export const usePublicDonations = (
+  params: PublicDonationsParams = {},
+  refetchInterval?: number,
+): UseQueryResult<PublicDonationsResponse, AxiosError> => {
+  return useQuery({
+    queryKey: ["donations", "public", params],
+    queryFn: () => getPublicDonations(params),
+    refetchInterval: refetchInterval ?? false,
+    staleTime: 0,
   });
 };

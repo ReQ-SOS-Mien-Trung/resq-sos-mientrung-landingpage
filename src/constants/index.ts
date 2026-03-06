@@ -1067,24 +1067,6 @@ export const donateImpactStats = [
   { number: "<48H", unit: "XỬ LÝ", label: "Thời gian triển khai" },
 ];
 
-export const donateBankInfo = [
-  { label: "NGÂN HÀNG", value: "VIETCOMBANK", copy: false },
-  { label: "SỐ TÀI KHOẢN", value: "1234 5678 9012 3456", copy: true },
-  { label: "CHỦ TÀI KHOẢN", value: "QUỸ CỨU TRỢ RESQ SOS", copy: false },
-  { label: "CHI NHÁNH", value: "Chi nhánh Đà Nẵng", copy: false },
-];
-
-export const donatePaymentLabels = [
-  "Vietcombank",
-  "Techcombank",
-  "BIDV",
-  "MoMo",
-  "ZaloPay",
-  "VNPay",
-  "Agribank",
-  "ACB",
-];
-
 export const donateStories = [
   {
     tag: "LŨ LỤT 10/2024",
@@ -1107,4 +1089,19 @@ export const donateStories = [
     quote:
       "Chúng tôi mất tất cả nhưng được mọi người khắp nơi gửi yêu thương về. Điều đó cho chúng tôi sức mạnh để tiếp tục.",
   },
+];
+
+export const donateNotePresets = [
+  "GỬI CHÚT TẤM LÒNG ĐẾN ĐỒNG BÀO MIỀN TRUNG",
+  "CHUNG TAY VƯỢT QUA THIÊN TAI, VUI BUỒN CÓ NHAU",
+  "HY VỌNG ĐỒNG BÀO SỚM ỔN ĐỊNH VÀ AN LÀNH",
+  "MỘT PHẦN NHỎ GIÚP BÀ CON SỚM VƯỢT KHÓ",
+  "ĐỒNG LÒNG HƯỚNG VỀ MIỀN TRUNG THÂN YÊU",
+  "THƯƠNG GỬI MIỀN TRUNG VƯỢT QUA BÃO LŨ",
+  "SAN SẺ YÊU THƯƠNG, HƯỚNG VỀ ĐỒNG BÀO",
+  "CÙNG ĐỒNG BÀO VƯỢT QUA GIAN KHÓ",
+  "MỘT MIỀN TRUNG KIÊN CƯỜNG, KHÔNG BAO GIỜ BỎ CUỘC",
+  "CỦA ÍT LÒNG VÒNG, MIỀN TRUNG ƠI FIGHTING",
+  "TIẾT KIỆM TRÀ SỮA 1 TUẦN ĐỂ ỦNG HỘ MIỀN TRUNG",
+  "LƯƠNG VỀ CHƯA KỊP NÓNG TAY ĐÃ GỬI MIỀN TRUNG",
 ];

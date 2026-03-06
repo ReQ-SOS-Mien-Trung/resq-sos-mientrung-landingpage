@@ -13,3 +13,4 @@ export { default as ServicesPage } from "./ServicesPage";
 export { default as ContactPage } from "./ContactPage";
 export { default as DonatePage } from "./DonatePage";
 export { default as HelpCenterPage } from "./HelpCenterPage";
+export { default as DonationFeedPage } from "./DonationFeedPage";

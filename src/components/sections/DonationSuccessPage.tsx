@@ -48,12 +48,12 @@ const DonationSuccessPage = () => {
             Giao dịch hoàn tất
           </p>
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-neutral-900">
-            Thanh toán thành công
+            Quyên góp thành công
           </h1>
-          <p className="mt-3 text-sm text-neutral-500 leading-relaxed">
-            Cảm ơn bạn đã chung tay cùng ResQ SOS.<br />
+          {/* <p className="mt-3 text-sm text-neutral-500 leading-relaxed">
+            Cảm ơn bạn đã chung tay đóng góp cùng ResQ.<br />
             Biên lai xác nhận sẽ được gửi qua email.
-          </p>
+          </p> */}
         </div>
 
         {/* Card */}

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Contributions, DownloadAppPage, RegisterPage, Services, PrivacyPolicyPage, TermsOfServicePage, AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DocumentsUploadPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage, EmailVerificationSuccessPage, ForgotPasswordPage, ResetPasswordPage } from "@/components";
 import MainLayout from "@/layouts/MainLayout";
-import { HeroSection, Newsroom, Features, AboutPage, NewsPage, ServicesPage, ContactPage, DonatePage, HelpCenterPage } from "./components/sections";
+import { HeroSection, Newsroom, Features, AboutPage, NewsPage, ServicesPage, ContactPage, DonatePage, HelpCenterPage, DonationFeedPage } from "./components/sections";
 import DonationSuccessPage from "./components/sections/DonationSuccessPage";
 import DonationFailPage from "./components/sections/DonationFailPage";
 import ScrollToTop from "./components/ScrollToTop";
@@ -120,6 +120,14 @@ function App() {
             element={
               <MainLayout>
                 <DonatePage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/donations"
+            element={
+              <MainLayout>
+                <DonationFeedPage />
               </MainLayout>
             }
           />
