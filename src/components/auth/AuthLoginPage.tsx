@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon, ArrowRightIcon, EnvelopeSimpleIcon, EyeIcon, EyeSlashIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
 import { ArrowRight, EnvelopeSimple, X } from "@phosphor-icons/react";
 import { useGoogleAuth, useLogin } from "@/services/auth/hooks";
+import { toast } from "sonner";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserMe } from "@/services/user/api";
@@ -88,13 +89,21 @@ const AuthLoginPage = () => {
               authMethod: "google",
             });
 
-            // Fetch user profile to check isOnboarded
+            // Fetch user profile to get the real isOnboarded value
             try {
               const userProfile = await getUserMe();
               if (userProfile.isOnboarded) {
+                toast.success("Đăng nhập thành công!", {
+                  description: "Chào mừng bạn quay trở lại.",
+                  duration: 3000,
+                });
                 completeOnboarding();
                 navigate("/profile");
               } else {
+                toast.success("Xác thực thành công!", {
+                  description: "Chào mừng bạn đến với ResQ.",
+                  duration: 3000,
+                });
                 navigate(getNextOnboardingPath());
               }
             } catch {

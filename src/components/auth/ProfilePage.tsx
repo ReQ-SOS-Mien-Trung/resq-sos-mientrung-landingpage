@@ -32,7 +32,7 @@ const ProfilePage = () => {
     if (authLoading) return;
 
     if (!user) {
-      navigate("/auth/register");
+      navigate("/auth/login");
       return;
     }
     if (!onboardingStatus.isComplete) {
@@ -69,8 +69,7 @@ const ProfilePage = () => {
     return rescuerAbilities?.abilities?.map((a) => a.abilityId) || [];
   }, [rescuerAbilities]);
 
-  // Generate stable IDs from user UUID
-  const volunteerId = useMemo(() => userProfile?.id?.replace(/-/g, "").slice(-6).toUpperCase() ?? "------", [userProfile?.id]);
+  // Generate stable profile ID from user UUID
   const profileId = useMemo(() => userProfile?.id?.replace(/-/g, "").slice(-8).toUpperCase() ?? "--------", [userProfile?.id]);
 
   // Get skills by category using API data
@@ -106,7 +105,7 @@ const ProfilePage = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/auth/login");
   };
 
   // Show loading while checking auth
@@ -180,19 +179,10 @@ const ProfilePage = () => {
                   </div>
                 )}
 
-                {/* Overlay Text on Image */}
-                <div className="absolute bottom-8 left-8 right-8">
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
-                    Mã tình nguyện viên
-                  </p>
-                  <p className="text-2xl font-black text-white tracking-tight">
-                    #{volunteerId}
-                  </p>
-                </div>
               </div>
 
               {/* Decorative Elements */}
-              <div className="absolute top-8 left-8">
+              <div className="absolute top-50 left-8">
                 <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 -rotate-90 origin-left">
                   Thành viên ResQ SOS
                 </p>
@@ -257,11 +247,7 @@ const ProfilePage = () => {
                   <p className="text-4xl sm:text-5xl lg:text-6xl font-black">{totalSkills}</p>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Kỹ năng</p>
                 </div>
-                <div className="stat-item">
-                  <p className="text-4xl sm:text-5xl lg:text-6xl font-black">0</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Nhiệm vụ</p>
-                </div>
-                <div className="stat-item">
+                 <div className="stat-item">
                   <p className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#FF5722]">A+</p>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Đánh giá</p>
                 </div>

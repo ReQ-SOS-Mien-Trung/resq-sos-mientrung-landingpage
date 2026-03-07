@@ -1,4 +1,6 @@
 import axios from "axios";
+import { toast } from "sonner";
+import { isApiErrorResponse, getApiErrorMessages } from "@/types/api";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -52,7 +54,14 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Skip refresh/redirect logic for auth endpoints (login, register, etc.)
+    const isAuthEndpoint = originalRequest?.url?.includes("/identity/auth/");
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
       const storedRefreshToken = localStorage.getItem("refreshToken");
 
       // No refresh token available → clear auth and redirect
@@ -105,6 +114,22 @@ api.interceptors.response.use(
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
+      }
+    }
+
+    // Handle API errors: show backend message as toast
+    if (error.response && (error.response.status !== 401 || isAuthEndpoint)) {
+      const data = error.response.data;
+      if (isApiErrorResponse(data)) {
+        // Has both message + errors fields → show field errors as description
+        const fieldErrors = getApiErrorMessages(data);
+        toast.error(data.message, {
+          description: fieldErrors.join("\n"),
+          duration: 5000,
+        });
+      } else if (typeof data?.message === "string") {
+        // Only message → show message only
+        toast.error(data.message, { duration: 5000 });
       }
     }
 
