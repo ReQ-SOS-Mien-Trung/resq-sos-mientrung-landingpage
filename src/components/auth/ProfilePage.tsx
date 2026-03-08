@@ -95,7 +95,7 @@ const ProfilePage = () => {
   const categoryIcons = [Shield, FirstAid, Car, Certificate];
   const fullName = `${userProfile?.firstName || ""} ${userProfile?.lastName || ""}`.trim() || user?.name || "Tình nguyện viên";
   const memberDate = new Date(userProfile?.createdAt || user.registeredAt).toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  const todayDate = new Date().toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
   const docs = userProfile?.rescuerApplicationDocuments || [];
 
   return (
