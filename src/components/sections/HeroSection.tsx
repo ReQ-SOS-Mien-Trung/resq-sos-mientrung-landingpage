@@ -166,7 +166,7 @@ const HeroSection = () => {
               x5-video-player-type="h5"
               x5-video-player-fullscreen="true"
             >
-              <source src="/videos/baoYagi.mp4" type="video/mp4" />
+              <source src="/videos/baoYagi_h264.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-black/20" />
             <div className="relative z-10 h-full flex items-end justify-start p-4 sm:p-6 md:p-8">
