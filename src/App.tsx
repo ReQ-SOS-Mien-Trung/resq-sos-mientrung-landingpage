@@ -2,9 +2,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { Contributions, DownloadAppPage, RegisterPage, Services, PrivacyPolicyPage, TermsOfServicePage, AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DocumentsUploadPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage, EmailVerificationSuccessPage, ForgotPasswordPage, ResetPasswordPage } from "@/components";
+import { Contributions, DownloadAppPage, RegisterPage, Services, PrivacyPolicyPage, TermsOfServicePage, AuthRegisterPage, AuthLoginPage, AbilityQuestionsPage, PersonalInfoPage, DetailedAbilitiesPage, ProfilePage, ResendVerificationPage, EmailVerificationPendingPage, EmailVerificationSuccessPage, ForgotPasswordPage, ResetPasswordPage } from "@/components";
 import MainLayout from "@/layouts/MainLayout";
-import { HeroSection, Newsroom, Features, AboutPage, NewsPage, ServicesPage, ContactPage, DonatePage, HelpCenterPage } from "./components/sections";
+import { HeroSection, Newsroom, Features, AboutPage, NewsPage, ServicesPage, ContactPage, DonatePage, HelpCenterPage, DonationFeedPage } from "./components/sections";
+import DonationSuccessPage from "./components/sections/DonationSuccessPage";
+import DonationFailPage from "./components/sections/DonationFailPage";
 import ScrollToTop from "./components/ScrollToTop";
 import SplashScreen from "./components/SplashScreen";
 
@@ -122,6 +124,14 @@ function App() {
             }
           />
           <Route
+            path="/donations"
+            element={
+              <MainLayout>
+                <DonationFeedPage />
+              </MainLayout>
+            }
+          />
+          <Route
             path="/help-center"
             element={
               <MainLayout>
@@ -135,12 +145,28 @@ function App() {
           <Route path="/auth/email-verification-pending" element={<EmailVerificationPendingPage />} />
           <Route path="/verify-email/success" element={<EmailVerificationSuccessPage />} />
           <Route path="/auth/personal-info" element={<PersonalInfoPage />} />
-          <Route path="/auth/documents" element={<DocumentsUploadPage />} />
+
           <Route path="/auth/ability-check" element={<AbilityQuestionsPage />} />
           <Route path="/auth/detailed-abilities" element={<DetailedAbilitiesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/auth/reset-pass" element={<ResetPasswordPage />} />
+          <Route
+            path="/success"
+            element={
+              <MainLayout>
+                <DonationSuccessPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/fail"
+            element={
+              <MainLayout>
+                <DonationFailPage />
+              </MainLayout>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

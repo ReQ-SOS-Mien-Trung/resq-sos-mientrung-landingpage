@@ -25,6 +25,8 @@ import type {
 } from "./type";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
+// Note: Error toasts (400/401) are handled globally by the axios interceptor.
+// Only success toasts are managed here in onSuccess callbacks.
 
 // Register rescuer
 export const useRegisterRescuer = (): UseMutationResult<
@@ -43,30 +45,8 @@ export const useRegisterRescuer = (): UseMutationResult<
       console.log("Registration successful:", data);
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message || "Đăng ký thất bại. Vui lòng thử lại.";
-      const errors = error.response?.data?.errors;
-
-      // Display specific field errors if available
-      if (errors && Object.keys(errors).length > 0) {
-        Object.entries(errors).forEach(([field, messages]) => {
-          messages.forEach((msg) => {
-            toast.error(`Lỗi ${field}`, {
-              description: msg,
-              duration: 4000,
-            });
-          });
-        });
-      } else {
-        toast.error("Đăng ký thất bại", {
-          description: errorMessage,
-          duration: 4000,
-        });
-      }
-      console.error(
-        "Registration failed:",
-        error.response?.data?.message || error.message,
-      );
+      // Toast is shown by the global axios interceptor
+      console.error("Registration failed:", error.response?.data || error.message);
     },
   });
 };
@@ -90,31 +70,8 @@ export const useLogin = (): UseMutationResult<
       console.log("Login successful:", data);
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Đăng nhập thất bại. Vui lòng thử lại.";
-      const errors = error.response?.data?.errors;
-
-      // Display specific field errors if available
-      if (errors && Object.keys(errors).length > 0) {
-        Object.entries(errors).forEach(([field, messages]) => {
-          messages.forEach((msg) => {
-            toast.error(`Lỗi ${field}`, {
-              description: msg,
-              duration: 4000,
-            });
-          });
-        });
-      } else {
-        toast.error("Đăng nhập thất bại", {
-          description: errorMessage,
-          duration: 4000,
-        });
-      }
-      console.error(
-        "Login failed:",
-        error.response?.data?.message || error.message,
-      );
+      // Toast is shown by the global axios interceptor
+      console.error("Login failed:", error.response?.data || error.message);
     },
   });
 };
@@ -137,17 +94,8 @@ export const useLogout = (): UseMutationResult<
       console.log("Logout successful");
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Đăng xuất thất bại. Vui lòng thử lại.";
-      toast.error("Đăng xuất thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
-      console.error(
-        "Logout failed:",
-        error.response?.data?.message || error.message,
-      );
+      // Toast is shown by the global axios interceptor
+      console.error("Logout failed:", error.response?.data || error.message);
     },
   });
 };
@@ -166,33 +114,12 @@ export const useGoogleAuth = (): UseMutationResult<
         localStorage.setItem("accessToken", data.accessToken);
       if (data.refreshToken)
         localStorage.setItem("refreshToken", data.refreshToken);
-
-      // Show appropriate message based on isOnboarded status
-      if (data.user?.isOnboarded) {
-        toast.success("Đăng nhập thành công!", {
-          description: "Chào mừng bạn quay trở lại.",
-          duration: 3000,
-        });
-      } else {
-        toast.success("Xác thực thành công!", {
-          description: "Chào mừng bạn đến với ResQ SOS. Hãy hoàn tất hồ sơ.",
-          duration: 3000,
-        });
-      }
+      // Note: toast is shown in the page after getUserMe() to get the real isOnboarded value
       console.log("Google auth successful:", data);
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Xác thực với Google thất bại. Vui lòng thử lại.";
-      toast.error("Xác thực thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
-      console.error(
-        "Google auth failed:",
-        error.response?.data?.message || error.message,
-      );
+      // Toast is shown by the global axios interceptor
+      console.error("Google auth failed:", error.response?.data || error.message);
     },
   });
 };
@@ -220,17 +147,8 @@ export const useResendVerification = (): UseMutationResult<
       console.log("Resend verification:", data);
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Gửi email xác thực thất bại. Vui lòng thử lại.";
-      toast.error("Gửi email thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
-      console.error(
-        "Resend verification failed:",
-        error.response?.data?.message || error.message,
-      );
+      // Toast is shown by the global axios interceptor
+      console.error("Resend verification failed:", error.response?.data || error.message);
     },
   });
 };
@@ -250,13 +168,8 @@ export const useForgotPassword = (): UseMutationResult<
       });
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Gửi yêu cầu thất bại. Vui lòng thử lại.";
-      toast.error("Thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
+      // Toast is shown by the global axios interceptor
+      console.error("Forgot password failed:", error.response?.data || error.message);
     },
   });
 };
@@ -276,13 +189,8 @@ export const useResetPassword = (): UseMutationResult<
       });
     },
     onError: (error: AxiosError<AuthError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Đặt lại mật khẩu thất bại. Vui lòng thử lại.";
-      toast.error("Thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
+      // Toast is shown by the global axios interceptor
+      console.error("Reset password failed:", error.response?.data || error.message);
     },
   });
 };

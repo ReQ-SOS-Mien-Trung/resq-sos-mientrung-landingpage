@@ -262,7 +262,7 @@ const Header = () => {
               } else if (isAuthenticated) {
                 navigate(getNextOnboardingPath());
               } else {
-                navigate("/auth/register");
+                navigate("/auth/login");
               }
             }}
             className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center text-white/60 hover:text-white transition-colors"

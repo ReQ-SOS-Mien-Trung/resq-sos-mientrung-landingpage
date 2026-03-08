@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import type { ApiErrorResponse } from "@/types/api";
 import {
   updateRescuerProfile,
   submitRescuerConsent,
@@ -23,11 +24,7 @@ import type {
   SubmitDocumentsResponse,
   DocumentFileType,
 } from "./type";
-
-interface FormError {
-  message?: string;
-  errors?: Record<string, string[]>;
-}
+// Note: Error toasts (400/401) are handled globally by the axios interceptor.
 
 // Fetch document file types
 export const useDocumentFileTypes = () => {
@@ -44,7 +41,7 @@ export const useDocumentFileTypes = () => {
 // Update rescuer profile
 export const useUpdateRescuerProfile = (): UseMutationResult<
   RescuerProfileResponse,
-  AxiosError<FormError>,
+  AxiosError<ApiErrorResponse>,
   RescuerProfileRequest
 > => {
   return useMutation({
@@ -55,31 +52,9 @@ export const useUpdateRescuerProfile = (): UseMutationResult<
         duration: 3000,
       });
     },
-    onError: (error: AxiosError<FormError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Cập nhật hồ sơ thất bại. Vui lòng thử lại.";
-      const errors = error.response?.data?.errors;
-
-      if (errors && Object.keys(errors).length > 0) {
-        Object.entries(errors).forEach(([field, messages]) => {
-          messages.forEach((msg) => {
-            toast.error(`Lỗi ${field}`, {
-              description: msg,
-              duration: 4000,
-            });
-          });
-        });
-      } else {
-        toast.error("Cập nhật thất bại", {
-          description: errorMessage,
-          duration: 4000,
-        });
-      }
-      console.error(
-        "Profile update failed:",
-        error.response?.data?.message || error.message,
-      );
+    onError: (error: AxiosError<ApiErrorResponse>) => {
+      // Toast is shown by the global axios interceptor
+      console.error("Profile update failed:", error.response?.data || error.message);
     },
   });
 };
@@ -87,7 +62,7 @@ export const useUpdateRescuerProfile = (): UseMutationResult<
 // Submit rescuer consent
 export const useSubmitRescuerConsent = (): UseMutationResult<
   RescuerConsentResponse,
-  AxiosError<FormError>,
+  AxiosError<ApiErrorResponse>,
   RescuerConsentRequest
 > => {
   return useMutation({
@@ -98,25 +73,16 @@ export const useSubmitRescuerConsent = (): UseMutationResult<
         duration: 3000,
       });
     },
-    onError: (error: AxiosError<FormError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Gửi xác nhận thất bại. Vui lòng thử lại.";
-      toast.error("Gửi thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
-      console.error(
-        "Consent submission failed:",
-        error.response?.data?.message || error.message,
-      );
+    onError: (error: AxiosError<ApiErrorResponse>) => {
+      // Toast is shown by the global axios interceptor
+      console.error("Consent submission failed:", error.response?.data || error.message);
     },
   });
 };
 // Apply as rescuer
 export const useApplyRescuer = (): UseMutationResult<
   RescuerApplyResponse,
-  AxiosError<FormError>,
+  AxiosError<ApiErrorResponse>,
   RescuerApplyRequest
 > => {
   return useMutation({
@@ -128,28 +94,9 @@ export const useApplyRescuer = (): UseMutationResult<
         duration: 3000,
       });
     },
-    onError: (error: AxiosError<FormError>) => {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Nộp hồ sơ thất bại. Vui lòng thử lại.";
-      const errors = error.response?.data?.errors;
-
-      if (errors && Object.keys(errors).length > 0) {
-        Object.entries(errors).forEach(([field, messages]) => {
-          messages.forEach((msg) => {
-            toast.error(`Lỗi ${field}`, { description: msg, duration: 4000 });
-          });
-        });
-      } else {
-        toast.error("Nộp hồ sơ thất bại", {
-          description: errorMessage,
-          duration: 4000,
-        });
-      }
-      console.error(
-        "Apply rescuer failed:",
-        error.response?.data?.message || error.message,
-      );
+    onError: (error: AxiosError<ApiErrorResponse>) => {
+      // Toast is shown by the global axios interceptor
+      console.error("Apply rescuer failed:", error.response?.data || error.message);
     },
   });
 };
@@ -157,31 +104,15 @@ export const useApplyRescuer = (): UseMutationResult<
 // Submit rescuer documents
 export const useSubmitDocuments = (): UseMutationResult<
   SubmitDocumentsResponse,
-  AxiosError<FormError>,
+  AxiosError<ApiErrorResponse>,
   SubmitDocumentsRequest
 > => {
   return useMutation({
     mutationFn: submitDocuments,
-    onError: (error: AxiosError<FormError>) => {
-      if (error.response?.status === 401) {
-        // Token refresh failed — user is being redirected to login by the interceptor
-        toast.error("Phiên đăng nhập đã hết hạn", {
-          description: "Vui lòng đăng nhập lại để tiếp tục.",
-          duration: 4000,
-        });
-      } else {
-        const errorMessage =
-          error.response?.data?.message ||
-          "Tải lên chứng chỉ thất bại. Vui lòng thử lại.";
-        toast.error("Lỗi nộp chứng chỉ", {
-          description: errorMessage,
-          duration: 4000,
-        });
-      }
-      console.error(
-        "Submit documents failed:",
-        error.response?.data?.message || error.message,
-      );
+    onError: (error: AxiosError<ApiErrorResponse>) => {
+      // Toast is shown by the global axios interceptor
+      console.error("Submit documents failed:", error.response?.data || error.message);
     },
   });
 };
+

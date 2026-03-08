@@ -900,153 +900,58 @@ export const prerequisiteQuestions: PrerequisiteQuestion[] = [
   },
 ];
 
-// ==================== DETAILED ABILITIES ====================
-// Skill IDs match the API response from GET /identity/abilities
-export const rescueSkillCategories = [
+// ==================== DONATE PAGE ====================
+export const donatePresetAmounts = [
+  { value: 50_000, label: "50K", desc: "1 suất cơm" },
+  { value: 200_000, label: "200K", desc: "1 túi cứu trợ" },
+  { value: 500_000, label: "500K", desc: "1 gia đình / tuần" },
+  { value: 1_000_000, label: "1 TRIỆU", desc: "Nhà tạm 1 tháng" },
+  { value: 5_000_000, label: "5 TRIỆU", desc: "Trang bị cứu hộ" },
+  { value: 0, label: "TỰ NHẬP", desc: "Số tiền khác" },
+];
+
+export const donateImpactStats = [
+  { number: "2.5 TỲ", unit: "VNĐ", label: "Đã quyên góp năm 2024" },
+  { number: "50,000", unit: "HỘ", label: "Gia đình được hỗ trợ" },
+  { number: "1,200+", unit: "TNV", label: "Tình nguyện viên" },
+  { number: "<48H", unit: "XỬ LÝ", label: "Thời gian triển khai" },
+];
+
+export const donateStories = [
   {
-    id: "rescue-survival",
-    title: "I. CỨU HỘ & SINH TỒN",
-    titleEn: "RESCUE & SURVIVAL",
-    subgroups: [
-      {
-        subtitle: "Kỹ năng bơi lội",
-        skills: [
-          { id: 1, label: "Bơi cơ bản" },
-          { id: 2, label: "Bơi thành thạo" },
-          { id: 3, label: "Cứu hộ dưới nước" },
-          { id: 4, label: "Di chuyển trong nước ngập sâu" },
-          { id: 5, label: "Di chuyển trong dòng nước chảy xiết" },
-          { id: 6, label: "Lặn cơ bản" },
-          { id: 7, label: "Thoát hiểm trong môi trường ngập nước" },
-        ],
-      },
-      {
-        subtitle: "Kỹ năng cứu người",
-        skills: [
-          { id: 8, label: "Cứu người bị mắc kẹt trong nhà ngập" },
-          { id: 9, label: "Cứu người bị mắc kẹt trên mái nhà" },
-          { id: 10, label: "Cứu người bị kẹt trong phương tiện (xe, ghe)" },
-          { id: 11, label: "Sử dụng dây thừng cứu hộ" },
-          { id: 12, label: "Sử dụng áo phao, phao cứu sinh" },
-        ],
-      },
-      {
-        subtitle: "Cứu hộ trong điều kiện khắc nghiệt",
-        skills: [
-          { id: 13, label: "Cứu hộ ban đêm / tầm nhìn kém" },
-          { id: 14, label: "Cứu hộ trong mưa lớn / bão" },
-          { id: 15, label: "Cứu hộ tại khu vực đổ nát" },
-          { id: 16, label: "Cứu hộ trong môi trường nguy hiểm" },
-        ],
-      },
-    ],
+    tag: "LŨ LỤT 10/2024",
+    name: "Chị Nguyễn Thị Hoa",
+    location: "Hội An, Quảng Nam",
+    quote:
+      "Nhờ đội cứu hộ ResQ, gia đình tôi được sơ tán kịp thời trước khi lũ tràn vào nhà. Không có các bạn, chúng tôi không biết sẽ ra sao.",
   },
   {
-    id: "medical-first-aid",
-    title: "II. Y TẾ & SƠ CỨU",
-    titleEn: "MEDICAL & FIRST AID",
-    subgroups: [
-      {
-        subtitle: "Y tế chuyên môn",
-        singleSelect: true,
-        skills: [
-          { id: 32, label: "Nhân viên y tế" },
-          { id: 33, label: "Y tá" },
-          { id: 34, label: "Bác sĩ" },
-          { id: 35, label: "Cấp cứu tiền viện" },
-        ],
-      },
-      {
-        subtitle: "Sơ cứu cơ bản",
-        skills: [
-          { id: 17, label: "Sơ cứu cơ bản" },
-          { id: 18, label: "Sơ cứu vết thương hở" },
-          { id: 19, label: "Cầm máu" },
-          { id: 20, label: "Băng bó vết thương" },
-          { id: 21, label: "Xử lý trầy xước, chấn thương nhẹ" },
-          { id: 22, label: "Xử lý bỏng nhẹ" },
-        ],
-      },
-      {
-        subtitle: "Cấp cứu",
-        skills: [
-          { id: 23, label: "Hồi sức tim phổi (CPR)" },
-          { id: 24, label: "Xử lý đuối nước" },
-          { id: 25, label: "Xử lý sốc" },
-          { id: 26, label: "Xử lý hạ thân nhiệt" },
-          { id: 27, label: "Theo dõi dấu hiệu sinh tồn" },
-          { id: 28, label: "Đánh giá mức độ nguy kịch nạn nhân" },
-        ],
-      },
-      {
-        subtitle: "Chấn thương",
-        skills: [
-          { id: 29, label: "Cố định gãy xương tạm thời" },
-          { id: 30, label: "Xử lý chấn thương cột sống (cơ bản)" },
-          { id: 31, label: "Vận chuyển người bị thương an toàn" },
-        ],
-      },
-    ],
+    tag: "CÔ LẬP 11/2024",
+    name: "Anh Trần Văn Minh",
+    location: "Huế, Thừa Thiên Huế",
+    quote:
+      "Những thùng hàng cứu trợ đến đúng lúc nhất — khi cả xóm bị cô lập 3 ngày không có gì ăn. Cảm ơn mọi tấm lòng.",
   },
   {
-    id: "mobility-transport",
-    title: "III. PHƯƠNG TIỆN & VẬN CHUYỂN",
-    titleEn: "MOBILITY & TRANSPORT",
-    subgroups: [
-      {
-        subtitle: "Lái xe cơ giới",
-        skills: [
-          { id: 36, label: "Lái xe máy" },
-          { id: 37, label: "Lái xe máy trong điều kiện ngập nước" },
-          { id: 38, label: "Lái ô tô" },
-          { id: 39, label: "Lái ô tô địa hình" },
-        ],
-      },
-      {
-        subtitle: "Lái phương tiện thủy",
-        skills: [
-          { id: 40, label: "Lái ghe" },
-          { id: 41, label: "Lái xuồng" },
-          { id: 42, label: "Lái ca nô" },
-        ],
-      },
-      {
-        subtitle: "Kỹ năng điều khiển đặc biệt",
-        skills: [
-          { id: 43, label: "Điều khiển phương tiện ban đêm" },
-          { id: 44, label: "Điều khiển phương tiện trong mưa lớn" },
-        ],
-      },
-      {
-        subtitle: "Vận chuyển",
-        skills: [
-          { id: 45, label: "Vận chuyển nạn nhân" },
-          { id: 46, label: "Vận chuyển hàng cứu trợ" },
-          { id: 47, label: "Vận chuyển hàng nặng" },
-        ],
-      },
-    ],
+    tag: "SAU LŨ 12/2024",
+    name: "Em Lê Thị Mai",
+    location: "Đồng Hới, Quảng Bình",
+    quote:
+      "Chúng tôi mất tất cả nhưng được mọi người khắp nơi gửi yêu thương về. Điều đó cho chúng tôi sức mạnh để tiếp tục.",
   },
-  {
-    id: "experience-certificates",
-    title: "IV. KINH NGHIỆM & CHỨNG CHỈ",
-    titleEn: "EXPERIENCE & CERTIFICATES (OPTIONAL)",
-    subgroups: [
-      {
-        subtitle: "Kinh nghiệm thực tế",
-        skills: [
-          { id: 48, label: "Đã tham gia cứu trợ thiên tai" },
-          { id: 49, label: "Kinh nghiệm cứu hộ lũ lụt" },
-          { id: 50, label: "Kinh nghiệm cứu hộ cộng đồng" },
-        ],
-      },
-      {
-        subtitle: "Tổ chức",
-        skills: [
-          { id: 51, label: "Thành viên đội cứu hộ địa phương" },
-          { id: 52, label: "Thành viên tổ chức thiện nguyện" },
-        ],
-      },
-    ],
-  },
+];
+
+export const donateNotePresets = [
+  "GỬI CHÚT TẤM LÒNG ĐẾN ĐỒNG BÀO MIỀN TRUNG",
+  "CHUNG TAY VƯỢT QUA THIÊN TAI, VUI BUỒN CÓ NHAU",
+  "HY VỌNG ĐỒNG BÀO SỚM ỔN ĐỊNH VÀ AN LÀNH",
+  "MỘT PHẦN NHỎ GIÚP BÀ CON SỚM VƯỢT KHÓ",
+  "ĐỒNG LÒNG HƯỚNG VỀ MIỀN TRUNG THÂN YÊU",
+  "THƯƠNG GỬI MIỀN TRUNG VƯỢT QUA BÃO LŨ",
+  "SAN SẺ YÊU THƯƠNG, HƯỚNG VỀ ĐỒNG BÀO",
+  "CÙNG ĐỒNG BÀO VƯỢT QUA GIAN KHÓ",
+  "MỘT MIỀN TRUNG KIÊN CƯỜNG, KHÔNG BAO GIỜ BỎ CUỘC",
+  "CỦA ÍT LÒNG VÒNG, MIỀN TRUNG ƠI FIGHTING",
+  "TIẾT KIỆM TRÀ SỮA 1 TUẦN ĐỂ ỦNG HỘ MIỀN TRUNG",
+  "LƯƠNG VỀ CHƯA KỊP NÓNG TAY ĐÃ GỬI MIỀN TRUNG",
 ];

@@ -1,8 +1,26 @@
+// Ability category from GET /identity/abilities
+export interface AbilityCategory {
+  id: number;
+  code: string;
+  description: string;
+}
+
+// Ability subgroup from GET /identity/abilities
+export interface AbilitySubgroup {
+  id: number;
+  code: string;
+  description: string;
+  abilityCategoryId: number;
+  abilityCategory: AbilityCategory;
+}
+
 // Ability item from GET /identity/abilities
 export interface Ability {
   id: number;
   code: string;
   description: string;
+  abilitySubgroupId: number;
+  abilitySubgroup: AbilitySubgroup;
 }
 
 // Abilities list response

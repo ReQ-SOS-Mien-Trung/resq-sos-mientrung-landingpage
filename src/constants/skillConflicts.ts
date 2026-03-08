@@ -1,5 +1,3 @@
-import { rescueSkillCategories } from "@/constants";
-
 // ==================== CONFLICT RULES ====================
 // When a "dominant" skill is selected, its "implies" skills are AUTO-CHECKED (disabled+checked)
 // Group 4 (environmental conditions) intentionally has NO conflicts — each skill is independent.
@@ -37,15 +35,6 @@ export const SKILL_CONFLICT_RULES: { dominant: number; implies: number[] }[] = [
 
 // IDs of all "vehicle" skills (used to gate special-conditions skills 43 & 44)
 export const VEHICLE_SKILL_IDS = [36, 37, 38, 39, 40, 41, 42];
-
-// Flat list of all skills for label lookup
-export const ALL_SKILLS_FLAT = rescueSkillCategories.flatMap((cat) =>
-  cat.subgroups.flatMap((sg) => sg.skills),
-);
-
-/** Label của skill theo id */
-export const getSkillLabel = (id: number): string =>
-  ALL_SKILLS_FLAT.find((s) => s.id === id)?.label ?? "";
 
 /** Skills mà skillId tự động bao gồm khi được chọn */
 export const getImpliedBy = (skillId: number): number[] =>

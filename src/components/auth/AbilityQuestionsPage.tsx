@@ -11,7 +11,8 @@ import {
   ShieldCheck,
   Handshake,
   GraduationCap,
-  CheckCircle
+  CheckCircle,
+  SpinnerGap,
 } from "@phosphor-icons/react";
 import { prerequisiteQuestions } from "@/constants";
 import { PersonSimpleSwimIcon } from "@phosphor-icons/react/dist/ssr";
@@ -104,8 +105,8 @@ const AbilityQuestionsPage = () => {
       },
       {
         onSuccess: () => {
-          saveOnboardingStep("/auth/documents");
-          navigate("/auth/documents");
+          saveOnboardingStep("/auth/detailed-abilities");
+          navigate("/auth/detailed-abilities");
         },
       }
     );
@@ -271,10 +272,20 @@ const AbilityQuestionsPage = () => {
               </p>
               <button
                 onClick={handleContinue}
-                className="px-8 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center gap-2 group"
+                disabled={consentMutation.isPending}
+                className="px-8 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Tiếp tục
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {consentMutation.isPending ? (
+                  <>
+                    <SpinnerGap className="w-4 h-4 animate-spin" />
+                    Đang xử lý...
+                  </>
+                ) : (
+                  <>
+                    Tiếp tục
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </button>
             </motion.div>
           )}

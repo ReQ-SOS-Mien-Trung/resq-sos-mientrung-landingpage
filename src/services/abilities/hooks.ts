@@ -3,13 +3,11 @@ import { getAbilities, submitRescuerAbilities, getRescuerAbilities } from "./api
 import type { AbilitiesResponse, SubmitAbilitiesRequest, SubmitAbilitiesResponse, RescuerAbilitiesResponse } from "./type";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
-
-interface AbilitiesError {
-  message?: string;
-}
+import type { ApiErrorResponse } from "@/types/api";
+// Note: Error toasts (400/401) are handled globally by the axios interceptor.
 
 // Get all abilities
-export const useGetAbilities = (): UseQueryResult<AbilitiesResponse, AxiosError<AbilitiesError>> => {
+export const useGetAbilities = (): UseQueryResult<AbilitiesResponse, AxiosError> => {
   return useQuery({
     queryKey: ["abilities"],
     queryFn: getAbilities,
@@ -17,7 +15,7 @@ export const useGetAbilities = (): UseQueryResult<AbilitiesResponse, AxiosError<
 };
 
 // Get rescuer's own abilities
-export const useGetRescuerAbilities = (): UseQueryResult<RescuerAbilitiesResponse, AxiosError<AbilitiesError>> => {
+export const useGetRescuerAbilities = (): UseQueryResult<RescuerAbilitiesResponse, AxiosError> => {
   return useQuery({
     queryKey: ["rescuer-abilities"],
     queryFn: getRescuerAbilities,
@@ -27,7 +25,7 @@ export const useGetRescuerAbilities = (): UseQueryResult<RescuerAbilitiesRespons
 // Submit rescuer abilities
 export const useSubmitRescuerAbilities = (): UseMutationResult<
   SubmitAbilitiesResponse,
-  AxiosError<AbilitiesError>,
+  AxiosError<ApiErrorResponse>,
   SubmitAbilitiesRequest
 > => {
   return useMutation({
@@ -38,17 +36,10 @@ export const useSubmitRescuerAbilities = (): UseMutationResult<
         duration: 3000,
       });
     },
-    onError: (error: AxiosError<AbilitiesError>) => {
-      const errorMessage =
-        error.response?.data?.message || "Cập nhật kỹ năng thất bại. Vui lòng thử lại.";
-      toast.error("Gửi thất bại", {
-        description: errorMessage,
-        duration: 4000,
-      });
-      console.error(
-        "Abilities submission failed:",
-        error.response?.data?.message || error.message,
-      );
+    onError: (error: AxiosError<ApiErrorResponse>) => {
+      // Toast is shown by the global axios interceptor
+      console.error("Abilities submission failed:", error.response?.data || error.message);
     },
   });
 };
+
