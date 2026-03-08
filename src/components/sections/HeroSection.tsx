@@ -71,11 +71,10 @@ const HeroSection = () => {
                   className="overflow-visible group cursor-default"
                 >
                   <span
-                    className={`block text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5.5rem] 2xl:text-[6.5rem] font-black tracking-tight leading-[1.1] transition-all duration-300 ${
-                      item.highlight
-                        ? "hover:text-[#FF5722]"
-                        : "hover:text-black/70"
-                    }`}
+                    className={`block text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5.5rem] 2xl:text-[6.5rem] font-black tracking-tight leading-[1.1] transition-all duration-300 ${item.highlight
+                      ? "hover:text-[#FF5722]"
+                      : "hover:text-black/70"
+                      }`}
                   >
                     {item.text}
                   </span>
@@ -158,12 +157,17 @@ const HeroSection = () => {
           >
             <video
               className="absolute inset-0 w-full h-full object-cover"
-              src="/videos/baoYagi.mp4"
               autoPlay
               muted
               loop
               playsInline
-            />
+              preload="auto"
+              webkit-playsinline="true"
+              x5-video-player-type="h5"
+              x5-video-player-fullscreen="true"
+            >
+              <source src="/videos/baoYagi.mp4" type="video/mp4" />
+            </video>
             <div className="absolute inset-0 bg-black/20" />
             <div className="relative z-10 h-full flex items-end justify-start p-4 sm:p-6 md:p-8">
               <p className="text-[10px] sm:text-xs text-white/80 uppercase tracking-wider">
@@ -188,7 +192,7 @@ const HeroSection = () => {
                 </span>
               </button>
               <button
-              onClick={() => navigate("/register")}
+                onClick={() => navigate("/register")}
                 ref={(el) => addContentRef(el, 6)}
                 className="px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 text-left hover:bg-black/5 transition-all duration-300 group"
               >
