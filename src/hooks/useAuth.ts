@@ -122,7 +122,11 @@ export const useAuth = () => {
   // Get next onboarding step path
   const getNextOnboardingPath = useCallback((): string => {
     const lastPath = localStorage.getItem(STORAGE_KEYS.LAST_ONBOARDING_PATH);
-    if (lastPath) return lastPath;
+    if (lastPath) {
+      // Migration: /auth/documents was removed, redirect to /auth/detailed-abilities
+      if (lastPath === "/auth/documents") return "/auth/detailed-abilities";
+      return lastPath;
+    }
     return "/auth/personal-info";
   }, []);
 

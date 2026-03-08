@@ -1,6 +1,7 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   User,
   Phone,
@@ -13,347 +14,322 @@ import {
   SignOut,
   ArrowUpRight,
   Lightning,
+  CheckCircle,
+  Clock,
+  Eye,
+  X,
+  FilePdf,
+  CalendarBlank,
+  IdentificationBadge,
   ArrowLeft,
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
-import { rescueSkillCategories } from "@/constants";
-import { useGetRescuerAbilities } from "@/services/abilities/hooks";
+import { useGetAbilities, useGetRescuerAbilities } from "@/services/abilities/hooks";
+import { buildSkillCategories } from "@/services/abilities/utils";
 import { useUserMe } from "@/services/user/hooks";
+import { useDocumentFileTypes } from "@/services/form/hooks";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, onboardingStatus, logout, isLoading: authLoading } = useAuth();
   const { data: rescuerAbilities } = useGetRescuerAbilities();
+  const { data: abilitiesData } = useGetAbilities();
   const { data: userProfile } = useUserMe();
+  const { data: docFileTypes = [] } = useDocumentFileTypes();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // Redirect if not authenticated or onboarding not complete
   useEffect(() => {
     if (authLoading) return;
-
-    if (!user) {
-      navigate("/auth/login");
-      return;
-    }
-    if (!onboardingStatus.isComplete) {
-      navigate("/auth/personal-info");
-      return;
-    }
+    if (!user) { navigate("/auth/login"); return; }
+    if (!onboardingStatus.isComplete) { navigate("/auth/personal-info"); return; }
   }, [authLoading, user, onboardingStatus.isComplete, navigate]);
 
-  // GSAP animation
   useEffect(() => {
     if (authLoading) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".hero-text",
-        { y: 100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" }
-      );
-      gsap.fromTo(
-        ".stat-item",
-        { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, stagger: 0.1, delay: 0.3, ease: "back.out(1.7)" }
-      );
-      gsap.fromTo(
-        ".skill-card",
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, delay: 0.5, ease: "power2.out" }
-      );
+      gsap.fromTo(".ed-fade", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: "power3.out" });
     }, containerRef);
     return () => ctx.revert();
   }, [authLoading]);
 
-  // Get selected ability IDs from API data
-  const selectedAbilityIds = useMemo(() => {
-    return rescuerAbilities?.abilities?.map((a) => a.abilityId) || [];
-  }, [rescuerAbilities]);
-
-  // Generate stable profile ID from user UUID
+  const selectedAbilityIds = useMemo(() => rescuerAbilities?.abilities?.map((a) => a.abilityId) || [], [rescuerAbilities]);
   const profileId = useMemo(() => userProfile?.id?.replace(/-/g, "").slice(-8).toUpperCase() ?? "--------", [userProfile?.id]);
 
-  // Get skills by category using API data
+  const apiSkillCategories = useMemo(() => {
+    if (!abilitiesData?.items) return [];
+    return buildSkillCategories(abilitiesData.items);
+  }, [abilitiesData]);
+
   const getSkillsByCategory = () => {
-    return rescueSkillCategories.map((category) => {
-      const categorySkillIds = category.subgroups.flatMap((sg) =>
-        sg.skills.map((s) => s.id)
-      );
-      const selectedInCategory = selectedAbilityIds.filter((id: number) =>
-        categorySkillIds.includes(id)
-      );
+    return apiSkillCategories.map((category) => {
+      const categorySkillIds = category.subgroups.flatMap((sg) => sg.skills.map((s) => s.id));
+      const selectedInCategory = selectedAbilityIds.filter((id: number) => categorySkillIds.includes(id));
       const skillLabels = selectedInCategory.map((id: number) => {
-        // First try to get label from API response
         const apiAbility = rescuerAbilities?.abilities?.find((a) => a.abilityId === id);
         if (apiAbility) return apiAbility.description;
-        // Fallback to constants
         for (const subgroup of category.subgroups) {
           const skill = subgroup.skills.find((s) => s.id === id);
           if (skill) return skill.label;
         }
         return String(id);
       });
-      return {
-        id: category.id,
-        title: category.title,
-        titleEn: category.titleEn,
-        count: selectedInCategory.length,
-        total: categorySkillIds.length,
-        skills: skillLabels,
-      };
+      return { id: category.id, title: category.title, count: selectedInCategory.length, total: categorySkillIds.length, skills: skillLabels };
     });
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate("/auth/login");
-  };
+  const handleLogout = () => { logout(); navigate("/auth/login"); };
 
-  // Show loading while checking auth
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-black border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
+      <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-black border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  if (!user || !onboardingStatus.isComplete) {
-    return null;
-  }
+  if (!user || !onboardingStatus.isComplete) return null;
 
   const skillsByCategory = getSkillsByCategory();
   const totalSkills = selectedAbilityIds.length;
   const categoryIcons = [Shield, FirstAid, Car, Certificate];
   const fullName = `${userProfile?.firstName || ""} ${userProfile?.lastName || ""}`.trim() || user?.name || "Tình nguyện viên";
+  const memberDate = new Date(userProfile?.createdAt || user.registeredAt).toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+  const docs = userProfile?.rescuerApplicationDocuments || [];
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white">
-      {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/5">
-        <div className="max-w-[1800px] mx-auto px-6 lg:px-12">
-          <div className="h-16 flex items-center justify-between">
-            <Link
-              to="/"
-              className="flex items-center gap-3 text-black hover:text-[#FF5722] transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="text-sm font-bold uppercase tracking-wider">Trang chủ</span>
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-5 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"
-            >
-              <SignOut className="w-4 h-4" />
-              Đăng xuất
-            </button>
+    <div ref={containerRef} className="min-h-screen bg-[#FAF9F6]">
+      {/* ══════ NEWSPAPER MASTHEAD ══════ */}
+      <header className="border-b border-black">
+        {/* Top utility bar */}
+        <div className="border-b border-black/15">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+            <div className="h-10 flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-black/50 font-medium">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] text-black/50 font-medium hover:text-[#FF5722] transition-colors"
+              >
+                <ArrowLeft className="w-3 h-3" />
+                Trang chủ
+              </Link>
+              <div className="flex items-center gap-6">
+                <span>Mã: {profileId}</span>
+                <button onClick={handleLogout} className="flex items-center gap-1.5 text-black/50 hover:text-[#FF5722] transition-colors">
+                  <SignOut className="w-3 h-3" />
+                  Đăng xuất
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Masthead title */}
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-5">
+          <div className="flex items-center justify-between">
+            {/* <Link to="/" className="hover:opacity-60 transition-opacity">
+              <img src="/resq_typo_logo.svg" alt="ResQ SOS" className="h-8 w-auto" />
+            </Link> */}
+            <p className="text-center flex-1">
+              <span className="text-[40px] sm:text-[54px] lg:text-[70px] font-black tracking-[-0.04em] leading-none">
+                HỒ SƠ CỨU HỘ VIÊN
+              </span>
+            </p>
+            <div className="w-20" />
+          </div>
+        </div>
+
+        {/* Sub-masthead rule + edition info */}
+        <div className="border-t border-black">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+            <div className="h-8 flex items-center justify-between text-[9px] uppercase tracking-[0.3em] text-black/40 font-bold">
+              <span>Ấn bản số {profileId}</span>
+              <span>ResQ SOS — Mạng lưới cứu hộ miền Trung</span>
+
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section - Editorial Style */}
-      <section className="pt-16 min-h-screen relative overflow-hidden">
-        <div className="max-w-[1800px] mx-auto">
-          <div className="grid lg:grid-cols-12 min-h-[calc(100vh-4rem)]">
+      {/* ══════ HERO — ABOVE THE FOLD ══════ */}
+      <section className="border-b border-black">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-12 gap-0">
 
-            {/* Left - Avatar & Visual */}
-            <div className="lg:col-span-5 relative bg-black flex items-end justify-center overflow-hidden">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 right-0 w-96 h-96 border border-white/20 rounded-full -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 border border-white/20 rounded-full translate-y-1/2 -translate-x-1/2" />
-              </div>
-
-              {/* Avatar */}
-              <div className="relative z-10 w-full max-w-md mx-auto px-8 pb-0">
-                {user.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={fullName}
-                    className="w-full aspect-square object-cover object-center"
-                  />
-                ) : (
-                  <div className="w-full aspect-square bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center">
-                    <User className="w-32 h-32 text-white/20" weight="thin" />
-                  </div>
-                )}
-
-              </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute top-50 left-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 -rotate-90 origin-left">
-                  Thành viên ResQ SOS
-                </p>
-              </div>
-            </div>
-
-            {/* Right - Info */}
-            <div className="lg:col-span-7 flex flex-col justify-center px-8 lg:px-16 xl:px-24 py-16 lg:py-24">
-              {/* Badge */}
-              {/* <div className="hero-text mb-8">
+            {/* Main headline column */}
+            <div className="lg:col-span-8 lg:border-r lg:border-black lg:pr-10 py-10 lg:py-14">
+              {/* Verification badge */}
+              <div className="ed-fade mb-6">
                 {userProfile?.isEligibleRescuer ? (
-                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#00A650] text-white text-[10px] font-black uppercase tracking-[0.2em]">
-                    <CheckCircle className="w-3 h-3" weight="fill" />
-                    Đủ điều kiện cứu hộ
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#00A650] text-[#00A650] text-[10px] font-black uppercase tracking-[0.2em]">
+                    <CheckCircle className="w-3.5 h-3.5" weight="fill" />
+                    Đã xác thực
                   </span>
                 ) : userProfile?.isOnboarded ? (
-                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF9800] text-white text-[10px] font-black uppercase tracking-[0.2em]">
-                    <CheckCircle className="w-3 h-3" weight="fill" />
-                    Chờ duyệt
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#FF9800] text-[#FF9800] text-[10px] font-black uppercase tracking-[0.2em]">
+                    <Clock className="w-3.5 h-3.5" weight="fill" />
+                    Chờ xác thực
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/20 text-black text-[10px] font-black uppercase tracking-[0.2em]">
-                    <CheckCircle className="w-3 h-3" weight="fill" />
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 border-2 border-black/30 text-black/40 text-[10px] font-black uppercase tracking-[0.2em]">
+                    <Clock className="w-3.5 h-3.5" weight="fill" />
                     Chưa hoàn thành
                   </span>
                 )}
-              </div> */}
+              </div>
 
-              {/* Name - Editorial Typography */}
-              <div className="hero-text mb-8">
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-[-0.03em] leading-none">
-                  {(userProfile?.firstName || fullName.split(" ")[0])?.toUpperCase() || "TÌNH NGUYỆN"}
+              {/* Name — editorial headline */}
+              <div className="ed-fade mb-8">
+                <h1 className="text-[56px] sm:text-[72px] lg:text-[96px] xl:text-[112px] font-black leading-[0.88] tracking-[-0.04em]">
+                  {(userProfile?.lastName || fullName.split(" ").slice(-1)[0])?.toUpperCase()}
                 </h1>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-[-0.03em] leading-none text-black/20">
-                  {(userProfile?.lastName || fullName.split(" ").slice(1).join(" "))?.toUpperCase() || "VIÊN"}
-                </h1>
+                <h2 className="text-[32px] sm:text-[40px] lg:text-[56px] font-black leading-[0.88] tracking-[-0.03em] text-black/25 mt-2">
+                  {(userProfile?.firstName || fullName.split(" ").slice(0, -1).join(" "))?.toUpperCase() || "TÌNH NGUYỆN VIÊN"}
+                </h2>
               </div>
 
-              {/* Contact Info */}
-              <div className="hero-text space-y-3 mb-12">
-                <p className="flex items-center gap-4 text-sm text-black/60">
-                  <Envelope className="w-4 h-4" />
-                  {userProfile?.email || user.email}
+              {/* Lead paragraph / pull-quote style */}
+              <div className="ed-fade border-l-4 border-[#FF5722] pl-5 mb-8 max-w-xl">
+                <p className="text-lg sm:text-xl leading-relaxed text-black/70">
+                  Thành viên hệ thống cứu hộ khẩn cấp với <strong className="text-black">{totalSkills} kỹ năng</strong> đã đăng ký và <strong className="text-black">{docs.length} chứng chỉ</strong> được xác minh.
                 </p>
-                {userProfile?.phone && (
-                  <p className="flex items-center gap-4 text-sm text-black/60">
-                    <Phone className="w-4 h-4" />
-                    {userProfile.phone}
-                  </p>
-                )}
-                {userProfile?.city && (
-                  <p className="flex items-center gap-4 text-sm text-black/60">
-                    <MapPin className="w-4 h-4" />
-                    {[userProfile.ward, userProfile.city].filter(Boolean).join(", ")}
-                  </p>
-                )}
               </div>
 
-              {/* Stats Row */}
-              <div className="flex flex-wrap gap-6 lg:gap-12">
-                <div className="stat-item">
-                  <p className="text-4xl sm:text-5xl lg:text-6xl font-black">{totalSkills}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Kỹ năng</p>
+              {/* Contact details — small text block */}
+              <div className="ed-fade grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2.5">
+                  <p className="flex items-center gap-3 text-sm text-black/60">
+                    <Envelope className="w-4 h-4 text-black/30 shrink-0" />
+                    {userProfile?.email || user.email}
+                  </p>
+                  {userProfile?.phone && (
+                    <p className="flex items-center gap-3 text-sm text-black/60">
+                      <Phone className="w-4 h-4 text-black/30 shrink-0" />
+                      {userProfile.phone}
+                    </p>
+                  )}
                 </div>
-                 <div className="stat-item">
-                  <p className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#FF5722]">A+</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Đánh giá</p>
+                <div className="space-y-2.5">
+                  {userProfile?.city && (
+                    <p className="flex items-center gap-3 text-sm text-black/60">
+                      <MapPin className="w-4 h-4 text-black/30 shrink-0" />
+                      {[userProfile.ward, userProfile.city].filter(Boolean).join(", ")}
+                    </p>
+                  )}
+                  <p className="flex items-center gap-3 text-sm text-black/60">
+                    <CalendarBlank className="w-4 h-4 text-black/30 shrink-0" />
+                    Tham gia từ {memberDate}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar — stats & avatar */}
+            <div className="lg:col-span-4 lg:pl-10 py-10 lg:py-14 flex flex-col">
+              {/* Avatar */}
+              <div className="ed-fade mb-8">
+                <div className="w-full aspect-[4/5] bg-black overflow-hidden relative">
+                  {(userProfile?.avatarUrl || user.avatar) ? (
+                    <img src={userProfile?.avatarUrl || user.avatar} alt={fullName} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-black to-black/80">
+                      <User className="w-24 h-24 text-white/15" weight="thin" />
+                    </div>
+                  )}
+                  {/* Overlay badge */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-5">
+                    <p className="text-white text-[10px] font-bold uppercase tracking-[0.3em]">
+                      <IdentificationBadge className="inline w-3 h-3 mr-1.5" weight="fill" />
+                      #{profileId}
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Decorative Line */}
-              <div className="hero-text mt-12 pt-12 border-t border-black/10">
-                <p className="text-xs text-black/40 uppercase tracking-[0.2em]">
-                  Thành viên từ {new Date(userProfile?.createdAt || user.registeredAt).toLocaleDateString("vi-VN", { month: "long", year: "numeric" })}
-                </p>
+              {/* Stats — editorial number blocks */}
+              <div className="ed-fade grid grid-cols-2 border border-black">
+                <div className="p-5 border-r border-black text-center">
+                  <p className="text-4xl lg:text-5xl font-black leading-none">
+                    {totalSkills}
+                  </p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-black/40 mt-2">Kỹ năng</p>
+                </div>
+                <div className="p-5 text-center">
+                  <p className="text-4xl lg:text-5xl font-black leading-none text-[#FF5722]">
+                    {docs.length}
+                  </p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-black/40 mt-2">Chứng chỉ</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section className="py-24 lg:py-32 bg-[#F5F5F0]">
-        <div className="max-w-[1800px] mx-auto px-6 lg:px-12">
-          {/* Section Header */}
-          <div className="mb-16 lg:mb-24">
-            <div className="grid lg:grid-cols-12 gap-8 items-end">
-              <div className="lg:col-span-8">
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-4">
-                  Năng lực
-                </p>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-[-0.02em] leading-none">
-                  KỸ NĂNG
-                  <br />
-                  <span className="text-black/20">CỨU HỘ</span>
+      {/* ══════ SKILLS — MULTI-COLUMN GRID ══════ */}
+      <section className="border-b border-black">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          {/* Section header */}
+          <div className="py-6 border-b border-black/15">
+            <div className="flex items-end justify-between">
+              <div className="ed-fade">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-1">Mục II</p>
+                <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.02em]">
+                  Năng lực cứu hộ
                 </h2>
               </div>
-              <div className="lg:col-span-4 lg:text-right">
-                <p className="text-sm text-black/60 max-w-xs lg:ml-auto">
-                  Những kỹ năng bạn đã đăng ký sẽ giúp hệ thống phân công nhiệm vụ phù hợp nhất.
-                </p>
-              </div>
+              <p className="ed-fade text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">
+                {totalSkills} / {apiSkillCategories.reduce((acc, c) => acc + c.subgroups.reduce((a, sg) => a + sg.skills.length, 0), 0)} kỹ năng
+              </p>
             </div>
-            <div className="h-px bg-black/20 mt-8" />
           </div>
 
-          {/* Skills Grid - Magazine Layout */}
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+          {/* Skills grid — newspaper columns */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4">
             {skillsByCategory.map((category, index) => {
               const Icon = categoryIcons[index] || Shield;
               const hasSkills = category.count > 0;
+              const isLast = index === skillsByCategory.length - 1;
 
               return (
                 <div
                   key={category.id}
-                  className={`skill-card group relative bg-white border-2 border-black overflow-hidden transition-all duration-300 ${hasSkills ? 'hover:-translate-y-1 hover:shadow-[8px_8px_0_0_#000]' : 'opacity-50'
-                    }`}
+                  className={`ed-fade py-8 ${!isLast ? "md:border-r border-black/15 md:pr-6 lg:pr-8" : ""} ${index > 0 ? "md:pl-6 lg:pl-8" : ""} ${index >= 2 ? "lg:border-t-0" : ""} ${index === 1 ? "md:border-r-0 lg:border-r" : ""} border-b border-black/15 md:border-b-0`}
                 >
-                  {/* Card Header */}
-                  <div className="p-6 lg:p-8 border-b-2 border-black">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-14 h-14 flex items-center justify-center ${hasSkills ? 'bg-black text-white' : 'bg-black/5 text-black/30'}`}>
-                          <Icon className="w-7 h-7" weight="bold" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mb-1">
-                            0{index + 1}
-                          </p>
-                          <h3 className="text-lg font-black tracking-tight">
-                            {category.title.replace(/^[IVX]+\.\s*/, "")}
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className={`px-4 py-2 text-sm font-black ${hasSkills ? 'bg-[#FF5722] text-white' : 'bg-black/5 text-black/30'
-                          }`}>
-                          {category.count}/{category.total}
-                        </div>
-                        {/* Arrow */}
-                        {hasSkills && (
-                          <div className="w-10 h-10 bg-black text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <ArrowUpRight className="w-5 h-5" />
-                          </div>
-                        )}
-                      </div>
+                  {/* Category header */}
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className={`w-10 h-10 flex items-center justify-center ${hasSkills ? "bg-black text-white" : "bg-black/5 text-black/25"}`}>
+                      <Icon className="w-5 h-5" weight="bold" />
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-black/35">0{index + 1}</p>
+                      <h3 className="text-sm font-black tracking-tight leading-tight">{category.title}</h3>
                     </div>
                   </div>
 
-                  {/* Skills List */}
-                  <div className="p-6 lg:p-8 min-h-[160px]">
-                    {hasSkills ? (
-                      <div className="flex flex-wrap gap-2">
-                        {category.skills.map((skill: string, skillIndex: number) => (
-                          <span
-                            key={skillIndex}
-                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-black text-white text-xs font-bold uppercase tracking-wider"
-                          >
-                            <Lightning className="w-3 h-3" weight="fill" />
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="h-full flex items-center justify-center">
-                        <p className="text-sm text-black/30 italic">
-                          Chưa đăng ký kỹ năng
-                        </p>
-                      </div>
-                    )}
+                  {/* Fraction */}
+                  <div className="mb-4">
+                    <span className={`text-2xl font-black ${hasSkills ? "text-[#FF5722]" : "text-black/15"}`}>
+                      {category.count}
+                    </span>
+                    <span className="text-base font-black text-black/20">/{category.total}</span>
                   </div>
+
+                  {/* Skills list */}
+                  {hasSkills ? (
+                    <div className="space-y-1.5">
+                      {category.skills.map((skill: string, si: number) => (
+                        <div key={si} className="flex items-start gap-2">
+                          <Lightning className="w-3 h-3 text-[#FF5722] shrink-0 mt-0.5" weight="fill" />
+                          <span className="text-xs text-black/70 leading-relaxed">{skill}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-black/25 italic">
+                      Không có kỹ năng đã đăng ký
+                    </p>
+                  )}
                 </div>
               );
             })}
@@ -361,88 +337,182 @@ const ProfilePage = () => {
         </div>
       </section>
 
-      {/* CTA Section - Marquee Style */}
-      <section className="relative bg-[#FF5722] overflow-hidden">
-        {/* Marquee Banner */}
-        <div className="py-8 border-y-4 border-black overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...Array(20)].map((_, i) => (
-              <span key={i} className="text-6xl sm:text-7xl lg:text-8xl font-black text-black mx-8 flex items-center gap-8">
-                SẴN SÀNG CỨU HỘ
-                <span className="w-4 h-4 bg-black rounded-full" />
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="max-w-[1800px] mx-auto px-6 lg:px-12">
-          <div className="py-16 lg:py-24 grid lg:grid-cols-3 gap-12 lg:gap-8">
-            {/* Col 1 */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-black/60 mb-4">
-                Trạng thái
-              </p>
-              <div className="flex items-center gap-3">
-                <span className="w-3 h-3 bg-[#00A650] rounded-full animate-pulse" />
-                <span className="text-xl font-black text-white uppercase">Trực tuyến & Sẵn sàng</span>
+      {/* ══════ DOCUMENTS — EDITORIAL GALLERY ══════ */}
+      {docs.length > 0 && (
+        <section className="border-b border-black">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+            {/* Section header */}
+            <div className="py-6 border-b border-black/15">
+              <div className="flex items-end justify-between">
+                <div className="ed-fade">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-1">Mục III</p>
+                  <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.02em]">
+                    Chứng chỉ & Tài liệu
+                  </h2>
+                </div>
+                <p className="ed-fade text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">
+                  {docs.length} tài liệu đã nộp
+                </p>
               </div>
             </div>
 
-            {/* Col 2 */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-black/60 mb-4">
-                Bước tiếp theo
-              </p>
-              <p className="text-sm text-white/80 leading-relaxed">
+            {/* Documents grid */}
+            <div className="py-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {docs.map((doc, index) => {
+                const docType = docFileTypes.find((dt) => dt.id === doc.fileTypeId);
+                const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(doc.fileUrl);
+
+                return (
+                  <div key={doc.id} className="ed-fade group">
+                    {/* Image / PDF preview */}
+                    <div className="border border-black/20 overflow-hidden mb-4">
+                      {isImage ? (
+                        <button
+                          type="button"
+                          onClick={() => setPreviewUrl(doc.fileUrl)}
+                          className="w-full h-56 overflow-hidden relative block"
+                        >
+                          <img
+                            src={doc.fileUrl}
+                            alt={docType?.name || `Chứng chỉ #${doc.id}`}
+                            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                            <Eye className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" weight="bold" />
+                          </div>
+                        </button>
+                      ) : (
+                        <a
+                          href={doc.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full h-56 bg-[#F0EDE8] flex flex-col items-center justify-center gap-3 hover:bg-[#E8E4DE] transition-colors block"
+                        >
+                          <FilePdf className="w-14 h-14 text-red-600" weight="duotone" />
+                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">Nhấn để xem PDF</span>
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Caption — newspaper style */}
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF5722] mb-1">
+                        Tài liệu {String(index + 1).padStart(2, "0")}
+                      </p>
+                      <h3 className="text-base font-black tracking-tight leading-tight mb-1">
+                        {docType?.name || `Loại chứng chỉ #${doc.fileTypeId}`}
+                      </h3>
+                      {docType?.description && (
+                        <p className="text-xs text-black/50 leading-relaxed line-clamp-2 mb-2">
+                          {docType.description}
+                        </p>
+                      )}
+                      <p className="text-[9px] uppercase tracking-[0.2em] text-black/30">
+                        Tải lên {new Date(doc.uploadedAt).toLocaleDateString("vi-VN")}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ══════ FOOTER STRIP ══════ */}
+      <section className="bg-black text-white">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="py-12 lg:py-16 grid sm:grid-cols-3 gap-10">
+            {/* Status */}
+            <div className="ed-fade">
+              <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/30 mb-3">Trạng thái</p>
+              <div className="flex items-center gap-2.5">
+                {userProfile?.isEligibleRescuer ? (
+                  <>
+                    <span className="w-2.5 h-2.5 bg-[#00A650] rounded-full animate-pulse" />
+                    <span className="text-sm font-bold uppercase tracking-wider">Đã xác thực</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="w-2.5 h-2.5 bg-[#FF9800] rounded-full animate-pulse" />
+                    <span className="text-sm font-bold uppercase tracking-wider">Chờ xác thực</span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Next step */}
+            <div className="ed-fade">
+              <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/30 mb-3">Bước tiếp theo</p>
+              <p className="text-sm text-white/60 leading-relaxed">
                 Tải ứng dụng ResQ SOS để nhận thông báo cứu hộ real-time và kết nối với mạng lưới tình nguyện viên.
               </p>
             </div>
 
-            {/* Col 3 - Actions */}
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-4">
+            {/* Actions */}
+            <div className="ed-fade flex flex-col gap-3">
               <Link
                 to="/"
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-colors group"
+                className="inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-white text-black text-xs font-bold uppercase tracking-wider hover:bg-[#FF5722] hover:text-white transition-colors group"
               >
                 Về trang chủ
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
-              <button className="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-black text-black text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-all">
+              <Link
+                to="/download-app"
+                className="inline-flex items-center justify-center gap-3 px-6 py-3.5 border border-white/20 text-white text-xs font-bold uppercase tracking-wider hover:border-[#FF5722] hover:text-[#FF5722] transition-all"
+              >
                 Tải App
-              </button>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom Border */}
-        <div className="h-2 bg-black" />
-      </section>
-
-      {/* Add marquee animation style */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          animation: marquee 15s linear infinite;
-        }
-      `}</style>
-
-      {/* Footer */}
-      <footer className="py-8 border-t border-black/10">
-        <div className="max-w-[1800px] mx-auto px-6 lg:px-12">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">
-              © 2026 ResQ SOS — Mạng lưới cứu hộ miền Trung
-            </p>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-black/40">
-              Mã hồ sơ: {profileId}
-            </p>
+        {/* Bottom colophon */}
+        <div className="border-t border-white/10">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+            <div className="h-10 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-white/25 font-medium">
+              <span>© 2026 ResQ SOS</span>
+              <span>Mã hồ sơ: {profileId}</span>
+            </div>
           </div>
         </div>
-      </footer>
+      </section>
+
+      {/* ══════ IMAGE PREVIEW LIGHTBOX ══════ */}
+      <AnimatePresence>
+        {previewUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4"
+            onClick={() => setPreviewUrl(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ type: "spring", damping: 25 }}
+              className="relative max-w-4xl max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setPreviewUrl(null)}
+                className="absolute -top-4 -right-4 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:bg-red-50 hover:text-red-500 transition-colors z-10"
+              >
+                <X className="w-5 h-5" weight="bold" />
+              </button>
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="max-w-full max-h-[90vh] object-contain"
+                style={{ filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))" }}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

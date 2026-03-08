@@ -1,3 +1,10 @@
+// Document file type category
+export interface DocumentFileTypeCategory {
+  id: number;
+  code: string;
+  description: string;
+}
+
 // Document file type - GET /identity/document-file-types
 export interface DocumentFileType {
   id: number;
@@ -5,6 +12,8 @@ export interface DocumentFileType {
   name: string;
   description: string;
   isActive: boolean;
+  documentFileTypeCategoryId: number;
+  documentFileTypeCategory: DocumentFileTypeCategory;
 }
 
 export interface DocumentFileTypesResponse {

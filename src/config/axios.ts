@@ -124,7 +124,7 @@ api.interceptors.response.use(
         // Has both message + errors fields → show field errors as description
         const fieldErrors = getApiErrorMessages(data);
         toast.error(data.message, {
-          description: fieldErrors.join("\n"),
+          description: fieldErrors.join(" • "),
           duration: 5000,
         });
       } else if (typeof data?.message === "string") {
