@@ -6,15 +6,15 @@ import {
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { isApiErrorResponse } from "@/types/api";
+import type { ApiErrorResponse } from "@/types/api";
 import { createDonation, getPublicDonations } from "./api";
 import type {
   DonationRequest,
   DonationResponse,
   PublicDonationsParams,
   PublicDonationsResponse,
-  ApiErrorResponse,
 } from "./type";
+// Note: Error toasts (400/401) are handled globally by the axios interceptor.
 
 export const useCreateDonation = (): UseMutationResult<
   DonationResponse,
@@ -31,14 +31,7 @@ export const useCreateDonation = (): UseMutationResult<
       console.log("Donation created:", data);
     },
     onError: (error: AxiosError<ApiErrorResponse>) => {
-      // ApiErrorResponse errors are already handled by the global interceptor (toast shown).
-      // Only show a fallback toast for non-ApiErrorResponse errors (e.g. network errors).
-      if (!isApiErrorResponse(error.response?.data)) {
-        toast.error("Thất bại", {
-          description: "Tạo đơn quyên góp thất bại. Vui lòng thử lại.",
-          duration: 4000,
-        });
-      }
+      // Toast is shown by the global axios interceptor
       console.error("Donation failed:", error.response?.data || error.message);
     },
   });
@@ -56,3 +49,4 @@ export const usePublicDonations = (
     staleTime: 0,
   });
 };
+

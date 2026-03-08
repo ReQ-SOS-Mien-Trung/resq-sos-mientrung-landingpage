@@ -16,14 +16,15 @@ import {
   ArrowLeft,
 } from "@phosphor-icons/react";
 import { useAuth } from "@/hooks/useAuth";
-import { rescueSkillCategories } from "@/constants";
-import { useGetRescuerAbilities } from "@/services/abilities/hooks";
+import { useGetAbilities, useGetRescuerAbilities } from "@/services/abilities/hooks";
+import { buildSkillCategories } from "@/services/abilities/utils";
 import { useUserMe } from "@/services/user/hooks";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, onboardingStatus, logout, isLoading: authLoading } = useAuth();
   const { data: rescuerAbilities } = useGetRescuerAbilities();
+  const { data: abilitiesData } = useGetAbilities();
   const { data: userProfile } = useUserMe();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -72,9 +73,15 @@ const ProfilePage = () => {
   // Generate stable profile ID from user UUID
   const profileId = useMemo(() => userProfile?.id?.replace(/-/g, "").slice(-8).toUpperCase() ?? "--------", [userProfile?.id]);
 
+  // Build categories from API data
+  const apiSkillCategories = useMemo(() => {
+    if (!abilitiesData?.items) return [];
+    return buildSkillCategories(abilitiesData.items);
+  }, [abilitiesData]);
+
   // Get skills by category using API data
   const getSkillsByCategory = () => {
-    return rescueSkillCategories.map((category) => {
+    return apiSkillCategories.map((category) => {
       const categorySkillIds = category.subgroups.flatMap((sg) =>
         sg.skills.map((s) => s.id)
       );
@@ -82,10 +89,9 @@ const ProfilePage = () => {
         categorySkillIds.includes(id)
       );
       const skillLabels = selectedInCategory.map((id: number) => {
-        // First try to get label from API response
         const apiAbility = rescuerAbilities?.abilities?.find((a) => a.abilityId === id);
         if (apiAbility) return apiAbility.description;
-        // Fallback to constants
+        // Fallback: find in category subgroups
         for (const subgroup of category.subgroups) {
           const skill = subgroup.skills.find((s) => s.id === id);
           if (skill) return skill.label;
@@ -95,7 +101,6 @@ const ProfilePage = () => {
       return {
         id: category.id,
         title: category.title,
-        titleEn: category.titleEn,
         count: selectedInCategory.length,
         total: categorySkillIds.length,
         skills: skillLabels,
@@ -247,7 +252,7 @@ const ProfilePage = () => {
                   <p className="text-4xl sm:text-5xl lg:text-6xl font-black">{totalSkills}</p>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Kỹ năng</p>
                 </div>
-                 <div className="stat-item">
+                <div className="stat-item">
                   <p className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#FF5722]">A+</p>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 mt-1">Đánh giá</p>
                 </div>
@@ -313,7 +318,7 @@ const ProfilePage = () => {
                             0{index + 1}
                           </p>
                           <h3 className="text-lg font-black tracking-tight">
-                            {category.title.replace(/^[IVX]+\.\s*/, "")}
+                            {category.title}
                           </h3>
                         </div>
                       </div>
