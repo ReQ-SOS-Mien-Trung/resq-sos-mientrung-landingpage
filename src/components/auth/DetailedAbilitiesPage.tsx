@@ -31,6 +31,7 @@ import { buildSkillCategories } from "@/services/abilities/utils";
 import type { SkillSubgroup } from "@/services/abilities/utils";
 import { uploadFile } from "@/utils/uploadFile";
 import { toast } from "sonner";
+import { useOnboardingStore } from "@/stores/onboardingStore";
 
 // Subgroup IDs that should be single-select (e.g. professional medical roles)
 const SINGLE_SELECT_SUBGROUP_IDS = [4]; // PROFESSIONAL_MEDICAL
@@ -42,18 +43,6 @@ const CATEGORY_DOC_MAP: Record<string, string> = {
   TRANSPORTATION: "TRANSPORTATION",
   EXPERIENCE: "OTHER",
 };
-
-/* ── Types ───────────────────────────────────────────────────── */
-interface CertEntry {
-  id: string;
-  certType: string;
-  certTypeId: number;
-  certTypeLabel: string;
-  fileUrl: string;
-  fileName: string;
-  isUploading: boolean;
-  categoryCode: string; // which ability category page this belongs to
-}
 
 /* ── File icon helper ─────────────────────────────────────────── */
 const FileTypeIcon = ({ name }: { name: string }) => {
@@ -99,8 +88,8 @@ const DetailedAbilitiesPage = () => {
   const [currentCategory, setCurrentCategory] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ── Document upload state ──
-  const [certEntries, setCertEntries] = useState<CertEntry[]>([]);
+  // ── Document state từ Zustand store ──
+  const { certEntries, addCertEntry, removeCertEntry, updateCertEntry, clearCertEntries } = useOnboardingStore();
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [pendingCertType, setPendingCertType] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -132,11 +121,10 @@ const DetailedAbilitiesPage = () => {
 
   // Documents for current page
   const currentPageCerts = certEntries.filter((e) => e.categoryCode === currentCatCode);
-  const currentPageUploadedCount = currentPageCerts.filter((e) => e.fileUrl).length;
   const isAnyUploading = certEntries.some((e) => e.isUploading);
 
-  // Can proceed to next page?
-  const canProceed = !isUploadRequired || currentPageUploadedCount > 0;
+  // Có thể tiếp tục nếu không yêu cầu hoặc đã chọn >=1 file
+  const canProceed = !isUploadRequired || currentPageCerts.length > 0;
 
   // ── Guards ──
   useEffect(() => {
@@ -190,7 +178,7 @@ const DetailedAbilitiesPage = () => {
     setTimeout(() => fileInputRef.current?.click(), 50);
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !pendingCertType) return;
 
@@ -198,43 +186,28 @@ const DetailedAbilitiesPage = () => {
     if (!certType) return;
 
     const entryId = crypto.randomUUID();
+    // Tạo preview URL tạm thời cho ảnh (PDF không cần)
+    const isImg = isImageFile(file.name);
+    const localPreviewUrl = isImg ? URL.createObjectURL(file) : undefined;
 
-    setCertEntries((prev) => [
-      ...prev,
-      {
-        id: entryId,
-        certType: certType.code,
-        certTypeId: certType.id,
-        certTypeLabel: certType.name,
-        fileUrl: "",
-        fileName: file.name,
-        isUploading: true,
-        categoryCode: currentCatCode,
-      },
-    ]);
+    addCertEntry({
+      id: entryId,
+      certType: certType.code,
+      certTypeId: certType.id,
+      certTypeLabel: certType.name,
+      fileUrl: "",
+      fileName: file.name,
+      isUploading: false,
+      categoryCode: currentCatCode,
+      file,
+      localPreviewUrl,
+    });
 
     setPendingCertType(null);
     e.target.value = "";
-
-    try {
-      const result = await uploadFile(file);
-      setCertEntries((prev) =>
-        prev.map((entry) =>
-          entry.id === entryId
-            ? { ...entry, fileUrl: result.url, isUploading: false }
-            : entry
-        )
-      );
-      toast.success("Tải lên thành công!");
-    } catch {
-      toast.error("Tải lên thất bại. Vui lòng thử lại.");
-      setCertEntries((prev) => prev.filter((entry) => entry.id !== entryId));
-    }
   };
 
-  const handleRemoveCert = (id: string) => {
-    setCertEntries((prev) => prev.filter((entry) => entry.id !== id));
-  };
+  const handleRemoveCert = (id: string) => removeCertEntry(id);
 
   // ── Navigation ──
   const handleBack = () => {
@@ -245,33 +218,53 @@ const DetailedAbilitiesPage = () => {
     if (!canProceed) return;
 
     if (!isLastPage) {
+      // Trang giữa: chỉ chuyển trang, không upload
       setCurrentCategory((prev) => prev + 1);
-    } else {
-      // Final page — submit both abilities and documents in parallel
-      setIsSubmitting(true);
+      return;
+    }
 
-      const docsPayload = {
-        documents: certEntries
-          .filter((e) => e.fileUrl)
-          .map((e) => ({ fileUrl: e.fileUrl, fileTypeId: e.certTypeId })),
-      };
+    // Trang cuối — upload TẤT CẢ file từ store rồi submit
+    setIsSubmitting(true);
 
-      const abilitiesPayload = {
-        abilities: allSelectedSkills.map((id) => ({ abilityId: id, level: 1 })),
-      };
+    const allPending = certEntries.filter((e) => !e.fileUrl && e.file);
+    const uploadedUrlMap = new Map<string, string>();
 
+    for (const entry of allPending) {
+      updateCertEntry(entry.id, { isUploading: true });
       try {
-        await Promise.all([
-          submitDocsMutation.mutateAsync(docsPayload),
-          submitAbilitiesMutation.mutateAsync(abilitiesPayload),
-        ]);
-        completeOnboarding();
-        navigate("/profile");
+        const result = await uploadFile(entry.file!);
+        uploadedUrlMap.set(entry.id, result.url);
+        updateCertEntry(entry.id, { fileUrl: result.url, isUploading: false });
       } catch {
-        // Error toasts handled by global axios interceptor
-      } finally {
+        toast.error(`Tải lên thất bại: ${entry.fileName}. Vui lòng thử lại.`);
+        updateCertEntry(entry.id, { isUploading: false });
         setIsSubmitting(false);
+        return;
       }
+    }
+
+    // Gom tất cả URL (cứ + mới) để submit
+    const documents = certEntries.map((e) => ({
+      fileUrl: e.fileUrl || uploadedUrlMap.get(e.id) || "",
+      fileTypeId: e.certTypeId,
+    })).filter((d) => d.fileUrl);
+
+    const abilitiesPayload = {
+      abilities: allSelectedSkills.map((id) => ({ abilityId: id, level: 1 })),
+    };
+
+    try {
+      await Promise.all([
+        submitDocsMutation.mutateAsync({ documents }),
+        submitAbilitiesMutation.mutateAsync(abilitiesPayload),
+      ]);
+      clearCertEntries();
+      completeOnboarding();
+      navigate("/profile");
+    } catch {
+      // Error toasts handled by global axios interceptor
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -415,14 +408,14 @@ const DetailedAbilitiesPage = () => {
                         <div className="shrink-0">
                           {entry.isUploading ? (
                             <SpinnerGap className="w-5 h-5 text-[#FF5722] animate-spin" weight="bold" />
-                          ) : entry.fileUrl && isImageFile(entry.fileName) ? (
+                          ) : isImageFile(entry.fileName) && (entry.localPreviewUrl || entry.fileUrl) ? (
                             <button
                               type="button"
-                              onClick={() => setPreviewUrl(entry.fileUrl)}
+                              onClick={() => setPreviewUrl(entry.localPreviewUrl || entry.fileUrl)}
                               className="w-10 h-10 rounded-lg overflow-hidden border border-black/10 hover:ring-2 hover:ring-[#FF5722] transition-all relative group"
                             >
                               <img
-                                src={entry.fileUrl}
+                                src={entry.localPreviewUrl || entry.fileUrl}
                                 alt={entry.fileName}
                                 className="w-full h-full object-cover"
                               />
@@ -451,10 +444,10 @@ const DetailedAbilitiesPage = () => {
                         {/* Preview & Remove */}
                         {!entry.isUploading && (
                           <div className="flex items-center gap-1 shrink-0">
-                            {entry.fileUrl && isImageFile(entry.fileName) && (
+                            {isImageFile(entry.fileName) && (entry.localPreviewUrl || entry.fileUrl) && (
                               <button
                                 type="button"
-                                onClick={() => setPreviewUrl(entry.fileUrl)}
+                                onClick={() => setPreviewUrl(entry.localPreviewUrl || entry.fileUrl)}
                                 className="w-7 h-7 rounded-full flex items-center justify-center text-black/30 hover:text-[#FF5722] hover:bg-[#FF5722]/10 transition-colors"
                               >
                                 <Eye className="w-4 h-4" weight="bold" />
@@ -537,19 +530,19 @@ const DetailedAbilitiesPage = () => {
 
               {/* Upload status note */}
               {isUploadRequired && (
-                <div className={`flex gap-2 mt-3 p-3 rounded-lg text-xs ${currentPageUploadedCount > 0
+                <div className={`flex gap-2 mt-3 p-3 rounded-lg text-xs ${currentPageCerts.length > 0
                   ? "bg-[#00A650]/8 text-[#00A650]"
                   : "bg-amber-50 text-amber-600"
                   }`}>
-                  {currentPageUploadedCount > 0 ? (
+                  {currentPageCerts.length > 0 ? (
                     <CheckCircle className="w-4 h-4 shrink-0" weight="fill" />
                   ) : (
                     <Warning className="w-4 h-4 shrink-0" weight="fill" />
                   )}
                   <span>
-                    {currentPageUploadedCount > 0
-                      ? `Đã tải lên ${currentPageUploadedCount} chứng chỉ.`
-                      : "Vui lòng tải lên ít nhất 1 chứng chỉ để tiếp tục."}
+                    {currentPageCerts.length > 0
+                      ? `Đã chọn ${currentPageCerts.length} chứng chỉ. Bấm Tiếp tục để tải lên.`
+                      : "Vui lòng chọn ít nhất 1 chứng chỉ để tiếp tục."}
                   </span>
                 </div>
               )}
@@ -748,19 +741,23 @@ const DetailedAbilitiesPage = () => {
               </div>
             )}
 
-            {/* Uploaded docs summary */}
-            {certEntries.filter(e => e.fileUrl).length > 0 && (
+            {/* Docs summary */}
+            {certEntries.length > 0 && (
               <div className="p-4 bg-[#FF5722]/20 rounded-lg mb-6">
                 <p className="text-xs font-bold uppercase tracking-wider mb-2">
-                  📄 Chứng chỉ đã tải ({certEntries.filter(e => e.fileUrl).length})
+                  📄 Chứng chỉ đã chọn ({certEntries.length})
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {certEntries.filter(e => e.fileUrl).map((cert) => (
-                    <span key={cert.id} className="px-2 py-1 bg-white/10 rounded text-[11px] font-medium truncate max-w-[180px]">
+                  {certEntries.map((cert) => (
+                    <span key={cert.id} className="flex items-center gap-1 px-2 py-1 bg-white/10 rounded text-[11px] font-medium truncate max-w-[180px]">
+                      {cert.fileUrl ? "" : <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />}
                       {cert.certTypeLabel}
                     </span>
                   ))}
                 </div>
+                {certEntries.some(e => !e.fileUrl) && (
+                  <p className="text-[10px] text-white/50 mt-2">● chưa upload • sẽ đẩy lên khi Hoàn tất</p>
+                )}
               </div>
             )}
 
@@ -769,7 +766,7 @@ const DetailedAbilitiesPage = () => {
               {apiSkillCategories.map((cat, index) => {
                 const catAllSkills = cat.subgroups.flatMap(sg => sg.skills);
                 const catSkills = catAllSkills.filter(skill => allSelectedSkills.includes(skill.id)).length;
-                const catDocs = certEntries.filter(e => e.categoryCode === cat.code && e.fileUrl).length;
+                const catDocs = certEntries.filter(e => e.categoryCode === cat.code).length;
                 return (
                   <div
                     key={cat.id}
