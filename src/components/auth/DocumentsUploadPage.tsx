@@ -29,6 +29,7 @@ interface CertEntry {
   fileUrl: string;
   fileName: string;
   isUploading: boolean;
+  file?: File; // lưu file cục bộ, chưa upload
 }
 
 
@@ -105,8 +106,8 @@ const DocumentsUploadPage = () => {
     setTimeout(() => fileInputRef.current?.click(), 50);
   };
 
-  /* ── File chosen → upload ── */
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* ── File chosen → chỉ lưu local, chưa upload ── */
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !pendingCertType) return;
 
@@ -115,7 +116,6 @@ const DocumentsUploadPage = () => {
 
     const entryId = crypto.randomUUID();
 
-    /* Add placeholder while uploading */
     setCertEntries((prev) => [
       ...prev,
       {
@@ -125,27 +125,13 @@ const DocumentsUploadPage = () => {
         certTypeLabel: certType.name,
         fileUrl: "",
         fileName: file.name,
-        isUploading: true,
+        isUploading: false,
+        file,
       },
     ]);
 
     setPendingCertType(null);
     e.target.value = "";
-
-    try {
-      const result = await uploadFile(file);
-      setCertEntries((prev) =>
-        prev.map((entry) =>
-          entry.id === entryId
-            ? { ...entry, fileUrl: result.url, isUploading: false }
-            : entry
-        )
-      );
-      toast.success("Tải lên thành công!");
-    } catch {
-      toast.error("Tải lên thất bại. Vui lòng thử lại.");
-      setCertEntries((prev) => prev.filter((entry) => entry.id !== entryId));
-    }
   };
 
   /* ── Remove entry ── */
@@ -153,19 +139,46 @@ const DocumentsUploadPage = () => {
     setCertEntries((prev) => prev.filter((entry) => entry.id !== id));
   };
 
-  /* ── Submit ── */
-  const handleSubmit = (skipDocuments = false) => {
+  /* ── Submit: upload từng file rồi mới submit ── */
+  const handleSubmit = async (skipDocuments = false) => {
     setIsSubmitting(true);
 
-    const payload = {
-      documents: skipDocuments
-        ? []
-        : certEntries
-            .filter((e) => e.fileUrl)
-            .map((e) => ({ fileUrl: e.fileUrl, fileTypeId: e.certTypeId })),
-    };
+    let documents: { fileUrl: string; fileTypeId: number }[] = [];
+
+    if (!skipDocuments) {
+      for (const entry of certEntries) {
+        if (entry.fileUrl) {
+          // đã upload trước đó
+          documents.push({ fileUrl: entry.fileUrl, fileTypeId: entry.certTypeId });
+        } else if (entry.file) {
+          // đánh dấu đang upload
+          setCertEntries((prev) =>
+            prev.map((e) => (e.id === entry.id ? { ...e, isUploading: true } : e))
+          );
+          try {
+            const result = await uploadFile(entry.file);
+            setCertEntries((prev) =>
+              prev.map((e) =>
+                e.id === entry.id
+                  ? { ...e, fileUrl: result.url, isUploading: false }
+                  : e
+              )
+            );
+            documents.push({ fileUrl: result.url, fileTypeId: entry.certTypeId });
+          } catch {
+            toast.error(`Tải lên thất bại: ${entry.fileName}. Vui lòng thử lại.`);
+            setCertEntries((prev) =>
+              prev.map((e) => (e.id === entry.id ? { ...e, isUploading: false } : e))
+            );
+            setIsSubmitting(false);
+            return;
+          }
+        }
+      }
+    }
+
     submitDocsMutation.mutate(
-      payload,
+      { documents },
       {
         onSuccess: () => {
           setIsSubmitting(false);
@@ -364,25 +377,25 @@ const DocumentsUploadPage = () => {
 
             {/* Required note */}
             <div className={`flex gap-3 p-4 rounded-xl mb-8 border transition-colors ${
-              certEntries.filter(e => e.fileUrl).length > 0
+              certEntries.length > 0
                 ? "bg-[#00A650]/8 border-[#00A650]/30"
                 : "bg-amber-50 border-amber-300"
             }`}>
               <Warning className={`w-5 h-5 shrink-0 mt-0.5 ${
-                certEntries.filter(e => e.fileUrl).length > 0 ? "text-[#00A650]" : "text-amber-500"
+                certEntries.length > 0 ? "text-[#00A650]" : "text-amber-500"
               }`} weight="fill" />
               <p className="text-sm leading-relaxed text-black/70">
-                {certEntries.filter(e => e.fileUrl).length > 0 ? (
+                {certEntries.length > 0 ? (
                   <>
-                    Đã có{" "}
+                    Đã chọn{" "}
                     <span className="font-semibold text-[#00A650]">
-                      {certEntries.filter(e => e.fileUrl).length} chứng chỉ
+                      {certEntries.length} chứng chỉ
                     </span>
-                    . Bạn có thể thêm hoặc tiếp tục.
+                    . Bấm <span className="font-semibold">Tiếp tục</span> để tải lên và hoàn tất.
                   </>
                 ) : (
                   <>
-                    <span className="font-semibold text-black">Bắt buộc</span> — Vui lòng tải lên ít nhất
+                    <span className="font-semibold text-black">Bắt buộc</span> — Vui lòng chọn ít nhất
                     {" "}<span className="font-semibold">1 chứng chỉ</span> để tiếp tục.
                   </>
                 )}
@@ -393,19 +406,19 @@ const DocumentsUploadPage = () => {
             <div className="flex flex-col gap-3">
               <button
                 type="button"
-                disabled={isSubmitting || isAnyUploading || certEntries.filter((e) => e.fileUrl).length === 0}
+                disabled={isSubmitting || isAnyUploading || certEntries.length === 0}
                 onClick={() => handleSubmit(false)}
                 className="w-full px-6 py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group disabled:opacity-40 disabled:cursor-not-allowed rounded-xl"
               >
                 {isSubmitting ? (
                   <>
                     <SpinnerGap className="w-4 h-4 animate-spin" />
-                    Đang nộp hồ sơ...
+                    {isAnyUploading ? "Đang tải lên..." : "Đang nộp hồ sơ..."}
                   </>
                 ) : (
                   <>
-                    {certEntries.filter((e) => e.fileUrl).length > 0
-                      ? `Tiếp tục với ${certEntries.filter((e) => e.fileUrl).length} chứng chỉ`
+                    {certEntries.length > 0
+                      ? `Tiếp tục với ${certEntries.length} chứng chỉ`
                       : "Thêm ít nhất 1 chứng chỉ để tiếp tục"}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </>
