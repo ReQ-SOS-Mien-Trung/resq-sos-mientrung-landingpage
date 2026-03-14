@@ -16,7 +16,7 @@ import {
   LockSimple,
 } from "@phosphor-icons/react";
 import { useGetCampaignsMetadata } from "@/services/campaign/hooks";
-import { useCreateDonation } from "@/services/donation/hooks";
+import { useCreateDonation, usePaymentMethods } from "@/services/donation/hooks";
 import { useUserMe } from "@/services/user/hooks";
 import {
   donatePresetAmounts,
@@ -42,6 +42,7 @@ const DonatePage = () => {
   const [message, setMessage] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [fundCampaignId, setFundCampaignId] = useState<number | null>(null);
+  const [paymentMethodId, setPaymentMethodId] = useState<number | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{
     campaign?: string;
     amount?: string;
@@ -51,7 +52,11 @@ const DonatePage = () => {
 
   const { data: campaigns, isLoading: campaignsLoading } = useGetCampaignsMetadata();
   const { data: userProfile } = useUserMe(isAuthenticated);
+  const { data: paymentMethods } = usePaymentMethods();
   const donateMutation = useCreateDonation();
+
+  // Derive active payment method: explicit choice or fallback to first
+  const activePaymentMethodId = paymentMethodId ?? paymentMethods?.[0]?.id ?? null;
 
   // Derive effective name/email: if logged in use profile, else use manual input
   const donorName = isAuthenticated && userProfile
@@ -165,6 +170,7 @@ const DonatePage = () => {
         amount: displayAmount,
         note: message,
         isPrivate,
+        paymentMethodId: activePaymentMethodId!
       },
       {
         onSuccess: (data) => {
@@ -229,14 +235,14 @@ const DonatePage = () => {
               <div className="hero-sub mt-10 flex flex-wrap gap-3">
                 <a
                   href="#donate-box"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5722] text-white text-sm font-black uppercase tracking-wider hover:bg-black transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#FF5722] text-white text-sm font-bold uppercase tracking-wider hover:bg-black transition-colors"
                 >
                   ĐÓNG GÓP NGAY
                   <Heart className="w-4 h-4" weight="fill" />
                 </a>
                 <a
                   href="/donations"
-                  className="inline-flex items-center gap-2 px-8 py-4 border-2 border-black text-sm font-black uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-black text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
                 >
                   QUYÊN GÓP CÔNG KHAI
                   <ArrowRight className="w-4 h-4" />
@@ -490,6 +496,37 @@ const DonatePage = () => {
                 : "Tên của bạn sẽ xuất hiện công khai trong danh sách đóng góp."}
             </p>
           </div>
+
+          {/* Payment method */}
+          {paymentMethods && paymentMethods.length > 0 && (
+            <div className="donate-anim mb-6">
+              <label className="text-xs font-mono tracking-[0.3em] text-white/50 block mb-3">
+                PHƯƠNG THỨC THANH TOÁN *
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {paymentMethods.map((method) => (
+                  <button
+                    key={method.id}
+                    type="button"
+                    onClick={() => setPaymentMethodId(method.id)}
+                    className={`group flex flex-col items-center justify-center gap-1.5 py-4 px-3 border-2 transition-all duration-200 ${
+                      activePaymentMethodId === method.id
+                        ? "border-[#FF5722] bg-[#FF5722]"
+                        : "border-white/15 hover:border-white/50"
+                    }`}
+                  >
+                    <span className="text-sm font-black leading-none">{method.code}</span>
+                    <span className={`text-[10px] text-center leading-tight ${
+                      activePaymentMethodId === method.id ? "text-white/85" : "text-white/35 group-hover:text-white/55"
+                    }`}>
+                      {method.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="donate-anim mb-10">
             <label className="text-xs font-mono tracking-[0.3em] text-white/50 block mb-2">LỜI NHẮN (TÙY CHỌN)</label>
             <div className="relative mb-3">
@@ -532,6 +569,7 @@ const DonatePage = () => {
               disabled={
                 donateMutation.isPending ||
                 !fundCampaignId ||
+                !activePaymentMethodId ||
                 displayAmount <= 0 ||
                 !donorName.trim() ||
                 !donorEmail.trim() ||
