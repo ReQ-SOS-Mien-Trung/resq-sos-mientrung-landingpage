@@ -7,12 +7,20 @@ import {
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import type { ApiErrorResponse } from "@/types/api";
-import { createDonation, getPublicDonations } from "./api";
+import {
+  createDonation,
+  getPaymentMethods,
+  getPublicDonations,
+  verifyZaloPay,
+} from "./api";
 import type {
   DonationRequest,
   DonationResponse,
+  PaymentMethod,
   PublicDonationsParams,
   PublicDonationsResponse,
+  ZaloPayVerifyParams,
+  ZaloPayVerifyResponse,
 } from "./type";
 // Note: Error toasts (400/401) are handled globally by the axios interceptor.
 
@@ -50,3 +58,26 @@ export const usePublicDonations = (
   });
 };
 
+/** Fetch available payment methods */
+export const usePaymentMethods = (): UseQueryResult<
+  PaymentMethod[],
+  AxiosError
+> => {
+  return useQuery({
+    queryKey: ["donations", "payment-methods"],
+    queryFn: getPaymentMethods,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useVerifyZaloPay = (
+  params: ZaloPayVerifyParams,
+  enabled = true,
+): UseQueryResult<ZaloPayVerifyResponse, AxiosError> => {
+  return useQuery({
+    queryKey: ["donations", "zalopay-verify", params.apptransid],
+    queryFn: () => verifyZaloPay(params),
+    enabled: enabled && !!params.apptransid,
+    staleTime: 0,
+  });
+};
