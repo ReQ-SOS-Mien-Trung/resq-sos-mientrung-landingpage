@@ -1,15 +1,24 @@
 import { useSearchParams, Link } from "react-router-dom";
 import { XCircle, ArrowLeft, Heart } from "@phosphor-icons/react";
+import { useVerifyZaloPay } from "@/services/donation/hooks";
 
 const DonationFailPage = () => {
   const [params] = useSearchParams();
 
+  // ZaloPay callback params
+  const apptransid = params.get("apptransid") ?? "";
+  const isZaloPay  = !!apptransid;
+
+  // PayOS params
   const orderCode = params.get("orderCode") ?? "—";
   const id        = params.get("id")        ?? "—";
   const status    = params.get("status")    ?? "—";
   const cancel    = params.get("cancel");
 
   const isCancelled = cancel === "true";
+
+  // Notify BE to update ZaloPay donation status (fire and forget)
+  useVerifyZaloPay({ apptransid }, isZaloPay);
 
   return (
     <div className="min-h-[calc(100vh-80px)] bg-neutral-50 flex flex-col items-center justify-center px-4 py-16">
@@ -45,7 +54,7 @@ const DonationFailPage = () => {
         </div>
 
         {/* Card */}
-        {orderCode !== "—" && (
+        {(isZaloPay || orderCode !== "—") && (
           <div className="bg-white rounded-2xl shadow-sm ring-1 ring-neutral-100 overflow-hidden mb-5">
 
             {/* Order code */}
@@ -54,7 +63,7 @@ const DonationFailPage = () => {
                 Mã giao dịch
               </p>
               <span className="text-2xl sm:text-3xl font-black tracking-tight text-neutral-900">
-                {orderCode}
+                {isZaloPay ? apptransid : orderCode}
               </span>
             </div>
 

@@ -262,7 +262,7 @@ const PersonalInfoPage = () => {
 
     applyMutation.mutate(
       {
-        rescuerType: "normal",
+        rescuerType: "Volunteer",
         firstName: profileData.firstName,
         lastName: profileData.lastName,
         phone: profileData.phone.startsWith("0") ? profileData.phone : `0${profileData.phone}`,
