@@ -29,7 +29,7 @@ const iconMap = {
 
 const AbilityQuestionsPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, onboardingStatus, isLoading: authLoading, saveOnboardingStep } = useAuth();
+  const { isAuthenticated, rescuerStep, getNextOnboardingPath, isLoading: authLoading } = useAuth();
   const consentMutation = useSubmitRescuerConsent();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: boolean | null }>({});
@@ -48,11 +48,15 @@ const AbilityQuestionsPage = () => {
       navigate("/auth/register");
       return;
     }
-    if (onboardingStatus.isComplete) {
-      navigate("/profile");
+    if (rescuerStep === 0) {
+      navigate("/auth/personal-info");
       return;
     }
-  }, [authLoading, isAuthenticated, onboardingStatus.isComplete, navigate]);
+    if (rescuerStep >= 2) {
+      navigate(getNextOnboardingPath());
+      return;
+    }
+  }, [authLoading, getNextOnboardingPath, isAuthenticated, navigate, rescuerStep]);
 
   useEffect(() => {
     if (questionRef.current) {
@@ -105,7 +109,6 @@ const AbilityQuestionsPage = () => {
       },
       {
         onSuccess: () => {
-          saveOnboardingStep("/auth/detailed-abilities");
           navigate("/auth/detailed-abilities");
         },
       }
@@ -138,7 +141,7 @@ const AbilityQuestionsPage = () => {
           />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
-          Bước 2/4 - Câu hỏi tiên quyết
+          Bước 2/3 - Câu hỏi tiên quyết
         </span>
       </header>
 

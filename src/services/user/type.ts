@@ -9,22 +9,21 @@ export interface RescuerApplicationDocument {
   uploadedAt: string;
 }
 
-// User profile response from GET /identity/user/me
-export interface UserProfile {
+export type UserPermission = string;
+
+// Raw API response from GET /identity/user/me
+export interface UserMeResponse {
   id: string;
   roleId: number;
   firstName: string | null;
   lastName: string | null;
   username: string | null;
   phone: string | null;
-  address?: string | null;
-  ward?: string | null;
-  city?: string | null;
   rescuerType: string | null;
   email: string | null;
   isEmailVerified: boolean;
-  isOnboarded: boolean;
   isEligibleRescuer: boolean;
+  rescuerStep: number;
   avatarUrl: string | null;
   latitude: number | null;
   longitude: number | null;
@@ -33,5 +32,12 @@ export interface UserProfile {
   approvedBy: string | null;
   approvedAt: string | null;
   rescuerApplicationDocuments: RescuerApplicationDocument[];
+  permissions: UserPermission[];
+  depotId: string | number | null;
+  depotName: string | null;
+  address?: string | null;
+  ward?: string | null;
+  city?: string | null;
 }
 
+export type UserProfile = UserMeResponse;

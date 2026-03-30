@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 const RegisterHero = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, onboardingStatus, getNextOnboardingPath } = useAuth();
+  const { isAuthenticated, isOnboardingComplete, getNextOnboardingPath } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ const RegisterHero = () => {
               </button>
               <button
                 onClick={() => {
-                  if (isAuthenticated && onboardingStatus.isComplete) {
+                  if (isAuthenticated && isOnboardingComplete) {
                     navigate("/profile");
                   } else if (isAuthenticated) {
                     navigate(getNextOnboardingPath());
@@ -78,7 +78,7 @@ const RegisterHero = () => {
                 }}
                 className="px-6 sm:px-8 py-4 border border-black text-black text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
               >
-                {isAuthenticated && onboardingStatus.isComplete
+                {isAuthenticated && isOnboardingComplete
                   ? "Xem hồ sơ"
                   : isAuthenticated
                   ? "Tiếp tục hồ sơ"

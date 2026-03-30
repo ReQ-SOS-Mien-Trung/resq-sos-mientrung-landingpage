@@ -35,7 +35,6 @@ export interface LoginResponse {
   lastName: string | null;
   roleId: number;
   isEmailVerified: boolean;
-  isOnboarded: boolean;
 }
 
 // Unified Google Auth Response
@@ -48,7 +47,6 @@ export interface GoogleAuthResponse {
     firstName?: string;
     lastName?: string;
     avatar?: string;
-    isOnboarded: boolean;
   };
 }
 

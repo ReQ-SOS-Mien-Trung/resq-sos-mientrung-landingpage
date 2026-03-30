@@ -100,7 +100,7 @@ export const useLogout = (): UseMutationResult<
   });
 };
 
-// Unified Google Auth (handles both login and signup based on backend isOnboarded)
+// Unified Google Auth
 export const useGoogleAuth = (): UseMutationResult<
   GoogleAuthResponse,
   AxiosError<AuthError>,
@@ -114,7 +114,7 @@ export const useGoogleAuth = (): UseMutationResult<
         localStorage.setItem("accessToken", data.accessToken);
       if (data.refreshToken)
         localStorage.setItem("refreshToken", data.refreshToken);
-      // Note: toast is shown in the page after getUserMe() to get the real isOnboarded value
+      // Note: toast is shown in the page after getUserMe() to read the latest rescuerStep
       console.log("Google auth successful:", data);
     },
     onError: (error: AxiosError<AuthError>) => {

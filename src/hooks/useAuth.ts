@@ -1,4 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useUserMe } from "@/services/user/hooks";
+import {
+  getOnboardingLabelByRescuerStep,
+  getOnboardingPathByRescuerStep,
+  getOnboardingStatusByRescuerStep,
+  getSafeRescuerStep,
+  isRescuerOnboardingComplete,
+} from "@/services/user/utils";
 
 export interface UserData {
   email: string;
@@ -28,52 +36,50 @@ export interface OnboardingStatus {
 
 const STORAGE_KEYS = {
   USER: "resq_user",
-  ONBOARDING_COMPLETE: "resq_onboarding_complete",
-  LAST_ONBOARDING_PATH: "resq_last_onboarding_path",
 };
 
 export const useAuth = () => {
   const [user, setUser] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [onboardingStatus, setOnboardingStatus] = useState<OnboardingStatus>({
-    isRegistered: false,
-    hasPersonalInfo: false,
-    hasAbilityCheck: false,
-    hasDetailedAbilities: false,
-    isComplete: false,
-  });
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
 
-  // Load user and onboarding status from localStorage
+  // Load user from localStorage
   const loadUserData = useCallback(() => {
     try {
       const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
-      const onboardingComplete = localStorage.getItem(
-        STORAGE_KEYS.ONBOARDING_COMPLETE,
-      );
 
       if (savedUser) {
         setUser(JSON.parse(savedUser));
+      } else {
+        setUser(null);
       }
-
-      const isComplete = onboardingComplete === "true";
-
-      setOnboardingStatus({
-        isRegistered: !!savedUser,
-        hasPersonalInfo: isComplete,
-        hasAbilityCheck: isComplete,
-        hasDetailedAbilities: isComplete,
-        isComplete,
-      });
     } catch (error) {
       console.error("Error loading user data:", error);
+      setUser(null);
     } finally {
-      setIsLoading(false);
+      setIsBootstrapping(false);
     }
   }, []);
 
   useEffect(() => {
     loadUserData();
   }, [loadUserData]);
+
+  const {
+    data: userProfile,
+    isLoading: isUserProfileLoading,
+    refetch: refetchUserProfile,
+  } = useUserMe(!isBootstrapping && !!user);
+
+  const rescuerStep = getSafeRescuerStep(userProfile?.rescuerStep);
+  const onboardingStatus = useMemo<OnboardingStatus>(
+    () => getOnboardingStatusByRescuerStep(userProfile?.rescuerStep, !!user),
+    [userProfile?.rescuerStep, user],
+  );
+  const currentOnboardingLabel = useMemo(
+    () => getOnboardingLabelByRescuerStep(userProfile?.rescuerStep),
+    [userProfile?.rescuerStep],
+  );
+  const isLoading = isBootstrapping || (!!user && isUserProfileLoading);
 
   // Register user (after Google or Email signup)
   const registerUser = useCallback(
@@ -84,68 +90,45 @@ export const useAuth = () => {
       };
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
       setUser(newUser);
-      setOnboardingStatus((prev) => ({ ...prev, isRegistered: true }));
     },
     [],
   );
 
-  // Complete onboarding
-  const completeOnboarding = useCallback(() => {
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETE, "true");
-    localStorage.removeItem(STORAGE_KEYS.LAST_ONBOARDING_PATH);
-    setOnboardingStatus((prev) => ({ ...prev, isComplete: true }));
-  }, []);
-
   // Logout
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEYS.USER);
-    localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETE);
-    localStorage.removeItem(STORAGE_KEYS.LAST_ONBOARDING_PATH);
     // Clear authentication tokens
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
-    setOnboardingStatus({
-      isRegistered: false,
-      hasPersonalInfo: false,
-      hasAbilityCheck: false,
-      hasDetailedAbilities: false,
-      isComplete: false,
-    });
-  }, []);
-
-  // Save current onboarding step so user can resume later
-  const saveOnboardingStep = useCallback((path: string) => {
-    localStorage.setItem(STORAGE_KEYS.LAST_ONBOARDING_PATH, path);
   }, []);
 
   // Get next onboarding step path
-  const getNextOnboardingPath = useCallback((): string => {
-    const lastPath = localStorage.getItem(STORAGE_KEYS.LAST_ONBOARDING_PATH);
-    if (lastPath) {
-      // Migration: /auth/documents was removed, redirect to /auth/detailed-abilities
-      if (lastPath === "/auth/documents") return "/auth/detailed-abilities";
-      return lastPath;
-    }
-    return "/auth/personal-info";
-  }, []);
+  const getNextOnboardingPath = useCallback(
+    (step?: number | null): string => getOnboardingPathByRescuerStep(step ?? rescuerStep),
+    [rescuerStep],
+  );
 
   // Refresh onboarding status
   const refreshOnboardingStatus = useCallback(() => {
     loadUserData();
-  }, [loadUserData]);
+    void refetchUserProfile();
+  }, [loadUserData, refetchUserProfile]);
 
   return {
     user,
+    userProfile,
     isLoading,
     isAuthenticated: !!user,
     onboardingStatus,
+    rescuerStep,
+    currentOnboardingLabel,
+    isOnboardingComplete: isRescuerOnboardingComplete(userProfile?.rescuerStep),
     registerUser,
-    completeOnboarding,
-    saveOnboardingStep,
     logout,
     getNextOnboardingPath,
     refreshOnboardingStatus,
+    refreshUserProfile: refetchUserProfile,
   };
 };
 

@@ -22,7 +22,7 @@ const AuthLoginPage = () => {
   const navigate = useNavigate();
   const googleAuthMutation = useGoogleAuth();
   const loginMutation = useLogin();
-  const { registerUser, completeOnboarding, getNextOnboardingPath } = useAuth();
+  const { registerUser, getNextOnboardingPath } = useAuth();
   const [authMethod, setAuthMethod] = useState<"choice" | "email">("choice");
 
   const [showPassword, setShowPassword] = useState(false);
@@ -101,26 +101,27 @@ const AuthLoginPage = () => {
               authMethod: "google",
             });
 
-            // Fetch user profile to get the real isOnboarded value
+            // Fetch user profile to get the latest rescuerStep from backend
             try {
               const userProfile = await getUserMe();
-              if (userProfile.isOnboarded) {
+              const nextPath = getNextOnboardingPath(userProfile.rescuerStep);
+
+              if (nextPath === "/profile") {
                 toast.success("Đăng nhập thành công!", {
                   description: "Chào mừng bạn quay trở lại.",
                   duration: 3000,
                 });
-                completeOnboarding();
                 navigate("/profile");
               } else {
                 toast.success("Xác thực thành công!", {
                   description: "Chào mừng bạn đến với ResQ.",
                   duration: 3000,
                 });
-                navigate(getNextOnboardingPath());
+                navigate(nextPath);
               }
             } catch {
               // Fallback
-              navigate(getNextOnboardingPath());
+              navigate("/auth/personal-info");
             }
           },
           onError: (error) => {
@@ -153,12 +154,20 @@ const AuthLoginPage = () => {
             authMethod: "email",
           });
 
-          // Use isOnboarded directly from login response
-          if (data.isOnboarded) {
-            completeOnboarding();
-            navigate("/");
-          } else {
-            navigate(getNextOnboardingPath());
+          try {
+            const userProfile = await getUserMe();
+            const nextPath = getNextOnboardingPath(userProfile.rescuerStep);
+
+            if (nextPath === "/profile") {
+              toast.success("Đăng nhập thành công!", {
+                description: "Chào mừng bạn quay trở lại.",
+                duration: 3000,
+              });
+            }
+
+            navigate(nextPath);
+          } catch {
+            navigate("/auth/personal-info");
           }
         },
       },

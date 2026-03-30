@@ -42,7 +42,7 @@ export interface RescuerProfileResponse {
   rescuerType: string | null;
   email: string | null;
   isEmailVerified: boolean;
-  isOnboarded: boolean;
+  rescuerStep: number;
   isEligibleRescuer: boolean;
   latitude: number | null;
   longitude: number | null;

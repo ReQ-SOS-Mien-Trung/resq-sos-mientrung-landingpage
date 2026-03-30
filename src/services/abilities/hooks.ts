@@ -1,4 +1,4 @@
-import { useQuery, useMutation, type UseQueryResult, type UseMutationResult } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, type UseQueryResult, type UseMutationResult } from "@tanstack/react-query";
 import { getAbilities, submitRescuerAbilities, getRescuerAbilities } from "./api";
 import type { AbilitiesResponse, SubmitAbilitiesRequest, SubmitAbilitiesResponse, RescuerAbilitiesResponse } from "./type";
 import type { AxiosError } from "axios";
@@ -28,9 +28,12 @@ export const useSubmitRescuerAbilities = (): UseMutationResult<
   AxiosError<ApiErrorResponse>,
   SubmitAbilitiesRequest
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: submitRescuerAbilities,
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Cập nhật kỹ năng thành công!", {
         description: "Kỹ năng của bạn đã được ghi nhận.",
         duration: 3000,
@@ -42,4 +45,3 @@ export const useSubmitRescuerAbilities = (): UseMutationResult<
     },
   });
 };
-

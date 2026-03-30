@@ -14,7 +14,7 @@ import { useAuth } from "@/hooks/useAuth";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, onboardingStatus, getNextOnboardingPath } = useAuth();
+  const { isAuthenticated, isOnboardingComplete, currentOnboardingLabel, getNextOnboardingPath } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -198,7 +198,7 @@ const Header = () => {
         {/* Vertical Text - Find */}
         <button
           onClick={() => {
-            if (isAuthenticated && onboardingStatus.isComplete) handleNavigate("/profile");
+            if (isAuthenticated && isOnboardingComplete) handleNavigate("/profile");
             else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
             else handleNavigate("/register");
           }}
@@ -208,13 +208,13 @@ const Header = () => {
             className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
-            {isAuthenticated && onboardingStatus.isComplete ? "Hồ sơ của tôi" : "Đăng ký cứu hộ"}
+            {isAuthenticated && isOnboardingComplete ? "Hồ sơ của tôi" : "Đăng ký cứu hộ"}
           </span>
         </button>
 
         {/* Bottom Icons */}
         <div className="border-t border-white/10 py-3 lg:py-4 flex flex-col items-center gap-3 lg:gap-4">
-          {isAuthenticated && !onboardingStatus.isComplete ? (
+          {isAuthenticated && !isOnboardingComplete ? (
             /* Show bell with notification when onboarding incomplete */
             <div className="relative">
               <button
@@ -226,17 +226,21 @@ const Header = () => {
               </button>
               {/* Notification Popup */}
               {showNotification && (
-                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 w-72 bg-white text-black p-4 rounded-lg shadow-xl z-50 border-2 border-black">
+                <div className="absolute left-full top-[30%] -translate-y-1/2 ml-5 w-72 bg-white text-black p-4 rounded-lg shadow-xl z-50 border-2 border-black">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-[#FF5722]/10 rounded-full flex items-center justify-center shrink-0">
                       <BellIcon className="w-5 h-5 text-[#FF5722]" weight="fill" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-black text-black mb-1">
-                        Hoàn tất hồ sơ
+                        Tiếp tục khảo sát
                       </p>
                       <p className="text-xs text-black/60 leading-relaxed">
-                        Bạn cần hoàn tất thông tin để tham gia mạng lưới cứu hộ ResQ SOS.
+                        Khảo sát của bạn đang dừng ở
+                        {" "}
+                        <span className="font-mono text-black">{currentOnboardingLabel}</span>.
+                        {" "}
+                        Tiếp tục để hoàn tất hồ sơ cứu hộ.
                       </p>
                     </div>
                   </div>
@@ -257,7 +261,7 @@ const Header = () => {
           ) : null}
           <button
             onClick={() => {
-              if (isAuthenticated && onboardingStatus.isComplete) {
+              if (isAuthenticated && isOnboardingComplete) {
                 navigate("/profile");
               } else if (isAuthenticated) {
                 navigate(getNextOnboardingPath());
@@ -319,13 +323,13 @@ const Header = () => {
             </button>
             <button
               onClick={() => {
-                if (isAuthenticated && onboardingStatus.isComplete) handleNavigate("/profile");
+                if (isAuthenticated && isOnboardingComplete) handleNavigate("/profile");
                 else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
                 else handleNavigate("/register");
               }}
               className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
             >
-              {isAuthenticated && onboardingStatus.isComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
+              {isAuthenticated && isOnboardingComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
             </button>
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -338,7 +342,7 @@ const Header = () => {
           {/* Mobile Right Icons */}
           <div className="flex lg:hidden items-center gap-2 sm:gap-3">
             {/* Notification bell for mobile */}
-            {isAuthenticated && !onboardingStatus.isComplete && (
+            {isAuthenticated && !isOnboardingComplete && (
               <button
                 onClick={() => navigate(getNextOnboardingPath())}
                 className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-[#FF5722] hover:text-black transition-colors relative"
@@ -355,7 +359,7 @@ const Header = () => {
             </button>
             <button
               onClick={() => {
-                if (isAuthenticated && onboardingStatus.isComplete) {
+                if (isAuthenticated && isOnboardingComplete) {
                   navigate("/profile");
                 } else if (isAuthenticated) {
                   navigate(getNextOnboardingPath());
@@ -509,13 +513,13 @@ const Header = () => {
             </button>
             <button
               onClick={() => {
-                if (isAuthenticated && onboardingStatus.isComplete) handleNavigate("/profile");
+                if (isAuthenticated && isOnboardingComplete) handleNavigate("/profile");
                 else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
                 else handleNavigate("/register");
               }}
               className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"
             >
-              {isAuthenticated && onboardingStatus.isComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
+              {isAuthenticated && isOnboardingComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
             </button>
           </div>
         </div>

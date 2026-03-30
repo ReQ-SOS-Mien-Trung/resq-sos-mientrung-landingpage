@@ -1,6 +1,7 @@
 import {
   useMutation,
   useQuery,
+  useQueryClient,
   type UseMutationResult,
 } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
@@ -44,9 +45,12 @@ export const useUpdateRescuerProfile = (): UseMutationResult<
   AxiosError<ApiErrorResponse>,
   RescuerProfileRequest
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: updateRescuerProfile,
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Cập nhật hồ sơ thành công!", {
         description: "Thông tin cá nhân đã được lưu.",
         duration: 3000,
@@ -65,9 +69,12 @@ export const useSubmitRescuerConsent = (): UseMutationResult<
   AxiosError<ApiErrorResponse>,
   RescuerConsentRequest
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: submitRescuerConsent,
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Xác nhận thành công!", {
         description: "Câu trả lời tiên quyết đã được ghi nhận.",
         duration: 3000,
@@ -85,9 +92,12 @@ export const useApplyRescuer = (): UseMutationResult<
   AxiosError<ApiErrorResponse>,
   RescuerApplyRequest
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: applyRescuer,
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Nộp hồ sơ thành công!", {
         description:
           "Hồ sơ của bạn đã được gửi, vui lòng hoàn tất các bước tiếp theo.",
@@ -107,12 +117,16 @@ export const useSubmitDocuments = (): UseMutationResult<
   AxiosError<ApiErrorResponse>,
   SubmitDocumentsRequest
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: submitDocuments,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
+    },
     onError: (error: AxiosError<ApiErrorResponse>) => {
       // Toast is shown by the global axios interceptor
       console.error("Submit documents failed:", error.response?.data || error.message);
     },
   });
 };
-

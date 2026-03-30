@@ -10,6 +10,9 @@ export const useUserMe = (enabled = true): UseQueryResult<UserProfile, AxiosErro
     queryFn: getUserMe,
     enabled,
     retry: 1,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 };

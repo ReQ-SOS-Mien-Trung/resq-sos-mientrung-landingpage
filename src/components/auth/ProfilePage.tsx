@@ -31,7 +31,7 @@ import { useDocumentFileTypes } from "@/services/form/hooks";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user, onboardingStatus, logout, isLoading: authLoading } = useAuth();
+  const { user, rescuerStep, getNextOnboardingPath, logout, isLoading: authLoading } = useAuth();
   const { data: rescuerAbilities } = useGetRescuerAbilities();
   const { data: abilitiesData } = useGetAbilities();
   const { data: userProfile } = useUserMe();
@@ -42,8 +42,8 @@ const ProfilePage = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!user) { navigate("/auth/login"); return; }
-    if (!onboardingStatus.isComplete) { navigate("/auth/personal-info"); return; }
-  }, [authLoading, user, onboardingStatus.isComplete, navigate]);
+    if (rescuerStep < 3) { navigate(getNextOnboardingPath()); return; }
+  }, [authLoading, getNextOnboardingPath, navigate, rescuerStep, user]);
 
   useEffect(() => {
     if (authLoading) return;
@@ -88,7 +88,7 @@ const ProfilePage = () => {
     );
   }
 
-  if (!user || !onboardingStatus.isComplete) return null;
+  if (!user || rescuerStep < 3) return null;
 
   const skillsByCategory = getSkillsByCategory();
   const totalSkills = selectedAbilityIds.length;
@@ -165,7 +165,7 @@ const ProfilePage = () => {
                     <CheckCircle className="w-3.5 h-3.5" weight="fill" />
                     Đã xác thực
                   </span>
-                ) : userProfile?.isOnboarded ? (
+                ) : (userProfile?.rescuerStep ?? 0) >= 3 ? (
                   <span className="inline-flex items-center gap-2 px-3 py-1.5 border-2 border-[#FF9800] text-[#FF9800] text-[10px] font-black uppercase tracking-[0.2em]">
                     <Clock className="w-3.5 h-3.5" weight="fill" />
                     Chờ xác thực
@@ -340,7 +340,7 @@ const ProfilePage = () => {
       {/* ══════ DOCUMENTS — EDITORIAL GALLERY ══════ */}
       {docs.length > 0 && (
         <section className="border-b border-black">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="max-w-350 mx-auto px-6 lg:px-10">
             {/* Section header */}
             <div className="py-6 border-b border-black/15">
               <div className="flex items-end justify-between">

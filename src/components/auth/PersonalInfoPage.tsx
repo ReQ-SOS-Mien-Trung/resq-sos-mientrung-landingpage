@@ -19,7 +19,7 @@ import { toast } from "sonner";
 
 const PersonalInfoPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, onboardingStatus, isLoading: authLoading, saveOnboardingStep } = useAuth();
+  const { isAuthenticated, rescuerStep, getNextOnboardingPath, isLoading: authLoading } = useAuth();
   const applyMutation = useApplyRescuer();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,11 +61,11 @@ const PersonalInfoPage = () => {
       navigate("/auth/register");
       return;
     }
-    if (onboardingStatus.isComplete) {
-      navigate("/profile");
+    if (rescuerStep > 0) {
+      navigate(getNextOnboardingPath());
       return;
     }
-  }, [authLoading, isAuthenticated, onboardingStatus.isComplete, navigate]);
+  }, [authLoading, getNextOnboardingPath, isAuthenticated, navigate, rescuerStep]);
 
 
 
@@ -275,7 +275,6 @@ const PersonalInfoPage = () => {
       {
         onSuccess: () => {
           setIsSubmitting(false);
-          saveOnboardingStep("/auth/ability-check");
           navigate("/auth/ability-check");
         },
         onError: () => {
@@ -678,18 +677,8 @@ const PersonalInfoPage = () => {
                   3
                 </div>
                 <div>
-                  <p className="font-bold">Chứng chỉ &amp; Tài liệu</p>
-                  <p className="text-sm text-white/60">Tải lên chứng chỉ</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
-                  4
-                </div>
-                <div>
-                  <p className="font-bold">Kỹ năng chi tiết</p>
-                  <p className="text-sm text-white/60">Đánh giá năng lực</p>
+                  <p className="font-bold">Chứng chỉ, Tài liệu &amp; Kỹ năng</p>
+                  <p className="text-sm text-white/60">Tải lên chứng chỉ và chọn kỹ năng</p>
                 </div>
               </div>
             </div>

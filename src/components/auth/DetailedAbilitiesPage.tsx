@@ -60,7 +60,7 @@ const isImageFile = (name: string) => {
 
 const DetailedAbilitiesPage = () => {
   const navigate = useNavigate();
-  const { completeOnboarding, isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, rescuerStep, getNextOnboardingPath, isLoading: authLoading } = useAuth();
   const submitAbilitiesMutation = useSubmitRescuerAbilities();
   const submitDocsMutation = useSubmitDocuments();
   const { data: abilitiesData, isLoading: abilitiesLoading } = useGetAbilities();
@@ -130,8 +130,9 @@ const DetailedAbilitiesPage = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!isAuthenticated) { navigate("/auth/register"); return; }
-    if (onboardingStatus.isComplete) { navigate("/profile"); return; }
-  }, [authLoading, isAuthenticated, onboardingStatus.isComplete, navigate]);
+    if (rescuerStep <= 1) { navigate(getNextOnboardingPath()); return; }
+    if (rescuerStep >= 3) { navigate("/profile"); return; }
+  }, [authLoading, getNextOnboardingPath, isAuthenticated, navigate, rescuerStep]);
 
   // ── Page animation ──
   useEffect(() => {
@@ -259,7 +260,6 @@ const DetailedAbilitiesPage = () => {
         submitAbilitiesMutation.mutateAsync(abilitiesPayload),
       ]);
       clearCertEntries();
-      completeOnboarding();
       navigate("/profile");
     } catch {
       // Error toasts handled by global axios interceptor

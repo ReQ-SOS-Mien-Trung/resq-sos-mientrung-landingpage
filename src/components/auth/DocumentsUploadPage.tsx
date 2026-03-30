@@ -45,7 +45,7 @@ const FileTypeIcon = ({ name }: { name: string }) => {
 /* ═══════════════════════════════════════════════════════════════ */
 const DocumentsUploadPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading: authLoading, saveOnboardingStep } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const submitDocsMutation = useSubmitDocuments();
   const { data: certTypes = [], isLoading: certTypesLoading } = useDocumentFileTypes();
 
@@ -182,7 +182,6 @@ const DocumentsUploadPage = () => {
       {
         onSuccess: () => {
           setIsSubmitting(false);
-          saveOnboardingStep("/auth/detailed-abilities");
           navigate("/auth/detailed-abilities");
         },
         onError: () => {
@@ -235,7 +234,7 @@ const DocumentsUploadPage = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold uppercase tracking-wider text-black/60">
-                Bước 3/4 — Chứng chỉ &amp; Tài liệu
+                Bước 3/3 — Chứng chỉ &amp; Tài liệu
               </span>
             </div>
             <div className="h-2 bg-black/10 rounded-full overflow-hidden">
@@ -472,18 +471,8 @@ const DocumentsUploadPage = () => {
                   3
                 </div>
                 <div>
-                  <p className="font-bold">Chứng chỉ &amp; Tài liệu</p>
-                  <p className="text-sm text-white/60">Đang thực hiện</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg opacity-60">
-                <div className="w-10 h-10 bg-white/20 flex items-center justify-center font-black rounded shrink-0">
-                  4
-                </div>
-                <div>
-                  <p className="font-bold">Kỹ năng chi tiết</p>
-                  <p className="text-sm text-white/60">Đánh giá năng lực</p>
+                  <p className="font-bold">Chứng chỉ, Tài liệu &amp; Kỹ năng</p>
+                  <p className="text-sm text-white/60">Đang tải chứng chỉ và chọn kỹ năng</p>
                 </div>
               </div>
             </div>

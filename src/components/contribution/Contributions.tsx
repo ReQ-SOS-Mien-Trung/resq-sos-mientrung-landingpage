@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 gsap.registerPlugin(ScrollTrigger);
 
 const Contributions = () => {
-  const { isAuthenticated, onboardingStatus } = useAuth();
+  const { isAuthenticated, isOnboardingComplete, getNextOnboardingPath } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -125,10 +125,10 @@ const Contributions = () => {
           <h3 className="text-lg sm:text-xl font-bold mb-2">Tham gia cùng chúng tôi</h3>
           <p className="text-xs sm:text-sm text-black/50 mb-4 sm:mb-6">Trở thành một phần của sứ mệnh nhân đạo.</p>
           <Link
-            to={isAuthenticated && onboardingStatus.isComplete ? "/profile" : "/register"}
+            to={isAuthenticated ? (isOnboardingComplete ? "/profile" : getNextOnboardingPath()) : "/register"}
             className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black transition-colors w-fit"
           >
-            {isAuthenticated && onboardingStatus.isComplete ? "Xem hồ sơ" : "Đăng ký ngay"}
+            {isAuthenticated ? (isOnboardingComplete ? "Xem hồ sơ" : "Tiếp tục hồ sơ") : "Đăng ký ngay"}
           </Link>
         </div>
       </div>

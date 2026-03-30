@@ -19,7 +19,7 @@ import { useAuth } from "@/hooks/useAuth";
 const AuthRegisterPage = () => {
   const navigate = useNavigate();
   const registerMutation = useRegisterRescuer();
-  const { isAuthenticated, onboardingStatus, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, getNextOnboardingPath, isLoading: authLoading } = useAuth();
   const [step, setStep] = useState<"auth" | "profile">("auth");
   const [authMethod] = useState<"choice" | "email">("email");
   const [showPassword, setShowPassword] = useState(false);
@@ -55,13 +55,9 @@ const AuthRegisterPage = () => {
     if (authLoading) return; // Wait until auth state is loaded
 
     if (isAuthenticated) {
-      if (onboardingStatus.isComplete) {
-        navigate("/profile");
-      } else {
-        navigate("/auth/personal-info");
-      }
+      navigate(getNextOnboardingPath());
     }
-  }, [authLoading, isAuthenticated, onboardingStatus.isComplete, navigate]);
+  }, [authLoading, getNextOnboardingPath, isAuthenticated, navigate]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
