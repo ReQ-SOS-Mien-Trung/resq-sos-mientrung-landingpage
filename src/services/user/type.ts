@@ -11,6 +11,17 @@ export interface RescuerApplicationDocument {
 
 export type UserPermission = string;
 
+export interface RescuerScore {
+  responseTimeScore: number | null;
+  rescueEffectivenessScore: number | null;
+  decisionHandlingScore: number | null;
+  safetyMedicalSkillScore: number | null;
+  teamworkCommunicationScore: number | null;
+  overallAverageScore: number | null;
+  evaluationCount: number;
+  updatedAt: string | null;
+}
+
 // Raw API response from GET /identity/user/me
 export interface UserMeResponse {
   id: string;
@@ -35,6 +46,7 @@ export interface UserMeResponse {
   permissions: UserPermission[];
   depotId: string | number | null;
   depotName: string | null;
+  rescuerScore?: RescuerScore | null;
   address?: string | null;
   ward?: string | null;
   city?: string | null;

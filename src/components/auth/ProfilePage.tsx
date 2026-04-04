@@ -28,6 +28,7 @@ import { useGetAbilities, useGetRescuerAbilities } from "@/services/abilities/ho
 import { buildSkillCategories } from "@/services/abilities/utils";
 import { useUserMe } from "@/services/user/hooks";
 import { useDocumentFileTypes } from "@/services/form/hooks";
+import RescuerScoreRadar from "./RescuerScoreRadar";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -157,7 +158,7 @@ const ProfilePage = () => {
           <div className="grid lg:grid-cols-12 gap-0">
 
             {/* Main headline column */}
-            <div className="lg:col-span-8 lg:border-r lg:border-black lg:pr-10 py-10 lg:py-14">
+            <div className="lg:col-span-8 lg:border-r lg:border-black lg:pr-10 py-6 lg:py-10">
               {/* Verification badge */}
               <div className="ed-fade mb-6">
                 {userProfile?.isEligibleRescuer ? (
@@ -180,10 +181,10 @@ const ProfilePage = () => {
 
               {/* Name — editorial headline */}
               <div className="ed-fade mb-8">
-                <h1 className="text-[56px] sm:text-[72px] lg:text-[96px] xl:text-[112px] font-black leading-[0.88] tracking-[-0.04em]">
+                <h1 className="text-[48px] sm:text-[64px] lg:text-[72px] xl:text-[80px] font-black leading-[0.88] tracking-[-0.04em]">
                   {(userProfile?.lastName || fullName.split(" ").slice(-1)[0])?.toUpperCase()}
                 </h1>
-                <h2 className="text-[32px] sm:text-[40px] lg:text-[56px] font-black leading-[0.88] tracking-[-0.03em] text-black/25 mt-2">
+                <h2 className="text-[56px] sm:text-[64px] lg:text-[72px] font-black leading-[0.88] tracking-[-0.03em] text-black/25 mt-2">
                   {(userProfile?.firstName || fullName.split(" ").slice(0, -1).join(" "))?.toUpperCase() || "TÌNH NGUYỆN VIÊN"}
                 </h2>
               </div>
@@ -198,12 +199,12 @@ const ProfilePage = () => {
               {/* Contact details — small text block */}
               <div className="ed-fade grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2.5">
-                  <p className="flex items-center gap-3 text-sm text-black/60">
+                  <p className="flex items-center gap-3 text-base text-black/60">
                     <Envelope className="w-4 h-4 text-black/30 shrink-0" />
                     {userProfile?.email || user.email}
                   </p>
                   {userProfile?.phone && (
-                    <p className="flex items-center gap-3 text-sm text-black/60">
+                    <p className="flex items-center gap-3 text-base text-black/60">
                       <Phone className="w-4 h-4 text-black/30 shrink-0" />
                       {userProfile.phone}
                     </p>
@@ -211,12 +212,12 @@ const ProfilePage = () => {
                 </div>
                 <div className="space-y-2.5">
                   {userProfile?.city && (
-                    <p className="flex items-center gap-3 text-sm text-black/60">
+                    <p className="flex items-center gap-3 text-base text-black/60">
                       <MapPin className="w-4 h-4 text-black/30 shrink-0" />
                       {[userProfile.ward, userProfile.city].filter(Boolean).join(", ")}
                     </p>
                   )}
-                  <p className="flex items-center gap-3 text-sm text-black/60">
+                  <p className="flex items-center gap-3 text-base text-black/60">
                     <CalendarBlank className="w-4 h-4 text-black/30 shrink-0" />
                     Tham gia từ {memberDate}
                   </p>
@@ -225,10 +226,10 @@ const ProfilePage = () => {
             </div>
 
             {/* Sidebar — stats & avatar */}
-            <div className="lg:col-span-4 lg:pl-10 py-10 lg:py-14 flex flex-col">
+            <div className="lg:col-span-4 lg:pl-10 py-6 lg:py-10 flex flex-col">
               {/* Avatar */}
               <div className="ed-fade mb-8">
-                <div className="w-full aspect-[4/5] bg-black overflow-hidden relative">
+                <div className="w-full max-w-[320px] lg:ml-auto lg:mr-0 mx-auto aspect-4/5 bg-black overflow-hidden relative">
                   {(userProfile?.avatarUrl || user.avatar) ? (
                     <img src={userProfile?.avatarUrl || user.avatar} alt={fullName} className="w-full h-full object-cover" />
                   ) : (
@@ -247,24 +248,26 @@ const ProfilePage = () => {
               </div>
 
               {/* Stats — editorial number blocks */}
-              <div className="ed-fade grid grid-cols-2 border border-black">
-                <div className="p-5 border-r border-black text-center">
-                  <p className="text-4xl lg:text-5xl font-black leading-none">
+              <div className="ed-fade w-full max-w-[320px] lg:ml-auto lg:mr-0 mx-auto grid grid-cols-2 border border-black">
+                <div className="p-4 lg:p-3 border-r border-black text-center">
+                  <p className="text-3xl lg:text-4xl font-black leading-none">
                     {totalSkills}
                   </p>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-black/40 mt-2">Kỹ năng</p>
+                  <p className="text-[8px] font-bold uppercase tracking-[0.22em] text-black/40 mt-1.5">Kỹ năng</p>
                 </div>
-                <div className="p-5 text-center">
-                  <p className="text-4xl lg:text-5xl font-black leading-none text-[#FF5722]">
+                <div className="p-4 lg:p-3 text-center">
+                  <p className="text-3xl lg:text-4xl font-black leading-none text-[#FF5722]">
                     {docs.length}
                   </p>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-black/40 mt-2">Chứng chỉ</p>
+                  <p className="text-[8px] font-bold uppercase tracking-[0.22em] text-black/40 mt-1.5">Chứng chỉ</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <RescuerScoreRadar rescuerScore={userProfile?.rescuerScore} />
 
       {/* ══════ SKILLS — MULTI-COLUMN GRID ══════ */}
       <section className="border-b border-black">
@@ -273,7 +276,7 @@ const ProfilePage = () => {
           <div className="py-6 border-b border-black/15">
             <div className="flex items-end justify-between">
               <div className="ed-fade">
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-1">Mục II</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-1">Mục III</p>
                 <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.02em]">
                   Năng lực cứu hộ
                 </h2>
@@ -345,7 +348,7 @@ const ProfilePage = () => {
             <div className="py-6 border-b border-black/15">
               <div className="flex items-end justify-between">
                 <div className="ed-fade">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-1">Mục III</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF5722] mb-1">Mục IV</p>
                   <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.02em]">
                     Chứng chỉ & Tài liệu
                   </h2>
