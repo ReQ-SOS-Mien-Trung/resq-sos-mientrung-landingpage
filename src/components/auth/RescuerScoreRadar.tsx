@@ -316,14 +316,10 @@ const RescuerScoreRadar = ({ rescuerScore }: RescuerScoreRadarProps) => {
         </div>
 
         {/* Main card */}
-        {evaluationCount < 3 ? (
+        {!hasData ? (
           <div className="flex flex-col items-center justify-center gap-2 rounded-[32px] border border-black/10 bg-black/3 px-8 py-16 text-center">
             <Icon icon="mdi:chart-arc" width={48} height={48} className="text-black/20" />
-            <p className="text-lg font-semibold text-black/50">Chưa đủ tiêu chí để đánh giá năng lực cứu hộ viên</p>
-            <p className="text-base text-black/35">
-              Cần ít nhất <span className="font-bold text-black">3 đánh giá</span> để hiển thị chỉ số cứu hộ.
-              Hiện tại: <span className="font-bold text-black">{evaluationCount}</span> đánh giá.
-            </p>
+            <p className="text-lg font-regular text-black/50">Chưa đủ tiêu chí để đánh giá năng lực cứu hộ viên</p>
           </div>
         ) : (
         <div
