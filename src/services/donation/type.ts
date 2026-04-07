@@ -7,7 +7,7 @@ export interface DonationRequest {
   amount: number;
   note: string;
   isPrivate: boolean;
-  paymentMethodId: number;
+  paymentMethodId: string;
 }
 
 export interface DonationResponse {
@@ -43,9 +43,8 @@ export interface PublicDonationsResponse {
 }
 
 export interface PaymentMethod {
-  id: number;
-  code: string;
-  name: string;
+  key: string;
+  value: string;
 }
 
 export interface ZaloPayVerifyParams {
