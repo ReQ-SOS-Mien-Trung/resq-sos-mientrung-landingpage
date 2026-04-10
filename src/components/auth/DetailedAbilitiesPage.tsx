@@ -60,7 +60,13 @@ const isImageFile = (name: string) => {
 
 const DetailedAbilitiesPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, rescuerStep, getNextOnboardingPath, isLoading: authLoading } = useAuth();
+  const {
+    isAuthenticated,
+    rescuerStep,
+    getNextOnboardingPath,
+    refreshUserProfile,
+    isLoading: authLoading,
+  } = useAuth();
   const submitAbilitiesMutation = useSubmitRescuerAbilities();
   const submitDocsMutation = useSubmitDocuments();
   const { data: abilitiesData, isLoading: abilitiesLoading } = useGetAbilities();
@@ -255,12 +261,17 @@ const DetailedAbilitiesPage = () => {
     };
 
     try {
-      await Promise.all([
+      const [docsResponse] = await Promise.all([
         submitDocsMutation.mutateAsync({ documents }),
         submitAbilitiesMutation.mutateAsync(abilitiesPayload),
       ]);
+      const refreshedProfile = await refreshUserProfile();
       clearCertEntries();
-      navigate("/profile");
+      navigate(
+        getNextOnboardingPath(
+          refreshedProfile.data?.rescuerStep ?? docsResponse.rescuerStep,
+        ),
+      );
     } catch {
       // Error toasts handled by global axios interceptor
     } finally {

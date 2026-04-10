@@ -29,7 +29,13 @@ const iconMap = {
 
 const AbilityQuestionsPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, rescuerStep, getNextOnboardingPath, isLoading: authLoading } = useAuth();
+  const {
+    isAuthenticated,
+    rescuerStep,
+    getNextOnboardingPath,
+    refreshUserProfile,
+    isLoading: authLoading,
+  } = useAuth();
   const consentMutation = useSubmitRescuerConsent();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: boolean | null }>({});
@@ -98,21 +104,25 @@ const AbilityQuestionsPage = () => {
     }
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     // Call consent API - all 4 must be true
-    consentMutation.mutate(
-      {
+    try {
+      const nextProfile = await consentMutation.mutateAsync({
         agreeMedicalFitness: true,
         agreeLegalResponsibility: true,
         agreeTraining: true,
         agreeCodeOfConduct: true,
-      },
-      {
-        onSuccess: () => {
-          navigate("/auth/detailed-abilities");
-        },
-      }
-    );
+      });
+
+      const refreshedProfile = await refreshUserProfile();
+      navigate(
+        getNextOnboardingPath(
+          refreshedProfile.data?.rescuerStep ?? nextProfile.rescuerStep,
+        ),
+      );
+    } catch {
+      // Error toasts handled by global axios interceptor
+    }
   };
 
   const progress = ((currentQuestion + (isCompleted ? 1 : 0)) / prerequisiteQuestions.length) * 100;

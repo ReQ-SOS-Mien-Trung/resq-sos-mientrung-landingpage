@@ -25,7 +25,40 @@ import type {
   SubmitDocumentsResponse,
   DocumentFileType,
 } from "./type";
+import type { UserProfile } from "@/services/user/type";
 // Note: Error toasts (400/401) are handled globally by the axios interceptor.
+
+const mergeUserProfile = (
+  current: UserProfile | undefined,
+  data: RescuerProfileResponse,
+): UserProfile => ({
+  id: data.id,
+  roleId: data.roleId,
+  firstName: current?.firstName ?? null,
+  lastName: current?.lastName ?? null,
+  username: data.username,
+  phone: data.phone,
+  rescuerType: data.rescuerType,
+  email: data.email,
+  isEmailVerified: data.isEmailVerified,
+  isEligibleRescuer: data.isEligibleRescuer,
+  rescuerStep: data.rescuerStep,
+  avatarUrl: current?.avatarUrl ?? null,
+  latitude: data.latitude,
+  longitude: data.longitude,
+  createdAt: data.createdAt,
+  updatedAt: data.updatedAt,
+  approvedBy: data.approvedBy,
+  approvedAt: data.approvedAt,
+  rescuerApplicationDocuments: current?.rescuerApplicationDocuments ?? [],
+  permissions: current?.permissions ?? [],
+  depotId: current?.depotId ?? null,
+  depotName: current?.depotName ?? null,
+  rescuerScore: current?.rescuerScore ?? null,
+  address: current?.address ?? null,
+  ward: current?.ward ?? null,
+  city: current?.city ?? null,
+});
 
 // Fetch document file types
 export const useDocumentFileTypes = () => {
@@ -49,7 +82,10 @@ export const useUpdateRescuerProfile = (): UseMutationResult<
 
   return useMutation({
     mutationFn: updateRescuerProfile,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData<UserProfile>(["user", "me"], (current) =>
+        mergeUserProfile(current, data),
+      );
       void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Cập nhật hồ sơ thành công!", {
         description: "Thông tin cá nhân đã được lưu.",
@@ -73,7 +109,10 @@ export const useSubmitRescuerConsent = (): UseMutationResult<
 
   return useMutation({
     mutationFn: submitRescuerConsent,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData<UserProfile>(["user", "me"], (current) =>
+        mergeUserProfile(current, data),
+      );
       void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Xác nhận thành công!", {
         description: "Câu trả lời tiên quyết đã được ghi nhận.",
@@ -96,7 +135,10 @@ export const useApplyRescuer = (): UseMutationResult<
 
   return useMutation({
     mutationFn: applyRescuer,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData<UserProfile>(["user", "me"], (current) =>
+        mergeUserProfile(current, data),
+      );
       void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       toast.success("Nộp hồ sơ thành công!", {
         description:
@@ -121,7 +163,10 @@ export const useSubmitDocuments = (): UseMutationResult<
 
   return useMutation({
     mutationFn: submitDocuments,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData<UserProfile>(["user", "me"], (current) =>
+        mergeUserProfile(current, data),
+      );
       void queryClient.invalidateQueries({ queryKey: ["user", "me"] });
     },
     onError: (error: AxiosError<ApiErrorResponse>) => {

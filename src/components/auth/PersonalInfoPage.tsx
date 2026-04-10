@@ -19,7 +19,13 @@ import { toast } from "sonner";
 
 const PersonalInfoPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, rescuerStep, getNextOnboardingPath, isLoading: authLoading } = useAuth();
+  const {
+    isAuthenticated,
+    rescuerStep,
+    getNextOnboardingPath,
+    refreshUserProfile,
+    isLoading: authLoading,
+  } = useAuth();
   const applyMutation = useApplyRescuer();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -260,8 +266,8 @@ const PersonalInfoPage = () => {
 
     setIsSubmitting(true);
 
-    applyMutation.mutate(
-      {
+    try {
+      const nextProfile = await applyMutation.mutateAsync({
         rescuerType: "Volunteer",
         firstName: profileData.firstName,
         lastName: profileData.lastName,
@@ -271,17 +277,17 @@ const PersonalInfoPage = () => {
         province: profileData.city,
         latitude,
         longitude,
-      },
-      {
-        onSuccess: () => {
-          setIsSubmitting(false);
-          navigate("/auth/ability-check");
-        },
-        onError: () => {
-          setIsSubmitting(false);
-        },
-      }
-    );
+      });
+
+      const refreshedProfile = await refreshUserProfile();
+      navigate(
+        getNextOnboardingPath(
+          refreshedProfile.data?.rescuerStep ?? nextProfile.rescuerStep,
+        ),
+      );
+    } catch {
+      setIsSubmitting(false);
+    }
   };
 
   // Calculate progress
