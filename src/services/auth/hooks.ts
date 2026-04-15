@@ -45,8 +45,14 @@ export const useRegisterRescuer = (): UseMutationResult<
       console.log("Registration successful:", data);
     },
     onError: (error: AxiosError<AuthError>) => {
-      // Toast is shown by the global axios interceptor
-      console.error("Registration failed:", error.response?.data || error.message);
+      const message = error.response?.data?.message || "Đăng ký thất bại";
+      toast.error(message, {
+        duration: 5000,
+      });
+      console.error(
+        "Registration failed:",
+        error.response?.data || error.message,
+      );
     },
   });
 };
@@ -119,7 +125,10 @@ export const useGoogleAuth = (): UseMutationResult<
     },
     onError: (error: AxiosError<AuthError>) => {
       // Toast is shown by the global axios interceptor
-      console.error("Google auth failed:", error.response?.data || error.message);
+      console.error(
+        "Google auth failed:",
+        error.response?.data || error.message,
+      );
     },
   });
 };
@@ -133,7 +142,7 @@ export const useResendVerification = (): UseMutationResult<
   return useMutation({
     mutationFn: resendVerificationEmail,
     onSuccess: (data: ResendVerificationResponse) => {
-      if (data.success) {
+      if (data.success !== false) {
         toast.success("Gửi email thành công!", {
           description: data.message || "Vui lòng kiểm tra hộp thư của bạn.",
           duration: 5000,
@@ -147,8 +156,15 @@ export const useResendVerification = (): UseMutationResult<
       console.log("Resend verification:", data);
     },
     onError: (error: AxiosError<AuthError>) => {
-      // Toast is shown by the global axios interceptor
-      console.error("Resend verification failed:", error.response?.data || error.message);
+      const message =
+        error.response?.data?.message || "Gửi email xác thực thất bại";
+      toast.error(message, {
+        duration: 5000,
+      });
+      console.error(
+        "Resend verification failed:",
+        error.response?.data || error.message,
+      );
     },
   });
 };
@@ -169,7 +185,10 @@ export const useForgotPassword = (): UseMutationResult<
     },
     onError: (error: AxiosError<AuthError>) => {
       // Toast is shown by the global axios interceptor
-      console.error("Forgot password failed:", error.response?.data || error.message);
+      console.error(
+        "Forgot password failed:",
+        error.response?.data || error.message,
+      );
     },
   });
 };
@@ -190,7 +209,10 @@ export const useResetPassword = (): UseMutationResult<
     },
     onError: (error: AxiosError<AuthError>) => {
       // Toast is shown by the global axios interceptor
-      console.error("Reset password failed:", error.response?.data || error.message);
+      console.error(
+        "Reset password failed:",
+        error.response?.data || error.message,
+      );
     },
   });
 };

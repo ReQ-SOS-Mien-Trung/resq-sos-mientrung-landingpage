@@ -25,8 +25,14 @@ import {
   VEHICLE_SKILL_IDS,
 } from "@/constants/skillConflicts";
 import { useAuth } from "@/hooks/useAuth";
-import { useGetAbilities, useSubmitRescuerAbilities } from "@/services/abilities/hooks";
-import { useDocumentFileTypes, useSubmitDocuments } from "@/services/form/hooks";
+import {
+  useGetAbilities,
+  useSubmitRescuerAbilities,
+} from "@/services/abilities/hooks";
+import {
+  useDocumentFileTypes,
+  useSubmitDocuments,
+} from "@/services/form/hooks";
 import { buildSkillCategories } from "@/services/abilities/utils";
 import type { SkillSubgroup } from "@/services/abilities/utils";
 import { uploadFile } from "@/utils/uploadFile";
@@ -47,7 +53,8 @@ const CATEGORY_DOC_MAP: Record<string, string> = {
 /* ── File icon helper ─────────────────────────────────────────── */
 const FileTypeIcon = ({ name }: { name: string }) => {
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
-  if (ext === "pdf") return <FilePdf className="w-5 h-5 text-red-500" weight="duotone" />;
+  if (ext === "pdf")
+    return <FilePdf className="w-5 h-5 text-red-500" weight="duotone" />;
   if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext))
     return <ImageIcon className="w-5 h-5 text-blue-500" weight="duotone" />;
   return <FileIcon className="w-5 h-5 text-black/40" weight="duotone" />;
@@ -69,8 +76,10 @@ const DetailedAbilitiesPage = () => {
   } = useAuth();
   const submitAbilitiesMutation = useSubmitRescuerAbilities();
   const submitDocsMutation = useSubmitDocuments();
-  const { data: abilitiesData, isLoading: abilitiesLoading } = useGetAbilities();
-  const { data: docFileTypes = [], isLoading: docTypesLoading } = useDocumentFileTypes();
+  const { data: abilitiesData, isLoading: abilitiesLoading } =
+    useGetAbilities();
+  const { data: docFileTypes = [], isLoading: docTypesLoading } =
+    useDocumentFileTypes();
 
   // Build categories from API data
   const apiSkillCategories = useMemo(() => {
@@ -81,7 +90,7 @@ const DetailedAbilitiesPage = () => {
   // Build label map from API
   const apiLabelMap = useMemo(() => {
     const map = new Map<number, string>();
-    abilitiesData?.items.forEach(a => map.set(a.id, a.description));
+    abilitiesData?.items.forEach((a) => map.set(a.id, a.description));
     return map;
   }, [abilitiesData]);
 
@@ -95,7 +104,13 @@ const DetailedAbilitiesPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ── Document state từ Zustand store ──
-  const { certEntries, addCertEntry, removeCertEntry, updateCertEntry, clearCertEntries } = useOnboardingStore();
+  const {
+    certEntries,
+    addCertEntry,
+    removeCertEntry,
+    updateCertEntry,
+    clearCertEntries,
+  } = useOnboardingStore();
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [pendingCertType, setPendingCertType] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -121,12 +136,14 @@ const DetailedAbilitiesPage = () => {
   // Filter document types for current category
   const currentDocTypes = useMemo(() => {
     return docFileTypes.filter(
-      (dt) => dt.documentFileTypeCategory?.code === docCategoryCode
+      (dt) => dt.documentFileTypeCategory?.code === docCategoryCode,
     );
   }, [docFileTypes, docCategoryCode]);
 
   // Documents for current page
-  const currentPageCerts = certEntries.filter((e) => e.categoryCode === currentCatCode);
+  const currentPageCerts = certEntries.filter(
+    (e) => e.categoryCode === currentCatCode,
+  );
   const isAnyUploading = certEntries.some((e) => e.isUploading);
 
   // Có thể tiếp tục nếu không yêu cầu hoặc đã chọn >=1 file
@@ -135,15 +152,34 @@ const DetailedAbilitiesPage = () => {
   // ── Guards ──
   useEffect(() => {
     if (authLoading) return;
-    if (!isAuthenticated) { navigate("/auth/register"); return; }
-    if (rescuerStep <= 1) { navigate(getNextOnboardingPath()); return; }
-    if (rescuerStep >= 3) { navigate("/profile"); return; }
-  }, [authLoading, getNextOnboardingPath, isAuthenticated, navigate, rescuerStep]);
+    if (!isAuthenticated) {
+      navigate("/auth/register");
+      return;
+    }
+    if (rescuerStep <= 1) {
+      navigate(getNextOnboardingPath());
+      return;
+    }
+    if (rescuerStep >= 3) {
+      navigate("/profile");
+      return;
+    }
+  }, [
+    authLoading,
+    getNextOnboardingPath,
+    isAuthenticated,
+    navigate,
+    rescuerStep,
+  ]);
 
   // ── Page animation ──
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(formRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
+      gsap.fromTo(
+        formRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+      );
     }, containerRef);
     return () => ctx.revert();
   }, [currentCategory]);
@@ -152,8 +188,10 @@ const DetailedAbilitiesPage = () => {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (
-        popoverRef.current && !popoverRef.current.contains(e.target as Node) &&
-        addBtnRef.current && !addBtnRef.current.contains(e.target as Node)
+        popoverRef.current &&
+        !popoverRef.current.contains(e.target as Node) &&
+        addBtnRef.current &&
+        !addBtnRef.current.contains(e.target as Node)
       ) {
         setPopoverOpen(false);
       }
@@ -166,15 +204,19 @@ const DetailedAbilitiesPage = () => {
   const toggleSkill = (skillId: number, subgroup?: SkillSubgroup) => {
     if (impliedSkills.includes(skillId)) return;
     if (selectedSkills.includes(skillId)) {
-      setSelectedSkills(prev => prev.filter(id => id !== skillId));
+      setSelectedSkills((prev) => prev.filter((id) => id !== skillId));
       return;
     }
-    const isSingleSelect = subgroup && SINGLE_SELECT_SUBGROUP_IDS.includes(subgroup.id);
+    const isSingleSelect =
+      subgroup && SINGLE_SELECT_SUBGROUP_IDS.includes(subgroup.id);
     if (isSingleSelect && subgroup) {
       const subgroupSkillIds = subgroup.skills.map((s) => s.id);
-      setSelectedSkills(prev => [...prev.filter(id => !subgroupSkillIds.includes(id)), skillId]);
+      setSelectedSkills((prev) => [
+        ...prev.filter((id) => !subgroupSkillIds.includes(id)),
+        skillId,
+      ]);
     } else {
-      setSelectedSkills(prev => [...prev, skillId]);
+      setSelectedSkills((prev) => [...prev, skillId]);
     }
   };
 
@@ -251,10 +293,12 @@ const DetailedAbilitiesPage = () => {
     }
 
     // Gom tất cả URL (cứ + mới) để submit
-    const documents = certEntries.map((e) => ({
-      fileUrl: e.fileUrl || uploadedUrlMap.get(e.id) || "",
-      fileTypeId: e.certTypeId,
-    })).filter((d) => d.fileUrl);
+    const documents = certEntries
+      .map((e) => ({
+        fileUrl: e.fileUrl || uploadedUrlMap.get(e.id) || "",
+        fileTypeId: e.certTypeId,
+      }))
+      .filter((d) => d.fileUrl);
 
     const abilitiesPayload = {
       abilities: allSelectedSkills.map((id) => ({ abilityId: id, level: 1 })),
@@ -280,7 +324,12 @@ const DetailedAbilitiesPage = () => {
   };
 
   // ── Loading ──
-  if (authLoading || abilitiesLoading || docTypesLoading || apiSkillCategories.length === 0) {
+  if (
+    authLoading ||
+    abilitiesLoading ||
+    docTypesLoading ||
+    apiSkillCategories.length === 0
+  ) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -291,9 +340,12 @@ const DetailedAbilitiesPage = () => {
     );
   }
 
-  const categoryProgress = ((currentCategory + 1) / apiSkillCategories.length) * 100;
-  const allCategorySkills = currentCat.subgroups.flatMap(sg => sg.skills);
-  const categorySkillsCount = allCategorySkills.filter(skill => allSelectedSkills.includes(skill.id)).length;
+  const categoryProgress =
+    ((currentCategory + 1) / apiSkillCategories.length) * 100;
+  const allCategorySkills = currentCat.subgroups.flatMap((sg) => sg.skills);
+  const categorySkillsCount = allCategorySkills.filter((skill) =>
+    allSelectedSkills.includes(skill.id),
+  ).length;
 
   return (
     <div ref={containerRef} className="min-h-screen bg-white">
@@ -342,7 +394,11 @@ const DetailedAbilitiesPage = () => {
       {/* Header */}
       <header className="h-16 border-b border-black/10 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
         <Link to="/" className="hover:opacity-70 transition-opacity">
-          <img src="/resq_typo_logo.svg" alt="ResQ SOS" className="h-12 sm:h-14 lg:h-16 w-auto" />
+          <img
+            src="/resq_typo_logo.svg"
+            alt="ResQ SOS"
+            className="h-12 sm:h-14 lg:h-16 w-auto"
+          />
         </Link>
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-black/60">
           Bước 3/3 - Kỹ năng & Chứng chỉ
@@ -378,13 +434,18 @@ const DetailedAbilitiesPage = () => {
               {currentCat.title.toUpperCase()}
             </h1>
             <p className="text-sm sm:text-base text-black/60 mb-6">
-              Tải lên chứng chỉ{isUploadRequired ? " (bắt buộc)" : " (không bắt buộc)"} và chọn các kỹ năng bạn có.
+              Tải lên chứng chỉ
+              {isUploadRequired ? " (bắt buộc)" : " (không bắt buộc)"} và chọn
+              các kỹ năng bạn có.
             </p>
 
             {/* ═══════ DOCUMENT UPLOAD SECTION ═══════ */}
             <div className="mb-8 p-5 bg-black/[0.02] border-2 border-dashed border-black/15 rounded-2xl">
               <div className="flex items-center gap-2 mb-4">
-                <Certificate className="w-5 h-5 text-[#FF5722]" weight="duotone" />
+                <Certificate
+                  className="w-5 h-5 text-[#FF5722]"
+                  weight="duotone"
+                />
                 <h3 className="text-sm font-bold uppercase tracking-wider text-black/70">
                   Chứng chỉ & Tài liệu
                 </h3>
@@ -410,19 +471,28 @@ const DetailedAbilitiesPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: 20 }}
                         transition={{ duration: 0.2 }}
-                        className={`flex items-center gap-3 p-3 rounded-xl border-2 ${entry.isUploading
-                          ? "border-black/10 bg-white"
-                          : "border-[#00A650]/30 bg-[#00A650]/5"
-                          }`}
+                        className={`flex items-center gap-3 p-3 rounded-xl border-2 ${
+                          entry.isUploading
+                            ? "border-black/10 bg-white"
+                            : "border-[#00A650]/30 bg-[#00A650]/5"
+                        }`}
                       >
                         {/* Thumbnail / Icon */}
                         <div className="shrink-0">
                           {entry.isUploading ? (
-                            <SpinnerGap className="w-5 h-5 text-[#FF5722] animate-spin" weight="bold" />
-                          ) : isImageFile(entry.fileName) && (entry.localPreviewUrl || entry.fileUrl) ? (
+                            <SpinnerGap
+                              className="w-5 h-5 text-[#FF5722] animate-spin"
+                              weight="bold"
+                            />
+                          ) : isImageFile(entry.fileName) &&
+                            (entry.localPreviewUrl || entry.fileUrl) ? (
                             <button
                               type="button"
-                              onClick={() => setPreviewUrl(entry.localPreviewUrl || entry.fileUrl)}
+                              onClick={() =>
+                                setPreviewUrl(
+                                  entry.localPreviewUrl || entry.fileUrl,
+                                )
+                              }
                               className="w-10 h-10 rounded-lg overflow-hidden border border-black/10 hover:ring-2 hover:ring-[#FF5722] transition-all relative group"
                             >
                               <img
@@ -431,11 +501,17 @@ const DetailedAbilitiesPage = () => {
                                 className="w-full h-full object-cover"
                               />
                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                                <Eye className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" weight="bold" />
+                                <Eye
+                                  className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                  weight="bold"
+                                />
                               </div>
                             </button>
                           ) : (
-                            <CheckCircle className="w-5 h-5 text-[#00A650]" weight="fill" />
+                            <CheckCircle
+                              className="w-5 h-5 text-[#00A650]"
+                              weight="fill"
+                            />
                           )}
                         </div>
 
@@ -447,7 +523,9 @@ const DetailedAbilitiesPage = () => {
                           <div className="flex items-center gap-1.5 mt-0.5">
                             <FileTypeIcon name={entry.fileName} />
                             <p className="text-sm text-black/60 truncate">
-                              {entry.isUploading ? "Đang tải lên..." : entry.fileName}
+                              {entry.isUploading
+                                ? "Đang tải lên..."
+                                : entry.fileName}
                             </p>
                           </div>
                         </div>
@@ -455,15 +533,20 @@ const DetailedAbilitiesPage = () => {
                         {/* Preview & Remove */}
                         {!entry.isUploading && (
                           <div className="flex items-center gap-1 shrink-0">
-                            {isImageFile(entry.fileName) && (entry.localPreviewUrl || entry.fileUrl) && (
-                              <button
-                                type="button"
-                                onClick={() => setPreviewUrl(entry.localPreviewUrl || entry.fileUrl)}
-                                className="w-7 h-7 rounded-full flex items-center justify-center text-black/30 hover:text-[#FF5722] hover:bg-[#FF5722]/10 transition-colors"
-                              >
-                                <Eye className="w-4 h-4" weight="bold" />
-                              </button>
-                            )}
+                            {isImageFile(entry.fileName) &&
+                              (entry.localPreviewUrl || entry.fileUrl) && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setPreviewUrl(
+                                      entry.localPreviewUrl || entry.fileUrl,
+                                    )
+                                  }
+                                  className="w-7 h-7 rounded-full flex items-center justify-center text-black/30 hover:text-[#FF5722] hover:bg-[#FF5722]/10 transition-colors"
+                                >
+                                  <Eye className="w-4 h-4" weight="bold" />
+                                </button>
+                              )}
                             <button
                               type="button"
                               onClick={() => handleRemoveCert(entry.id)}
@@ -524,10 +607,15 @@ const DetailedAbilitiesPage = () => {
                                 onClick={() => handleCertTypeSelect(ct.code)}
                                 className="w-full text-left px-4 py-2.5 text-sm font-medium text-black/80 hover:bg-[#FF5722]/[0.08] hover:text-[#FF5722] transition-colors flex items-center gap-3"
                               >
-                                <Certificate className="w-4 h-4 shrink-0 text-[#FF5722]/60" weight="duotone" />
+                                <Certificate
+                                  className="w-4 h-4 shrink-0 text-[#FF5722]/60"
+                                  weight="duotone"
+                                />
                                 <div>
                                   <p className="font-medium">{ct.name}</p>
-                                  <p className="text-xs text-black/40 mt-0.5">{ct.description}</p>
+                                  <p className="text-xs text-black/40 mt-0.5">
+                                    {ct.description}
+                                  </p>
                                 </div>
                               </button>
                             </li>
@@ -541,10 +629,13 @@ const DetailedAbilitiesPage = () => {
 
               {/* Upload status note */}
               {isUploadRequired && (
-                <div className={`flex gap-2 mt-3 p-3 rounded-lg text-xs ${currentPageCerts.length > 0
-                  ? "bg-[#00A650]/8 text-[#00A650]"
-                  : "bg-amber-50 text-amber-600"
-                  }`}>
+                <div
+                  className={`flex gap-2 mt-3 p-3 rounded-lg text-xs ${
+                    currentPageCerts.length > 0
+                      ? "bg-[#00A650]/8 text-[#00A650]"
+                      : "bg-amber-50 text-amber-600"
+                  }`}
+                >
                   {currentPageCerts.length > 0 ? (
                     <CheckCircle className="w-4 h-4 shrink-0" weight="fill" />
                   ) : (
@@ -569,7 +660,9 @@ const DetailedAbilitiesPage = () => {
 
               {/* Subgroups */}
               {currentCat.subgroups.map((subgroup) => {
-                const isSingleSelect = SINGLE_SELECT_SUBGROUP_IDS.includes(subgroup.id);
+                const isSingleSelect = SINGLE_SELECT_SUBGROUP_IDS.includes(
+                  subgroup.id,
+                );
                 return (
                   <div key={subgroup.id} className="space-y-3">
                     <div className="flex items-center gap-2">
@@ -587,10 +680,14 @@ const DetailedAbilitiesPage = () => {
                       {subgroup.skills.map((skill) => {
                         const isManual = selectedSkills.includes(skill.id);
                         const isImplied = impliedSkills.includes(skill.id);
-                        const activeDominants = getDominantsFor(skill.id).filter(d => selectedSkills.includes(d));
+                        const activeDominants = getDominantsFor(
+                          skill.id,
+                        ).filter((d) => selectedSkills.includes(d));
 
                         const isVehicleGated = [43, 44].includes(skill.id);
-                        const hasVehicle = allSelectedSkills.some(id => VEHICLE_SKILL_IDS.includes(id));
+                        const hasVehicle = allSelectedSkills.some((id) =>
+                          VEHICLE_SKILL_IDS.includes(id),
+                        );
                         const isGatedDisabled = isVehicleGated && !hasVehicle;
                         const isDisabled = isImplied || isGatedDisabled;
 
@@ -599,14 +696,15 @@ const DetailedAbilitiesPage = () => {
                             <button
                               onClick={() => toggleSkill(skill.id, subgroup)}
                               disabled={isDisabled}
-                              className={`relative w-full px-4 py-3 border-2 rounded-full text-left text-sm font-medium transition-all ${isImplied
-                                ? "border-[#00A650]/40 bg-[#00A650]/5 text-black/45 cursor-not-allowed"
-                                : isGatedDisabled
-                                  ? "border-black/10 bg-black/[0.03] text-black/25 cursor-not-allowed"
-                                  : isManual
-                                    ? "border-[#00A650] bg-[#00A650]/10 text-black"
-                                    : "border-black/20 hover:border-black/40 text-black/70"
-                                }`}
+                              className={`relative w-full px-4 py-3 border-2 rounded-full text-left text-sm font-medium transition-all ${
+                                isImplied
+                                  ? "border-[#00A650]/40 bg-[#00A650]/5 text-black/45 cursor-not-allowed"
+                                  : isGatedDisabled
+                                    ? "border-black/10 bg-black/[0.03] text-black/25 cursor-not-allowed"
+                                    : isManual
+                                      ? "border-[#00A650] bg-[#00A650]/10 text-black"
+                                      : "border-black/20 hover:border-black/40 text-black/70"
+                              }`}
                             >
                               <div className="flex items-center gap-2">
                                 <span className="flex-1">{skill.label}</span>
@@ -614,17 +712,28 @@ const DetailedAbilitiesPage = () => {
                                 {isImplied && (
                                   <div
                                     className="relative shrink-0"
-                                    onMouseEnter={() => setHoveredImplied(skill.id)}
+                                    onMouseEnter={() =>
+                                      setHoveredImplied(skill.id)
+                                    }
                                     onMouseLeave={() => setHoveredImplied(null)}
                                   >
                                     <div className="w-5 h-5 bg-[#00A650]/40 rounded-full flex items-center justify-center">
-                                      <LockSimple className="w-3 h-3 text-[#00A650]" weight="fill" />
+                                      <LockSimple
+                                        className="w-3 h-3 text-[#00A650]"
+                                        weight="fill"
+                                      />
                                     </div>
                                     {hoveredImplied === skill.id && (
                                       <div className="absolute bottom-full right-0 mb-2 z-50 w-60 bg-black text-white text-xs rounded-lg px-3 py-2 shadow-xl pointer-events-none">
-                                        <span className="text-[#4ade80] font-bold">Tự động bao gồm bởi:</span>
+                                        <span className="text-[#4ade80] font-bold">
+                                          Tự động bao gồm bởi:
+                                        </span>
                                         <br />
-                                        <span className="font-medium">{activeDominants.map(id => getApiSkillLabel(id)).join(', ')}</span>
+                                        <span className="font-medium">
+                                          {activeDominants
+                                            .map((id) => getApiSkillLabel(id))
+                                            .join(", ")}
+                                        </span>
                                         <div className="absolute top-full right-3 border-4 border-transparent border-t-black" />
                                       </div>
                                     )}
@@ -634,15 +743,25 @@ const DetailedAbilitiesPage = () => {
                                 {isGatedDisabled && (
                                   <div
                                     className="relative shrink-0"
-                                    onMouseEnter={() => setHoveredImplied(skill.id)}
+                                    onMouseEnter={() =>
+                                      setHoveredImplied(skill.id)
+                                    }
                                     onMouseLeave={() => setHoveredImplied(null)}
                                   >
-                                    <Warning className="w-4 h-4 text-black/25" weight="fill" />
+                                    <Warning
+                                      className="w-4 h-4 text-black/25"
+                                      weight="fill"
+                                    />
                                     {hoveredImplied === skill.id && (
                                       <div className="absolute bottom-full right-0 mb-2 z-50 w-64 bg-black text-white text-xs rounded-lg px-3 py-2 shadow-xl pointer-events-none">
-                                        <span className="text-amber-400 font-bold">Yêu cầu phương tiện</span>
+                                        <span className="text-amber-400 font-bold">
+                                          Yêu cầu phương tiện
+                                        </span>
                                         <br />
-                                        <span>Chọn ít nhất 1 loại phương tiện ở trên để mở khóa kỹ năng này.</span>
+                                        <span>
+                                          Chọn ít nhất 1 loại phương tiện ở trên
+                                          để mở khóa kỹ năng này.
+                                        </span>
                                         <div className="absolute top-full right-3 border-4 border-transparent border-t-black" />
                                       </div>
                                     )}
@@ -651,7 +770,10 @@ const DetailedAbilitiesPage = () => {
 
                                 {isManual && (
                                   <div className="w-5 h-5 bg-[#00A650] rounded-full flex items-center justify-center shrink-0">
-                                    <Check className="w-3 h-3 text-white" weight="bold" />
+                                    <Check
+                                      className="w-3 h-3 text-white"
+                                      weight="bold"
+                                    />
                                   </div>
                                 )}
                               </div>
@@ -716,7 +838,8 @@ const DetailedAbilitiesPage = () => {
               <span className="text-white/40">CỦA BẠN.</span>
             </h2>
             <p className="text-base text-white/80 max-w-md leading-relaxed mb-8">
-              Tải lên chứng chỉ liên quan và chọn kỹ năng phù hợp. Thông tin này giúp chúng tôi phân công nhiệm vụ phù hợp nhất với bạn.
+              Tải lên chứng chỉ liên quan và chọn kỹ năng phù hợp. Thông tin này
+              giúp chúng tôi phân công nhiệm vụ phù hợp nhất với bạn.
             </p>
 
             {/* Selected Skills Preview */}
@@ -736,10 +859,14 @@ const DetailedAbilitiesPage = () => {
                     return (
                       <span
                         key={skillId}
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${isAuto ? "bg-[#00A650]/30 text-[#4ade80]" : "bg-white/20"
-                          }`}
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          isAuto
+                            ? "bg-[#00A650]/30 text-[#4ade80]"
+                            : "bg-white/20"
+                        }`}
                       >
-                        {isAuto && "🔒 "}{getApiSkillLabel(skillId)}
+                        {isAuto && "🔒 "}
+                        {getApiSkillLabel(skillId)}
                       </span>
                     );
                   })}
@@ -756,18 +883,27 @@ const DetailedAbilitiesPage = () => {
             {certEntries.length > 0 && (
               <div className="p-4 bg-[#FF5722]/20 rounded-lg mb-6">
                 <p className="text-xs font-bold uppercase tracking-wider mb-2">
-                  📄 Chứng chỉ đã chọn ({certEntries.length})
+                  Chứng chỉ đã chọn ({certEntries.length})
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {certEntries.map((cert) => (
-                    <span key={cert.id} className="flex items-center gap-1 px-2 py-1 bg-white/10 rounded text-[11px] font-medium truncate max-w-[180px]">
-                      {cert.fileUrl ? "" : <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />}
+                    <span
+                      key={cert.id}
+                      className="flex items-center gap-1 px-2 py-1 bg-white/10 rounded text-[11px] font-medium truncate max-w-[180px]"
+                    >
+                      {cert.fileUrl ? (
+                        ""
+                      ) : (
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                      )}
                       {cert.certTypeLabel}
                     </span>
                   ))}
                 </div>
-                {certEntries.some(e => !e.fileUrl) && (
-                  <p className="text-[10px] text-white/50 mt-2">● chưa upload • sẽ đẩy lên khi Hoàn tất</p>
+                {certEntries.some((e) => !e.fileUrl) && (
+                  <p className="text-xs text-white/50 mt-2">
+                    Chứng chỉ sẽ được gửi lên sau khi hoàn tất
+                  </p>
                 )}
               </div>
             )}
@@ -775,28 +911,43 @@ const DetailedAbilitiesPage = () => {
             {/* Category Progress Cards */}
             <div className="space-y-3">
               {apiSkillCategories.map((cat, index) => {
-                const catAllSkills = cat.subgroups.flatMap(sg => sg.skills);
-                const catSkills = catAllSkills.filter(skill => allSelectedSkills.includes(skill.id)).length;
-                const catDocs = certEntries.filter(e => e.categoryCode === cat.code).length;
+                const catAllSkills = cat.subgroups.flatMap((sg) => sg.skills);
+                const catSkills = catAllSkills.filter((skill) =>
+                  allSelectedSkills.includes(skill.id),
+                ).length;
+                const catDocs = certEntries.filter(
+                  (e) => e.categoryCode === cat.code,
+                ).length;
                 return (
                   <div
                     key={cat.id}
-                    className={`p-4 rounded-lg transition-all ${index === currentCategory
-                      ? "bg-[#FF5722] text-white"
-                      : index < currentCategory
-                        ? "bg-white/10 text-white/80"
-                        : "bg-white/5 text-white/40"
-                      }`}
+                    className={`p-4 rounded-lg transition-all ${
+                      index === currentCategory
+                        ? "bg-[#FF5722] text-white"
+                        : index < currentCategory
+                          ? "bg-white/10 text-white/80"
+                          : "bg-white/5 text-white/40"
+                    }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded ${index < currentCategory ? "bg-[#00A650] text-white" : "bg-white/10"
-                        }`}>
-                        {index < currentCategory ? <Check className="w-4 h-4" weight="bold" /> : index + 1}
+                      <span
+                        className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded ${
+                          index < currentCategory
+                            ? "bg-[#00A650] text-white"
+                            : "bg-white/10"
+                        }`}
+                      >
+                        {index < currentCategory ? (
+                          <Check className="w-4 h-4" weight="bold" />
+                        ) : (
+                          index + 1
+                        )}
                       </span>
                       <div className="flex-1">
                         <p className="text-sm font-bold">{cat.title}</p>
                         <p className="text-xs opacity-60">
-                          {catSkills}/{catAllSkills.length} kỹ năng • {catDocs} chứng chỉ
+                          {catSkills}/{catAllSkills.length} kỹ năng • {catDocs}{" "}
+                          chứng chỉ
                         </p>
                       </div>
                     </div>
