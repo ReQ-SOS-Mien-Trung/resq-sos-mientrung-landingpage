@@ -72,10 +72,10 @@ const RegisterHero = () => {
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="flex flex-col gap-3 w-full">
                 <button
                   onClick={() => navigate("/download-app")}
-                  className="px-6 sm:px-8 py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group"
+                  className="w-full px-6 sm:px-8 py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors flex items-center justify-center gap-2 group"
                 >
                   Tải ứng dụng
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -90,7 +90,7 @@ const RegisterHero = () => {
                       navigate("/auth/login");
                     }
                   }}
-                  className="px-6 sm:px-8 py-4 border border-black text-black text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
+                  className="w-full px-6 sm:px-8 py-4 border border-black text-black text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors"
                 >
                   {isAuthenticated && onboardingStatus.isComplete
                     ? "Xem hồ sơ"
