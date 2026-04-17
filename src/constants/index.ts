@@ -5,6 +5,7 @@ import type {
   FAQ,
   MenuItem,
   NewsArticle,
+  PrerequisiteQuestion,
   Region,
   Service,
   ServiceCategory,
@@ -365,38 +366,17 @@ export const menuItems: MenuItem[] = [
       {
         title: "Giới thiệu",
         description: "Chúng tôi là ai và chúng tôi đại diện cho điều gì",
-        link: "#about",
+        link: "/about",
       },
       {
         title: "Tầm nhìn & Sứ mệnh",
         description: "Mục tiêu và giá trị cốt lõi của chúng tôi",
-        link: "#vision",
+        link: "/about",
       },
       {
         title: "Đội ngũ",
         description: "Gặp gỡ những người đang xây dựng tương lai cứu hộ",
-        link: "#team",
-      },
-    ],
-  },
-  {
-    id: "services",
-    label: "Dịch vụ",
-    subItems: [
-      {
-        title: "Cứu hộ khẩn cấp",
-        description: "Kết nối nạn nhân với đội cứu hộ trong thời gian thực",
-        link: "#emergency",
-      },
-      {
-        title: "Điều phối đội cứu hộ",
-        description: "Hệ thống quản lý và điều phối đội cứu hộ thông minh",
-        link: "#coordination",
-      },
-      {
-        title: "Đào tạo",
-        description: "Chương trình đào tạo và nâng cao kỹ năng cứu hộ",
-        link: "#training",
+        link: "/about",
       },
     ],
   },
@@ -407,17 +387,17 @@ export const menuItems: MenuItem[] = [
       {
         title: "Đăng ký đội cứu hộ",
         description: "Tham gia mạng lưới cứu hộ của chúng tôi",
-        link: "#register",
+        link: "/register",
       },
       {
         title: "Tài nguyên",
         description: "Công cụ và tài liệu hỗ trợ đội cứu hộ",
-        link: "#resources",
+        link: "/help-center",
       },
       {
         title: "Cộng đồng",
         description: "Kết nối với các đội cứu hộ khác",
-        link: "#community",
+        link: "/register",
       },
     ],
   },
@@ -428,12 +408,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Trở thành đối tác",
         description: "Hợp tác với chúng tôi để mở rộng mạng lưới cứu hộ",
-        link: "#partner",
+        link: "/contact",
       },
       {
         title: "Đối tác hiện tại",
         description: "Các tổ chức đang hợp tác với chúng tôi",
-        link: "#partners",
+        link: "/contact",
       },
     ],
   },
@@ -444,12 +424,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Tin tức mới nhất",
         description: "Cập nhật về hoạt động và sự kiện của chúng tôi",
-        link: "#news",
+        link: "/news",
       },
       {
         title: "Blog",
         description: "Câu chuyện và chia sẻ từ cộng đồng cứu hộ",
-        link: "#blog",
+        link: "/news",
       },
     ],
   },
@@ -866,4 +846,112 @@ export const privacyPolicySections = [
       },
     ],
   },
+];
+
+// ==================== ABILITY CHECK PAGE ====================
+export const prerequisiteQuestions: PrerequisiteQuestion[] = [
+  {
+    id: 1,
+    category: "Kỹ năng bơi",
+    categoryEn: "Swimming Ability",
+    question:
+      "Bạn có thể tự bơi và giữ an toàn cho bản thân trong môi trường nước ngập không?",
+    yesAnswer: "Có, tôi có thể tự bơi và không hoảng loạn khi ở dưới nước",
+    noAnswer: "Không",
+    warningMessage:
+      'Nếu chọn "Không" → không thể tham gia cứu hộ lũ. Khả năng bơi là yêu cầu bắt buộc để đảm bảo an toàn cho chính bạn trong các tình huống ngập nước.',
+    iconName: "PersonSimpleSwimIcon",
+  },
+  {
+    id: 2,
+    category: "Nhận thức an toàn cá nhân",
+    categoryEn: "Personal Safety Awareness",
+    question:
+      "Trong tình huống nguy hiểm (nước xiết, điện giật, sạt lở), bạn có sẵn sàng rút lui và không cố cứu vượt khả năng của mình không?",
+    yesAnswer: "Có, tôi ưu tiên an toàn cho bản thân và đội",
+    noAnswer: "Không / Tôi sẽ cố cứu bằng mọi giá",
+    warningMessage:
+      "Chọn phương án này → không đủ điều kiện. Việc cố cứu vượt khả năng có thể gây nguy hiểm cho cả bạn và người được cứu, đồng thời tạo thêm gánh nặng cho đội cứu hộ.",
+    iconName: "ShieldCheck",
+  },
+  {
+    id: 3,
+    category: "Giao tiếp & tuân thủ điều phối",
+    categoryEn: "Communication & Coordination",
+    question:
+      "Khi tham gia cứu hộ, bạn có cam kết tuân thủ sự điều phối của hệ thống và người điều phối, không tự ý hành động ngoài nhiệm vụ được giao không?",
+    yesAnswer: "Có, tôi cam kết tuân thủ điều phối",
+    noAnswer: "Không",
+    warningMessage:
+      "Không tuân thủ → không thể tham gia hệ thống ResQ. Sự phối hợp nhịp nhàng giữa các thành viên là yếu tố quyết định thành công của mỗi nhiệm vụ cứu hộ.",
+    iconName: "Handshake",
+  },
+  {
+    id: 4,
+    category: "Khả năng học nhanh & tuân thủ quy trình",
+    categoryEn: "Trainability",
+    question:
+      "Bạn có sẵn sàng học và tuân thủ quy trình cứu hộ do ResQ hướng dẫn trước khi tham gia nhiệm vụ không?",
+    yesAnswer: "Có, tôi sẵn sàng học và làm theo quy trình",
+    noAnswer: "Không",
+    warningMessage:
+      "Không sẵn sàng học → rủi ro cao cho toàn đội. Quy trình cứu hộ được thiết kế để bảo vệ tất cả mọi người, việc không tuân thủ có thể dẫn đến hậu quả nghiêm trọng.",
+    iconName: "GraduationCap",
+  },
+];
+
+// ==================== DONATE PAGE ====================
+export const donatePresetAmounts = [
+  { value: 50_000, label: "50K", desc: "1 suất cơm" },
+  { value: 200_000, label: "200K", desc: "1 túi cứu trợ" },
+  { value: 500_000, label: "500K", desc: "1 gia đình / tuần" },
+  { value: 1_000_000, label: "1 TRIỆU", desc: "Nhà tạm 1 tháng" },
+  { value: 5_000_000, label: "5 TRIỆU", desc: "Trang bị cứu hộ" },
+  { value: 0, label: "TỰ NHẬP", desc: "Số tiền khác" },
+];
+
+export const donateImpactStats = [
+  { number: "2.5 TỲ", unit: "VNĐ", label: "Đã quyên góp năm 2024" },
+  { number: "50,000", unit: "HỘ", label: "Gia đình được hỗ trợ" },
+  { number: "1,200+", unit: "TNV", label: "Tình nguyện viên" },
+  { number: "<48H", unit: "XỬ LÝ", label: "Thời gian triển khai" },
+];
+
+export const donateStories = [
+  {
+    tag: "LŨ LỤT 10/2024",
+    name: "Chị Nguyễn Thị Hoa",
+    location: "Hội An, Quảng Nam",
+    quote:
+      "Nhờ đội cứu hộ ResQ, gia đình tôi được sơ tán kịp thời trước khi lũ tràn vào nhà. Không có các bạn, chúng tôi không biết sẽ ra sao.",
+  },
+  {
+    tag: "CÔ LẬP 11/2024",
+    name: "Anh Trần Văn Minh",
+    location: "Huế, Thừa Thiên Huế",
+    quote:
+      "Những thùng hàng cứu trợ đến đúng lúc nhất — khi cả xóm bị cô lập 3 ngày không có gì ăn. Cảm ơn mọi tấm lòng.",
+  },
+  {
+    tag: "SAU LŨ 12/2024",
+    name: "Em Lê Thị Mai",
+    location: "Đồng Hới, Quảng Bình",
+    quote:
+      "Chúng tôi mất tất cả nhưng được mọi người khắp nơi gửi yêu thương về. Điều đó cho chúng tôi sức mạnh để tiếp tục.",
+  },
+];
+
+export const donateNotePresets = [
+  "GỬI CHÚT TẤM LÒNG ĐẾN ĐỒNG BÀO MIỀN TRUNG",
+  "CHUNG TAY VƯỢT QUA THIÊN TAI, VUI BUỒN CÓ NHAU",
+  "HY VỌNG ĐỒNG BÀO SỚM ỔN ĐỊNH VÀ AN LÀNH",
+  "MỘT PHẦN NHỎ GIÚP BÀ CON SỚM VƯỢT KHÓ",
+  "ĐỒNG LÒNG HƯỚNG VỀ MIỀN TRUNG THÂN YÊU",
+  "THƯƠNG GỬI MIỀN TRUNG VƯỢT QUA BÃO LŨ",
+  "SAN SẺ YÊU THƯƠNG, HƯỚNG VỀ ĐỒNG BÀO",
+  "CÙNG ĐỒNG BÀO VƯỢT QUA GIAN KHÓ",
+  "MỘT MIỀN TRUNG KIÊN CƯỜNG, KHÔNG BAO GIỜ BỎ CUỘC",
+  "CỦA ÍT LÒNG VÒNG, MIỀN TRUNG ƠI FIGHTING",
+  "TIẾT KIỆM TRÀ SỮA 1 TUẦN ĐỂ ỦNG HỘ MIỀN TRUNG",
+  "LƯƠNG VỀ CHƯA KỊP NÓNG TAY ĐÃ GỬI MIỀN TRUNG",
 ];

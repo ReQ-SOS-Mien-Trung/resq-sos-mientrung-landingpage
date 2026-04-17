@@ -15,11 +15,16 @@ const Footer = () => {
         <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-black/10 p-6 sm:p-8 md:p-12">
           {/* Logo */}
           <div className="mb-8">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-4">
-              ResQ SOS
-              <br />
-              <span className="text-black/40">Miền Trung</span>
-            </h2>
+            <div className="mb-4">
+              <img
+                src="/resq_typo_logo.svg"
+                alt="ResQ SOS"
+                className="h-12 sm:h-14 md:h-16 w-auto"
+              />
+              <span className="block text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-black/40 mt-1">
+                Miền Trung
+              </span>
+            </div>
             <p className="text-xs sm:text-sm text-black/60 leading-relaxed max-w-xs">
               Nền tảng cứu hộ khẩn cấp - Kết nối nạn nhân thiên tai với đội ngũ cứu trợ.
             </p>
@@ -184,7 +189,7 @@ const Footer = () => {
           {/* App Download */}
           <div className="border-t border-black/10 p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <p className="text-xs sm:text-sm text-black/40">Tải ứng dụng ResQ SOS</p>
+              <p className="text-xs sm:text-sm text-black/40">Tải ứng dụng ngay</p>
               <div className="flex items-center gap-3">
                 <Link
                   to="/download-app"
