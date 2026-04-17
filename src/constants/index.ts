@@ -64,11 +64,31 @@ export const aboutValues = [
 ];
 
 export const aboutTeam = [
-  { name: "Huỳnh Kim Cương", role: "Giám đốc điều hành", image: "/images/team/Team%201.jpg" },
-  { name: "Lê Minh Đăng Khoa", role: "Trưởng phòng Điều phối", image: "/images/team/Team%202.jpg" },
-  { name: "Nguyễn Trần Phương An", role: "Trưởng phòng Công nghệ", image: "/images/team/Team%203.jpg" },
-  { name: "Nguyễn Ngọc Thảo", role: "Trưởng phòng Truyền thông", image: "/images/team/Team%204.jpg" },
-  { name: "Lê Bảo Châu", role: "Trưởng phòng Vận hành", image: "/images/team/Team%205.jpg" },
+  {
+    name: "Huỳnh Kim Cương",
+    role: "Giám đốc điều hành",
+    image: "/images/team/Team%201.jpg",
+  },
+  {
+    name: "Lê Minh Đăng Khoa",
+    role: "Trưởng phòng Điều phối",
+    image: "/images/team/Team%202.jpg",
+  },
+  {
+    name: "Nguyễn Trần Phương An",
+    role: "Trưởng phòng Công nghệ",
+    image: "/images/team/Team%203.jpg",
+  },
+  {
+    name: "Nguyễn Ngọc Thảo",
+    role: "Trưởng phòng Truyền thông",
+    image: "/images/team/Team%204.jpg",
+  },
+  {
+    name: "Lê Bảo Châu",
+    role: "Trưởng phòng Vận hành",
+    image: "/images/team/Team%205.jpg",
+  },
 ];
 
 // ==================== NEWS PAGE ====================
@@ -76,12 +96,20 @@ export const featuredNews = {
   id: 0,
   image: "/images/rescuer_flood.jpg",
   date: "20/01/26",
-  title: "ResQ SOS Miền Trung chính thức ra mắt phiên bản 2.0 với nhiều tính năng mới",
-  description: "Phiên bản mới tích hợp AI để phân loại mức độ khẩn cấp tự động, cải thiện thời gian phản hồi và nâng cao trải nghiệm người dùng.",
+  title:
+    "ResQ SOS Miền Trung chính thức ra mắt phiên bản 2.0 với nhiều tính năng mới",
+  description:
+    "Phiên bản mới tích hợp AI để phân loại mức độ khẩn cấp tự động, cải thiện thời gian phản hồi và nâng cao trải nghiệm người dùng.",
   category: "SẢN PHẨM",
 };
 
-export const newsCategories = ["TẤT CẢ", "SẢN PHẨM", "CỘNG ĐỒNG", "ĐỐI TÁC", "SỰ KIỆN"];
+export const newsCategories = [
+  "TẤT CẢ",
+  "SẢN PHẨM",
+  "CỘNG ĐỒNG",
+  "ĐỐI TÁC",
+  "SỰ KIỆN",
+];
 
 // ==================== CONTACT PAGE ====================
 export const contactMethods = [
@@ -113,9 +141,21 @@ export const contactMethods = [
 
 // ==================== DONATE PAGE ====================
 export const donationOptions = [
-  { amount: "100,000", label: "VNĐ", desc: "Hỗ trợ 1 gia đình với nhu yếu phẩm cơ bản" },
-  { amount: "500,000", label: "VNĐ", desc: "Cung cấp áo phao và đèn pin cho đội cứu hộ" },
-  { amount: "1,000,000", label: "VNĐ", desc: "Hỗ trợ vận chuyển hàng cứu trợ một chuyến" },
+  {
+    amount: "100,000",
+    label: "VNĐ",
+    desc: "Hỗ trợ 1 gia đình với nhu yếu phẩm cơ bản",
+  },
+  {
+    amount: "500,000",
+    label: "VNĐ",
+    desc: "Cung cấp áo phao và đèn pin cho đội cứu hộ",
+  },
+  {
+    amount: "1,000,000",
+    label: "VNĐ",
+    desc: "Hỗ trợ vận chuyển hàng cứu trợ một chuyến",
+  },
   { amount: "Khác", label: "", desc: "Nhập số tiền bạn muốn đóng góp" },
 ];
 
@@ -130,53 +170,56 @@ export const impactStats = [
 
 export const services: Service[] = [
   {
-    id: 'sos',
+    id: "sos",
     icon: Warning,
-    title: 'Gửi tín hiệu SOS',
-    description: 'Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.',
-    region: 'Khẩn cấp',
+    title: "Gửi tín hiệu SOS",
+    description:
+      "Gửi yêu cầu cứu trợ khẩn cấp với vị trí chính xác đến đội ngũ cứu hộ.",
+    region: "Khẩn cấp",
   },
   {
-    id: 'shelter',
+    id: "shelter",
     icon: House,
-    title: 'Tìm nơi trú ẩn',
-    description: 'Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.',
-    region: 'An toàn',
+    title: "Tìm nơi trú ẩn",
+    description: "Định vị điểm sơ tán an toàn gần nhất trong vùng thiên tai.",
+    region: "An toàn",
   },
   {
-    id: 'rescue',
+    id: "rescue",
     icon: Users,
-    title: 'Đội cứu hộ',
-    description: 'Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.',
-    region: 'Hỗ trợ',
+    title: "Đội cứu hộ",
+    description:
+      "Kết nối với đội ngũ tình nguyện viên và lực lượng cứu hộ chuyên nghiệp.",
+    region: "Hỗ trợ",
   },
   {
-    id: 'supply',
+    id: "supply",
     icon: Truck,
-    title: 'Tiếp tế vật tư',
-    description: 'Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.',
-    region: 'Cứu trợ',
+    title: "Tiếp tế vật tư",
+    description:
+      "Nhận thông tin về các điểm phân phối nhu yếu phẩm và hàng cứu trợ.",
+    region: "Cứu trợ",
   },
   {
-    id: 'medical',
+    id: "medical",
     icon: Heart,
-    title: 'Hỗ trợ y tế',
-    description: 'Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.',
-    region: 'Y tế',
+    title: "Hỗ trợ y tế",
+    description: "Tìm kiếm cơ sở y tế hoạt động và nhận hướng dẫn sơ cứu.",
+    region: "Y tế",
   },
   {
-    id: 'hotline',
+    id: "hotline",
     icon: Phone,
-    title: 'Đường dây nóng',
-    description: 'Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.',
-    region: 'Liên lạc',
+    title: "Đường dây nóng",
+    description: "Liên hệ trực tiếp với trung tâm điều phối cứu hộ 24/7.",
+    region: "Liên lạc",
   },
 ];
 
 export const regions: Region[] = [
-  { id: 'mien-trung', name: 'Miền Trung', image: '/images/mien-trung.jpg' },
-  { id: 'mien-bac', name: 'Miền Bắc', image: '/images/mien-bac.jpg' },
-  { id: 'mien-nam', name: 'Miền Nam', image: '/images/mien-nam.jpg' },
+  { id: "mien-trung", name: "Miền Trung", image: "/images/mien-trung.jpg" },
+  { id: "mien-bac", name: "Miền Bắc", image: "/images/mien-bac.jpg" },
+  { id: "mien-nam", name: "Miền Nam", image: "/images/mien-nam.jpg" },
 ];
 
 export const serviceCategories: ServiceCategory[] = [
@@ -307,8 +350,7 @@ export const contributions: ContributionCard[] = [
   {
     id: 3,
     image: "/images/quan_doi.png",
-    title:
-      "Các đơn vị Quân đội tập trung ứng phó lũ đặc biệt lớn",
+    title: "Các đơn vị Quân đội tập trung ứng phó lũ đặc biệt lớn",
     description:
       "Ngày 20-11, Bộ Quốc phòng có Công điện số 7453/CĐ-BQP về việc tập trung ứng phó lũ đặc biệt lớn tại Khánh Hòa, Đắk Lắk và Gia Lai",
     link: "https://www.qdnd.vn/quoc-phong-an-ninh/tin-tuc/cac-don-vi-quan-doi-tap-trung-ung-pho-lu-dac-biet-lon-1012970",
@@ -484,8 +526,7 @@ export const newsArticles: NewsArticle[] = [
     id: 3,
     image: "/images/cong_an.png",
     date: "04/12/25",
-    title:
-      "Công an Lâm Đồng chủ động ứng phó, xuyên đêm cứu dân trong mưa lũ",
+    title: "Công an Lâm Đồng chủ động ứng phó, xuyên đêm cứu dân trong mưa lũ",
     link: "https://bocongan.gov.vn/bai-viet/cong-an-lam-dong-chu-dong-ung-pho-xuyen-dem-cuu-dan-trong-mua-lu-1764835632",
   },
   {
@@ -599,11 +640,26 @@ export const termsOfServiceSections = [
       "ResQ SOS Miền Trung là nền tảng kết nối người dân gặp nạn trong thiên tai với đội ngũ cứu hộ.",
     ],
     list: [
-      { label: "GỬI TÍN HIỆU SOS", desc: "Gửi yêu cầu cứu hộ khẩn cấp kèm vị trí GPS" },
-      { label: "TÌM NƠI TRÚ ẨN", desc: "Xác định các điểm sơ tán an toàn gần nhất" },
-      { label: "YÊU CẦU TIẾP TẾ", desc: "Đăng ký nhu cầu về lương thực, nước uống, thuốc men" },
-      { label: "CẬP NHẬT THÔNG TIN", desc: "Nhận thông tin về tình hình thiên tai" },
-      { label: "KẾT NỐI CỘNG ĐỒNG", desc: "Liên lạc với tình nguyện viên và đội cứu hộ" },
+      {
+        label: "GỬI TÍN HIỆU SOS",
+        desc: "Gửi yêu cầu cứu hộ khẩn cấp kèm vị trí GPS",
+      },
+      {
+        label: "TÌM NƠI TRÚ ẨN",
+        desc: "Xác định các điểm sơ tán an toàn gần nhất",
+      },
+      {
+        label: "YÊU CẦU TIẾP TẾ",
+        desc: "Đăng ký nhu cầu về lương thực, nước uống, thuốc men",
+      },
+      {
+        label: "CẬP NHẬT THÔNG TIN",
+        desc: "Nhận thông tin về tình hình thiên tai",
+      },
+      {
+        label: "KẾT NỐI CỘNG ĐỒNG",
+        desc: "Liên lạc với tình nguyện viên và đội cứu hộ",
+      },
     ],
   },
   {
@@ -620,9 +676,7 @@ export const termsOfServiceSections = [
   {
     number: "04",
     title: "HÀNH VI BỊ CẤM",
-    content: [
-      "Các hành vi sau đây bị nghiêm cấm:",
-    ],
+    content: ["Các hành vi sau đây bị nghiêm cấm:"],
     warnings: [
       "Gửi tín hiệu SOS giả — có thể bị xử lý theo quy định pháp luật",
       "Cố ý cung cấp thông tin sai lệch về vị trí hoặc tình trạng khẩn cấp",
@@ -630,7 +684,8 @@ export const termsOfServiceSections = [
       "Cố gắng truy cập trái phép vào hệ thống hoặc dữ liệu",
       "Phát tán virus, mã độc hoặc nội dung có hại",
     ],
-    footer: "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
+    footer:
+      "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
   },
   {
     number: "05",
@@ -659,10 +714,30 @@ export const termsOfServiceSections = [
 ];
 
 export const termsOfServiceAdditionalTerms = [
-  { number: "07", title: "QUYỀN SỞ HỮU TRÍ TUỆ", content: "Tất cả nội dung, thiết kế, logo, mã nguồn thuộc quyền sở hữu của ResQ SOS và được bảo vệ bởi luật sở hữu trí tuệ." },
-  { number: "08", title: "CHẤM DỨT DỊCH VỤ", content: "Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập nếu bạn vi phạm điều khoản hoặc gây hại cho cộng đồng." },
-  { number: "09", title: "LUẬT ÁP DỤNG", content: "Các điều khoản được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền." },
-  { number: "10", title: "ĐIỀU KHOẢN RIÊNG BIỆT", content: "Nếu bất kỳ điều khoản nào bị tuyên bố vô hiệu, các điều khoản còn lại vẫn có hiệu lực đầy đủ." },
+  {
+    number: "07",
+    title: "QUYỀN SỞ HỮU TRÍ TUỆ",
+    content:
+      "Tất cả nội dung, thiết kế, logo, mã nguồn thuộc quyền sở hữu của ResQ SOS và được bảo vệ bởi luật sở hữu trí tuệ.",
+  },
+  {
+    number: "08",
+    title: "CHẤM DỨT DỊCH VỤ",
+    content:
+      "Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập nếu bạn vi phạm điều khoản hoặc gây hại cho cộng đồng.",
+  },
+  {
+    number: "09",
+    title: "LUẬT ÁP DỤNG",
+    content:
+      "Các điều khoản được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền.",
+  },
+  {
+    number: "10",
+    title: "ĐIỀU KHOẢN RIÊNG BIỆT",
+    content:
+      "Nếu bất kỳ điều khoản nào bị tuyên bố vô hiệu, các điều khoản còn lại vẫn có hiệu lực đầy đủ.",
+  },
 ];
 
 // Privacy Policy Page Constants
@@ -670,12 +745,25 @@ export const privacyPolicySections = [
   {
     number: "01",
     title: "THU THẬP THÔNG TIN",
-    intro: "Khi bạn sử dụng ứng dụng ResQ SOS Miền Trung, chúng tôi có thể thu thập:",
+    intro:
+      "Khi bạn sử dụng ứng dụng ResQ SOS Miền Trung, chúng tôi có thể thu thập:",
     items: [
-      { label: "THÔNG TIN CÁ NHÂN", desc: "Họ tên, số điện thoại, địa chỉ email khi đăng ký tài khoản hoặc gửi yêu cầu SOS" },
-      { label: "THÔNG TIN VỊ TRÍ", desc: "Vị trí GPS để xác định chính xác nơi cần cứu hộ và kết nối với đội cứu trợ gần nhất" },
-      { label: "THÔNG TIN THIẾT BỊ", desc: "Loại thiết bị, hệ điều hành, mã nhận dạng để đảm bảo ứng dụng hoạt động tối ưu" },
-      { label: "THÔNG TIN SỨC KHỎE", desc: "Trong trường hợp khẩn cấp, thông tin y tế để đội cứu trợ chuẩn bị phương án phù hợp" },
+      {
+        label: "THÔNG TIN CÁ NHÂN",
+        desc: "Họ tên, số điện thoại, địa chỉ email khi đăng ký tài khoản hoặc gửi yêu cầu SOS",
+      },
+      {
+        label: "THÔNG TIN VỊ TRÍ",
+        desc: "Vị trí GPS để xác định chính xác nơi cần cứu hộ và kết nối với đội cứu trợ gần nhất",
+      },
+      {
+        label: "THÔNG TIN THIẾT BỊ",
+        desc: "Loại thiết bị, hệ điều hành, mã nhận dạng để đảm bảo ứng dụng hoạt động tối ưu",
+      },
+      {
+        label: "THÔNG TIN SỨC KHỎE",
+        desc: "Trong trường hợp khẩn cấp, thông tin y tế để đội cứu trợ chuẩn bị phương án phù hợp",
+      },
     ],
   },
   {
@@ -708,19 +796,35 @@ export const privacyPolicySections = [
     title: "CHIA SẺ THÔNG TIN",
     intro: "Chúng tôi có thể chia sẻ thông tin trong các trường hợp:",
     shares: [
-      { to: "ĐỘI NGŨ CỨU HỘ", reason: "Chia sẻ vị trí và thông tin liên lạc để thực hiện cứu trợ" },
-      { to: "CƠ QUAN CHỨC NĂNG", reason: "Khi có yêu cầu từ cơ quan nhà nước theo quy định pháp luật" },
-      { to: "ĐỐI TÁC Y TẾ", reason: "Trong trường hợp khẩn cấp cần hỗ trợ y tế" },
+      {
+        to: "ĐỘI NGŨ CỨU HỘ",
+        reason: "Chia sẻ vị trí và thông tin liên lạc để thực hiện cứu trợ",
+      },
+      {
+        to: "CƠ QUAN CHỨC NĂNG",
+        reason: "Khi có yêu cầu từ cơ quan nhà nước theo quy định pháp luật",
+      },
+      {
+        to: "ĐỐI TÁC Y TẾ",
+        reason: "Trong trường hợp khẩn cấp cần hỗ trợ y tế",
+      },
     ],
-    warning: "Chúng tôi KHÔNG bán hoặc cho thuê thông tin cá nhân cho bên thứ ba vì mục đích thương mại.",
+    warning:
+      "Chúng tôi KHÔNG bán hoặc cho thuê thông tin cá nhân cho bên thứ ba vì mục đích thương mại.",
   },
   {
     number: "05",
     title: "QUYỀN CỦA NGƯỜI DÙNG",
     intro: "Bạn có các quyền sau đối với thông tin cá nhân:",
     rights: [
-      { right: "QUYỀN TRUY CẬP", desc: "Yêu cầu xem thông tin cá nhân chúng tôi đang lưu trữ" },
-      { right: "QUYỀN CHỈNH SỬA", desc: "Cập nhật hoặc sửa đổi thông tin không chính xác" },
+      {
+        right: "QUYỀN TRUY CẬP",
+        desc: "Yêu cầu xem thông tin cá nhân chúng tôi đang lưu trữ",
+      },
+      {
+        right: "QUYỀN CHỈNH SỬA",
+        desc: "Cập nhật hoặc sửa đổi thông tin không chính xác",
+      },
       { right: "QUYỀN XÓA", desc: "Yêu cầu xóa thông tin cá nhân" },
       { right: "QUYỀN HẠN CHẾ", desc: "Yêu cầu hạn chế việc xử lý thông tin" },
       { right: "QUYỀN PHẢN ĐỐI", desc: "Phản đối việc sử dụng thông tin" },
@@ -731,8 +835,16 @@ export const privacyPolicySections = [
     title: "COOKIE & THEO DÕI",
     intro: "Website và ứng dụng của chúng tôi sử dụng:",
     cookies: [
-      { type: "CẦN THIẾT", desc: "Để đảm bảo ứng dụng hoạt động bình thường", required: true },
-      { type: "PHÂN TÍCH", desc: "Để hiểu cách người dùng sử dụng dịch vụ", required: false },
+      {
+        type: "CẦN THIẾT",
+        desc: "Để đảm bảo ứng dụng hoạt động bình thường",
+        required: true,
+      },
+      {
+        type: "PHÂN TÍCH",
+        desc: "Để hiểu cách người dùng sử dụng dịch vụ",
+        required: false,
+      },
     ],
   },
   {
@@ -740,9 +852,18 @@ export const privacyPolicySections = [
     title: "LƯU TRỮ DỮ LIỆU",
     intro: "Thời gian lưu trữ thông tin:",
     timeline: [
-      { period: "ĐANG SỬ DỤNG", desc: "Thông tin được lưu trữ trong thời gian bạn sử dụng dịch vụ" },
-      { period: "SAU KHI XÓA", desc: "Xóa hoặc ẩn danh hóa trong vòng 30 ngày" },
-      { period: "THEO PHÁP LUẬT", desc: "Một số thông tin có thể được giữ lâu hơn nếu được yêu cầu" },
+      {
+        period: "ĐANG SỬ DỤNG",
+        desc: "Thông tin được lưu trữ trong thời gian bạn sử dụng dịch vụ",
+      },
+      {
+        period: "SAU KHI XÓA",
+        desc: "Xóa hoặc ẩn danh hóa trong vòng 30 ngày",
+      },
+      {
+        period: "THEO PHÁP LUẬT",
+        desc: "Một số thông tin có thể được giữ lâu hơn nếu được yêu cầu",
+      },
     ],
   },
 ];
