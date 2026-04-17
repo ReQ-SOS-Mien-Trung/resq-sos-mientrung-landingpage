@@ -64,11 +64,11 @@ export const aboutValues = [
 ];
 
 export const aboutTeam = [
-  { name: "Huỳnh Kim Cương", role: "Giám đốc điều hành", image: "public/images/team/team-1.jpeg" },
-  { name: "Lê Minh Đăng Khoa", role: "Trưởng phòng Điều phối", image: "public/images/team/team-2.jpeg" },
-  { name: "Nguyễn Trần Phương An", role: "Trưởng phòng Công nghệ", image: "public/images/team/team-3.jpeg" },
-  { name: "Nguyễn Ngọc Thảo", role: "Trưởng phòng Truyền thông", image: "public/images/team/team-4.jpeg" },
-  { name: "Lê Bảo Châu", role: "Trưởng phòng Vận hành", image: "public/images/team/team-5.jpeg" },
+  { name: "Huỳnh Kim Cương", role: "Giám đốc điều hành", image: "/images/team/Team%201.jpg" },
+  { name: "Lê Minh Đăng Khoa", role: "Trưởng phòng Điều phối", image: "/images/team/Team%202.jpg" },
+  { name: "Nguyễn Trần Phương An", role: "Trưởng phòng Công nghệ", image: "/images/team/Team%203.jpg" },
+  { name: "Nguyễn Ngọc Thảo", role: "Trưởng phòng Truyền thông", image: "/images/team/Team%204.jpg" },
+  { name: "Lê Bảo Châu", role: "Trưởng phòng Vận hành", image: "/images/team/Team%205.jpg" },
 ];
 
 // ==================== NEWS PAGE ====================
