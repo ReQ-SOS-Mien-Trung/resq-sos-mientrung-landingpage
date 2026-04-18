@@ -7,7 +7,7 @@ export interface DonationRequest {
   amount: number;
   note: string;
   isPrivate: boolean;
-  paymentMethodId: string;
+  paymentMethodCode: string;
 }
 
 export interface DonationResponse {

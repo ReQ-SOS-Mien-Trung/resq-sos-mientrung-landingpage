@@ -47,7 +47,7 @@ const DonatePage = () => {
   const [message, setMessage] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [fundCampaignId, setFundCampaignId] = useState<number | null>(null);
-  const [paymentMethodId, setPaymentMethodId] = useState<string | null>(null);
+  const [paymentMethodCode, setPaymentMethodCode] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{
     campaign?: string;
     amount?: string;
@@ -63,7 +63,7 @@ const DonatePage = () => {
 
   // Derive active payment method: explicit choice or fallback to first
   const activePaymentMethodKey =
-    paymentMethodId ?? paymentMethods?.[0]?.key ?? null;
+    paymentMethodCode ?? paymentMethods?.[0]?.key ?? null;
 
   // Derive effective name/email: if logged in use profile, else use manual input
   const donorName =
@@ -215,7 +215,7 @@ const DonatePage = () => {
         amount: displayAmount,
         note: message,
         isPrivate,
-        paymentMethodId: activePaymentMethodKey!,
+        paymentMethodCode: activePaymentMethodKey!,
       },
       {
         onSuccess: (data) => {
@@ -669,7 +669,7 @@ const DonatePage = () => {
                   <button
                     key={method.key}
                     type="button"
-                    onClick={() => setPaymentMethodId(method.key)}
+                    onClick={() => setPaymentMethodCode(method.key)}
                     className={`group flex flex-col items-center justify-center gap-1.5 py-4 px-3 border-2 transition-all duration-200 ${
                       activePaymentMethodKey === method.key
                         ? "border-[#FF5722] bg-[#FF5722]"
