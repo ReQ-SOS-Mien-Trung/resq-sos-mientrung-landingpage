@@ -7,6 +7,7 @@ import {
 
 type TermsSection = (typeof termsOfServiceSections)[number] & {
   isDark?: boolean;
+  emergency?: { number: string; label: string }[];
 };
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -370,25 +371,6 @@ const TermsOfServicePage = () => {
                         {section.footer}
                       </p>
                     )}
-                  </div>
-                )}
-
-                {/* Emergency Numbers */}
-                {section.emergency && (
-                  <div className="grid grid-cols-3 gap-4 mt-8">
-                    {section.emergency.map((item, i) => (
-                      <div
-                        key={i}
-                        className="bg-white text-black p-4 sm:p-6 text-center"
-                      >
-                        <span className="text-3xl sm:text-4xl lg:text-5xl font-black block">
-                          {item.number}
-                        </span>
-                        <span className="text-[10px] font-mono tracking-widest text-black/50">
-                          {item.label}
-                        </span>
-                      </div>
-                    ))}
                   </div>
                 )}
               </div>
