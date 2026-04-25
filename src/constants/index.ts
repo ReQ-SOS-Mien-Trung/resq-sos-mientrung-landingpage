@@ -621,11 +621,6 @@ export const termsOfServiceSections = [
       "Ứng dụng được tạo ra để hỗ trợ người dùng gửi thông tin nhanh hơn, rõ hơn và thuận tiện hơn. Tuy nhiên, RESQ không thay thế số điện thoại khẩn cấp, cơ quan công an, ủy ban nhân dân địa phương hoặc cơ quan nhà nước có thẩm quyền.",
       "Trong trường hợp nguy cấp, đe dọa trực tiếp đến tính mạng, sức khỏe hoặc an toàn, người dùng phải ưu tiên liên hệ cơ quan chức năng phù hợp. Việc gửi thông tin qua RESQ chỉ là một kênh hỗ trợ bổ sung.",
     ],
-    emergency: [
-      { number: "113", label: "CÔNG AN" },
-      { number: "114", label: "CỨU HỎA" },
-      { number: "115", label: "CẤP CỨU" },
-    ],
   },
   {
     number: "03",
