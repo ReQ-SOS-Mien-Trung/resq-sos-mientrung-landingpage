@@ -1,4 +1,11 @@
-import { FacebookLogo, InstagramLogo, YoutubeLogo, MapPin, Phone, Envelope } from "@phosphor-icons/react";
+import {
+  FacebookLogo,
+  InstagramLogo,
+  YoutubeLogo,
+  MapPin,
+  Phone,
+  Envelope,
+} from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -12,21 +19,19 @@ const Footer = () => {
       {/* Main Footer Content */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
         {/* Left - Brand & Contact */}
-        <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-black/10 p-6 sm:p-8 md:p-12">
+        <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-black/10 px-6 sm:px-8 md:px-12 py-1 sm:py-3 md:py-5">
           {/* Logo */}
           <div className="mb-8">
             <div className="mb-4">
               <img
                 src="/resq_typo_logo.svg"
                 alt="ResQ SOS"
-                className="h-12 sm:h-14 md:h-16 w-auto"
+                className="h-20 sm:h-22 md:h-24 w-auto"
               />
-              <span className="block text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-black/40 mt-1">
-                Miền Trung
-              </span>
             </div>
             <p className="text-xs sm:text-sm text-black/60 leading-relaxed max-w-xs">
-              Nền tảng cứu hộ khẩn cấp - Kết nối nạn nhân thiên tai với đội ngũ cứu trợ.
+              Nền tảng cứu hộ khẩn cấp - Kết nối nạn nhân thiên tai với đội ngũ
+              cứu trợ.
             </p>
           </div>
 
@@ -35,7 +40,8 @@ const Footer = () => {
             <div className="flex items-start gap-3">
               <MapPin className="w-4 h-4 mt-0.5 text-black/40" />
               <p className="text-xs sm:text-sm text-black/60">
-                123 Đường Trần Phú, TP. Đà Nẵng
+                FPT University HCMC, 7 Đ. D1, Long Thạnh Mỹ, Tăng Nhơn Phú, Hồ
+                Chí Minh, Vietnam
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -44,7 +50,9 @@ const Footer = () => {
             </div>
             <div className="flex items-center gap-3">
               <Envelope className="w-4 h-4 text-black/40" />
-              <p className="text-xs sm:text-sm text-black/60">contact@resq.vn</p>
+              <p className="text-xs sm:text-sm text-black/60">
+                contact@resq.vn
+              </p>
             </div>
           </div>
 
@@ -79,25 +87,39 @@ const Footer = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4">
             {/* Về ResQ */}
             <div className="p-6 sm:p-8 border-b sm:border-b-0 border-r border-black/10">
-              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">Về ResQ</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
+                Về ResQ
+              </h3>
               <ul className="space-y-2 sm:space-y-3">
                 <li>
-                  <Link to="/about" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/about"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Giới thiệu
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about#mission" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/about#mission"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Sứ mệnh
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about#team" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/about#team"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Đội ngũ
                   </Link>
                 </li>
                 <li>
-                  <Link to="/news" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/news"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Tin tức
                   </Link>
                 </li>
@@ -106,25 +128,39 @@ const Footer = () => {
 
             {/* Dịch vụ */}
             <div className="p-6 sm:p-8 border-b sm:border-b-0 sm:border-r border-black/10">
-              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">Dịch vụ</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
+                Dịch vụ
+              </h3>
               <ul className="space-y-2 sm:space-y-3">
                 <li>
-                  <Link to="/services" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/services"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Gửi SOS
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/services"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Tìm nơi trú ẩn
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/services"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Tiếp tế
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/services"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Y tế khẩn cấp
                   </Link>
                 </li>
@@ -133,25 +169,39 @@ const Footer = () => {
 
             {/* Tham gia */}
             <div className="p-6 sm:p-8 border-r border-black/10">
-              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">Tham gia</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
+                Tham gia
+              </h3>
               <ul className="space-y-2 sm:space-y-3">
                 <li>
-                  <Link to="/register" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/register"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Tình nguyện viên
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/contact"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Đối tác
                   </Link>
                 </li>
                 <li>
-                  <Link to="/donate" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/donate"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Quyên góp
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/contact"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Liên hệ
                   </Link>
                 </li>
@@ -160,25 +210,39 @@ const Footer = () => {
 
             {/* Hỗ trợ */}
             <div className="p-6 sm:p-8">
-              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">Hỗ trợ</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
+                Hỗ trợ
+              </h3>
               <ul className="space-y-2 sm:space-y-3">
                 <li>
-                  <Link to="/help-center" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/help-center"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Trung tâm trợ giúp
                   </Link>
                 </li>
                 <li>
-                  <Link to="/help-center#guides" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/help-center#guides"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Hướng dẫn
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms-of-service" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/terms-of-service"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Điều khoản
                   </Link>
                 </li>
                 <li>
-                  <Link to="/privacy-policy" className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors">
+                  <Link
+                    to="/privacy-policy"
+                    className="text-xs sm:text-sm text-black/50 hover:text-[#FF5722] transition-colors"
+                  >
                     Bảo mật
                   </Link>
                 </li>
@@ -189,7 +253,9 @@ const Footer = () => {
           {/* App Download */}
           <div className="border-t border-black/10 p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <p className="text-xs sm:text-sm text-black/40">Tải ứng dụng ngay</p>
+              <p className="text-xs sm:text-sm text-black/40">
+                Tải ứng dụng ngay
+              </p>
               <div className="flex items-center gap-3">
                 <Link
                   to="/download-app"
@@ -216,10 +282,16 @@ const Footer = () => {
             © {currentYear} ResQ SOS Miền Trung. Tất cả quyền được bảo lưu.
           </p>
           <div className="flex items-center gap-4 sm:gap-6">
-            <Link to="/terms-of-service" className="text-[10px] sm:text-xs text-black/40 hover:text-black transition-colors">
+            <Link
+              to="/terms-of-service"
+              className="text-[10px] sm:text-xs text-black/40 hover:text-black transition-colors"
+            >
               Điều khoản sử dụng
             </Link>
-            <Link to="/privacy-policy" className="text-[10px] sm:text-xs text-black/40 hover:text-black transition-colors">
+            <Link
+              to="/privacy-policy"
+              className="text-[10px] sm:text-xs text-black/40 hover:text-black transition-colors"
+            >
               Chính sách bảo mật
             </Link>
           </div>

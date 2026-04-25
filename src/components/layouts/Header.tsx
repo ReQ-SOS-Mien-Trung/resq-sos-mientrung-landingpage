@@ -14,7 +14,12 @@ import { useAuth } from "@/hooks/useAuth";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, isOnboardingComplete, currentOnboardingLabel, getNextOnboardingPath } = useAuth();
+  const {
+    isAuthenticated,
+    isOnboardingComplete,
+    currentOnboardingLabel,
+    getNextOnboardingPath,
+  } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -198,7 +203,8 @@ const Header = () => {
         {/* Vertical Text - Find */}
         <button
           onClick={() => {
-            if (isAuthenticated && isOnboardingComplete) handleNavigate("/profile");
+            if (isAuthenticated && isOnboardingComplete)
+              handleNavigate("/profile");
             else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
             else handleNavigate("/register");
           }}
@@ -208,7 +214,9 @@ const Header = () => {
             className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
-            {isAuthenticated && isOnboardingComplete ? "Hồ sơ của tôi" : "Đăng ký cứu hộ"}
+            {isAuthenticated && isOnboardingComplete
+              ? "Hồ sơ của tôi"
+              : "Đăng ký cứu hộ"}
           </span>
         </button>
 
@@ -229,18 +237,21 @@ const Header = () => {
                 <div className="absolute left-full top-[30%] -translate-y-1/2 ml-5 w-72 bg-white text-black p-4 rounded-lg shadow-xl z-50 border-2 border-black">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-[#FF5722]/10 rounded-full flex items-center justify-center shrink-0">
-                      <BellIcon className="w-5 h-5 text-[#FF5722]" weight="fill" />
+                      <BellIcon
+                        className="w-5 h-5 text-[#FF5722]"
+                        weight="fill"
+                      />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-black text-black mb-1">
                         Tiếp tục khảo sát
                       </p>
                       <p className="text-xs text-black/60 leading-relaxed">
-                        Khảo sát của bạn đang dừng ở
-                        {" "}
-                        <span className="font-mono text-black">{currentOnboardingLabel}</span>.
-                        {" "}
-                        Tiếp tục để hoàn tất hồ sơ cứu hộ.
+                        Khảo sát của bạn đang dừng ở{" "}
+                        <span className="font-mono text-black">
+                          {currentOnboardingLabel}
+                        </span>
+                        . Tiếp tục để hoàn tất hồ sơ cứu hộ.
                       </p>
                     </div>
                   </div>
@@ -254,7 +265,10 @@ const Header = () => {
                     Tiếp tục đăng ký →
                   </button>
                   {/* Arrow pointing left */}
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-white" style={{ filter: 'drop-shadow(-1px 0 0 black)' }} />
+                  <div
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-white"
+                    style={{ filter: "drop-shadow(-1px 0 0 black)" }}
+                  />
                 </div>
               )}
             </div>
@@ -311,25 +325,29 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-4 xl:gap-8">
             <button
               onClick={handleHomeClick}
-              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
+              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-tight"
             >
               Trang chủ
             </button>
             <button
               onClick={() => handleNavigate("/donate")}
-              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
+              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-tight"
             >
               Ủng hộ đồng bào
             </button>
             <button
               onClick={() => {
-                if (isAuthenticated && isOnboardingComplete) handleNavigate("/profile");
-                else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
+                if (isAuthenticated && isOnboardingComplete)
+                  handleNavigate("/profile");
+                else if (isAuthenticated)
+                  handleNavigate(getNextOnboardingPath());
                 else handleNavigate("/register");
               }}
-              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wider"
+              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-tight"
             >
-              {isAuthenticated && isOnboardingComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
+              {isAuthenticated && isOnboardingComplete
+                ? "Hồ sơ của tôi"
+                : "Dành cho cứu hộ"}
             </button>
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -414,18 +432,20 @@ const Header = () => {
                       >
                         <button
                           onMouseEnter={() => handleMenuMouseEnter(item.id)}
-                          className={`relative w-full text-left py-4 text-sm font-bold uppercase tracking-wider transition-all duration-300 group ${activeMenu === item.id
-                            ? "text-black pl-3"
-                            : "text-black/40 hover:text-black hover:pl-3"
-                            }`}
+                          className={`relative w-full text-left py-4 text-sm font-bold uppercase tracking-wider transition-all duration-300 group ${
+                            activeMenu === item.id
+                              ? "text-black pl-3"
+                              : "text-black/40 hover:text-black hover:pl-3"
+                          }`}
                         >
                           {item.label}
                           {/* Underline indicator */}
                           <span
-                            className={`absolute bottom-3 left-0 h-0.5 bg-[#FF5722] transition-all duration-300 ${activeMenu === item.id
-                              ? "w-8"
-                              : "w-0 group-hover:w-6"
-                              }`}
+                            className={`absolute bottom-3 left-0 h-0.5 bg-[#FF5722] transition-all duration-300 ${
+                              activeMenu === item.id
+                                ? "w-8"
+                                : "w-0 group-hover:w-6"
+                            }`}
                           />
                         </button>
                       </li>
@@ -513,13 +533,17 @@ const Header = () => {
             </button>
             <button
               onClick={() => {
-                if (isAuthenticated && isOnboardingComplete) handleNavigate("/profile");
-                else if (isAuthenticated) handleNavigate(getNextOnboardingPath());
+                if (isAuthenticated && isOnboardingComplete)
+                  handleNavigate("/profile");
+                else if (isAuthenticated)
+                  handleNavigate(getNextOnboardingPath());
                 else handleNavigate("/register");
               }}
               className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"
             >
-              {isAuthenticated && isOnboardingComplete ? "Hồ sơ của tôi" : "Dành cho cứu hộ"}
+              {isAuthenticated && isOnboardingComplete
+                ? "Hồ sơ của tôi"
+                : "Dành cho cứu hộ"}
             </button>
           </div>
         </div>

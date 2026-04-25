@@ -7,7 +7,7 @@ import type {
 
 export const getCampaignsMetadata = async (): Promise<CampaignMetadata[]> => {
   const response = await api.get<CampaignMetadata[]>(
-    "/finance/campaigns/metadata",
+    "/finance/campaigns/active",
   );
   return response.data;
 };

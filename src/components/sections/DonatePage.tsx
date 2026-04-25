@@ -47,7 +47,9 @@ const DonatePage = () => {
   const [message, setMessage] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [fundCampaignId, setFundCampaignId] = useState<number | null>(null);
-  const [paymentMethodCode, setPaymentMethodCode] = useState<string | null>(null);
+  const [paymentMethodCode, setPaymentMethodCode] = useState<string | null>(
+    null,
+  );
   const [fieldErrors, setFieldErrors] = useState<{
     campaign?: string;
     amount?: string;
@@ -504,16 +506,63 @@ const DonatePage = () => {
                 </option>
                 {campaigns?.map((c) => (
                   <option
-                    key={c.key}
-                    value={c.key}
+                    key={c.id}
+                    value={c.id}
                     className="bg-black text-white"
                   >
-                    {c.value}
+                    {c.name} [{c.region} - {c.code}]
                   </option>
                 ))}
               </select>
               <CaretDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
             </div>
+
+            {/* Selected campaign info */}
+            {fundCampaignId !== null &&
+              (() => {
+                const selected = campaigns?.find(
+                  (c) => c.id === fundCampaignId,
+                );
+                if (!selected) return null;
+                const progress =
+                  selected.targetAmount > 0
+                    ? Math.min(
+                        (selected.totalAmount / selected.targetAmount) * 100,
+                        100,
+                      )
+                    : 0;
+                return (
+                  <div className="mt-3 px-4 py-3 bg-white/5 border border-white/10 text-xs space-y-2">
+                    <div className="text-sm flex justify-between items-center text-white/50">
+                      <span>Mục tiêu</span>
+                      <span className="text-white font-semibold">
+                        {selected.targetAmount.toLocaleString("vi-VN")} VNĐ
+                      </span>
+                    </div>
+                    <div className="text-sm flex justify-between items-center text-white/50">
+                      <span>Tổng quyên góp</span>
+                      <span className="text-[#FF5722] font-semibold">
+                        {selected.totalAmount.toLocaleString("vi-VN")} VNĐ
+                      </span>
+                    </div>
+                    <div className="text-sm flex justify-between items-center text-white/50">
+                      <span>Tiền quỹ hiện tại</span>
+                      <span className="text-emerald-400 font-semibold">
+                        {selected.currentBalance.toLocaleString("vi-VN")} VNĐ
+                      </span>
+                    </div>
+                    <div className="text-sm w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#FF5722] rounded-full transition-all duration-500"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                    <div className="text-right text-white/30">
+                      {progress.toFixed(1)}% hoàn thành
+                    </div>
+                  </div>
+                );
+              })()}
           </div>
 
           {/* Donor info */}
@@ -816,7 +865,7 @@ const DonatePage = () => {
           className="p-8 sm:p-12 lg:p-16 border-b-2 lg:border-b-0 lg:border-r-2 border-black hover:bg-black hover:text-white transition-colors duration-300 group"
         >
           <Users className="w-10 h-10 mb-6 text-[#FF5722]" />
-          <p className="text-[9px] font-mono tracking-[0.3em] text-black/30 group-hover:text-white/30 mb-2">
+          <p className="text-xs font-mono tracking-[0.3em] text-black/30 group-hover:text-white/30 mb-2">
             NGOÀI TIỀN BẠC
           </p>
           <h3 className="text-2xl sm:text-3xl font-black mb-4">
@@ -835,7 +884,7 @@ const DonatePage = () => {
           className="p-8 sm:p-12 lg:p-16 hover:bg-black hover:text-white transition-colors duration-300 group"
         >
           <Package className="w-10 h-10 mb-6 text-[#FF5722]" />
-          <p className="text-[9px] font-mono tracking-[0.3em] text-black/30 group-hover:text-white/30 mb-2">
+          <p className="text-xs font-mono tracking-[0.3em] text-black/30 group-hover:text-white/30 mb-2">
             NGOÀI TIỀN BẠC
           </p>
           <h3 className="text-2xl sm:text-3xl font-black mb-4">

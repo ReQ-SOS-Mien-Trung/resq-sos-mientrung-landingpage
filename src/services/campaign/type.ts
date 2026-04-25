@@ -1,6 +1,13 @@
 export interface CampaignMetadata {
-  key: number;
-  value: string;
+  id: number;
+  code: string;
+  name: string;
+  region: string;
+  campaignStartDate: string;
+  campaignEndDate: string;
+  targetAmount: number;
+  currentBalance: number;
+  totalAmount: number;
 }
 
 export interface PublicCampaignSpendingItem {

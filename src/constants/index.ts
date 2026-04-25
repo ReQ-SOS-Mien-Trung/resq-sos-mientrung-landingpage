@@ -606,84 +606,20 @@ export const badges = [
 export const termsOfServiceSections = [
   {
     number: "01",
-    title: "CHẤP NHẬN ĐIỀU KHOẢN",
+    title: "PHẠM VI ÁP DỤNG",
     content: [
-      "Bằng việc tải xuống, cài đặt hoặc sử dụng ứng dụng ResQ SOS Miền Trung, bạn đồng ý tuân thủ các điều khoản và điều kiện được quy định trong tài liệu này.",
-      "Nếu bạn không đồng ý với bất kỳ điều khoản nào, vui lòng không sử dụng dịch vụ của chúng tôi.",
-      "Chúng tôi có quyền sửa đổi các điều khoản này bất cứ lúc nào. Việc tiếp tục sử dụng dịch vụ sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới.",
+      "Điều khoản này áp dụng đối với mọi cá nhân tải xuống, cài đặt, đăng ký, đăng nhập, truy cập hoặc sử dụng ứng dụng RESQ.",
+      "Khi tạo tài khoản, đăng nhập, gửi yêu cầu khẩn cấp, chia sẻ vị trí, sử dụng tính năng nhắn tin, trợ lý ảo, hồ sơ khẩn cấp hoặc tiếp tục sử dụng ứng dụng, người dùng được xem là đã đọc, hiểu và đồng ý với toàn bộ nội dung của Điều khoản này.",
+      "Nếu người dùng không đồng ý với bất kỳ nội dung nào trong Điều khoản này, người dùng phải ngừng sử dụng ứng dụng.",
     ],
   },
   {
     number: "02",
-    title: "MÔ TẢ DỊCH VỤ",
+    title: "MỤC ĐÍCH CỦA ỨNG DỤNG",
     content: [
-      "ResQ SOS Miền Trung là nền tảng kết nối người dân gặp nạn trong thiên tai với đội ngũ cứu hộ.",
-    ],
-    list: [
-      {
-        label: "GỬI TÍN HIỆU SOS",
-        desc: "Gửi yêu cầu cứu hộ khẩn cấp kèm vị trí GPS",
-      },
-      {
-        label: "TÌM NƠI TRÚ ẨN",
-        desc: "Xác định các điểm sơ tán an toàn gần nhất",
-      },
-      {
-        label: "YÊU CẦU TIẾP TẾ",
-        desc: "Đăng ký nhu cầu về lương thực, nước uống, thuốc men",
-      },
-      {
-        label: "CẬP NHẬT THÔNG TIN",
-        desc: "Nhận thông tin về tình hình thiên tai",
-      },
-      {
-        label: "KẾT NỐI CỘNG ĐỒNG",
-        desc: "Liên lạc với tình nguyện viên và đội cứu hộ",
-      },
-    ],
-  },
-  {
-    number: "03",
-    title: "TRÁCH NHIỆM NGƯỜI DÙNG",
-    content: [
-      "Khi sử dụng ResQ SOS Miền Trung, bạn cam kết:",
-      "Cung cấp thông tin chính xác, trung thực khi đăng ký và gửi yêu cầu cứu hộ.",
-      "CHỈ GỬI TÍN HIỆU SOS KHI THỰC SỰ CẦN CỨU HỘ — việc gửi tín hiệu giả có thể khiến người khác gặp nguy hiểm.",
-      "Không sử dụng dịch vụ cho mục đích bất hợp pháp hoặc gây hại cho người khác.",
-      "Bảo mật thông tin tài khoản và thông báo ngay nếu phát hiện truy cập trái phép.",
-    ],
-  },
-  {
-    number: "04",
-    title: "HÀNH VI BỊ CẤM",
-    content: ["Các hành vi sau đây bị nghiêm cấm:"],
-    warnings: [
-      "Gửi tín hiệu SOS giả — có thể bị xử lý theo quy định pháp luật",
-      "Cố ý cung cấp thông tin sai lệch về vị trí hoặc tình trạng khẩn cấp",
-      "Sử dụng dịch vụ để quấy rối, đe dọa hoặc gây hại cho người khác",
-      "Cố gắng truy cập trái phép vào hệ thống hoặc dữ liệu",
-      "Phát tán virus, mã độc hoặc nội dung có hại",
-    ],
-    footer:
-      "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
-  },
-  {
-    number: "05",
-    title: "GIỚI HẠN TRÁCH NHIỆM",
-    content: [
-      "ResQ SOS Miền Trung cung cấp nền tảng kết nối và không chịu trách nhiệm trực tiếp về hoạt động cứu hộ.",
-      "Chúng tôi nỗ lực để dịch vụ hoạt động liên tục nhưng không đảm bảo 100% thời gian hoạt động.",
-      "Trong tình huống thiên tai, hiệu quả cứu hộ phụ thuộc vào nhiều yếu tố ngoài tầm kiểm soát.",
-    ],
-  },
-  {
-    number: "06",
-    title: "DỊCH VỤ KHẨN CẤP",
-    isEmergency: true,
-    content: [
-      "ResQ SOS Miền Trung KHÔNG thay thế các dịch vụ cứu hộ khẩn cấp chính thức.",
-      "Trong tình huống đe dọa tính mạng, hãy gọi ngay đường dây nóng cứu hộ.",
-      "Ứng dụng yêu cầu kết nối internet để hoạt động.",
+      "RESQ là ứng dụng hỗ trợ tiếp nhận, ghi nhận, chuyển thông tin và phối hợp hỗ trợ trong các tình huống khẩn cấp, thiên tai, tai nạn hoặc hoàn cảnh nguy hiểm cần cứu trợ, cứu nạn, cứu hộ.",
+      "Ứng dụng được tạo ra để hỗ trợ người dùng gửi thông tin nhanh hơn, rõ hơn và thuận tiện hơn. Tuy nhiên, RESQ không thay thế số điện thoại khẩn cấp, cơ quan công an, ủy ban nhân dân địa phương hoặc cơ quan nhà nước có thẩm quyền.",
+      "Trong trường hợp nguy cấp, đe dọa trực tiếp đến tính mạng, sức khỏe hoặc an toàn, người dùng phải ưu tiên liên hệ cơ quan chức năng phù hợp. Việc gửi thông tin qua RESQ chỉ là một kênh hỗ trợ bổ sung.",
     ],
     emergency: [
       { number: "113", label: "CÔNG AN" },
@@ -691,34 +627,269 @@ export const termsOfServiceSections = [
       { number: "115", label: "CẤP CỨU" },
     ],
   },
-];
-
-export const termsOfServiceAdditionalTerms = [
+  {
+    number: "03",
+    title: "QUYỀN SỬ DỤNG ỨNG DỤNG",
+    content: [
+      "Đơn vị vận hành cho phép người dùng sử dụng ứng dụng RESQ trong phạm vi cá nhân, đúng mục đích, đúng quy định và không trái pháp luật.",
+      "Người dùng không được:",
+    ],
+    warnings: [
+      "Sao chép, sửa đổi, phát tán hoặc sử dụng ứng dụng vào mục đích kinh doanh trái phép",
+      "Tìm cách can thiệp, phá hoại, làm sai lệch hoặc gây ảnh hưởng xấu đến hoạt động của ứng dụng",
+      "Dùng công cụ hoặc cách thức không hợp pháp để lấy dữ liệu, làm nghẽn ứng dụng hoặc vượt qua các biện pháp bảo vệ",
+      "Sử dụng ứng dụng vào mục đích lừa đảo, quấy rối, trục lợi hoặc gây hại cho người khác",
+    ],
+  },
+  {
+    number: "04",
+    title: "TÀI KHOẢN NGƯỜI DÙNG",
+    content: [
+      "Người dùng phải cung cấp thông tin đúng sự thật, đầy đủ và còn hiệu lực khi đăng ký tài khoản hoặc khi được yêu cầu bổ sung thông tin.",
+      "Người dùng có trách nhiệm:",
+    ],
+    warnings: [
+      "Giữ bí mật thông tin đăng nhập",
+      "Tự bảo quản thiết bị dùng để truy cập ứng dụng",
+      "Không cho người khác mượn, dùng chung, mua bán hoặc chuyển nhượng tài khoản",
+      "Thông báo kịp thời cho đơn vị vận hành nếu phát hiện tài khoản bị sử dụng trái phép",
+    ],
+    footer:
+      "Đơn vị vận hành có quyền yêu cầu người dùng xác minh lại thông tin trong trường hợp cần thiết.",
+  },
+  {
+    number: "05",
+    title: "CÁC TÍNH NĂNG CỦA ỨNG DỤNG",
+    content: [
+      "Tùy từng thời điểm vận hành, RESQ có thể cung cấp một hoặc nhiều tính năng như:",
+    ],
+    list: [
+      {
+        label: "GỬI YÊU CẦU KHẨN CẤP",
+        desc: "Gửi yêu cầu hỗ trợ kèm thông tin vị trí",
+      },
+      { label: "LỊCH SỬ YÊU CẦU", desc: "Theo dõi lịch sử các yêu cầu đã gửi" },
+      {
+        label: "CHIA SẺ VỊ TRÍ",
+        desc: "Chia sẻ vị trí và tình trạng cần hỗ trợ",
+      },
+      {
+        label: "NHẮN TIN",
+        desc: "Nhắn tin với bộ phận điều phối hoặc người hỗ trợ",
+      },
+      { label: "TRỢ LÝ ẢO", desc: "Sử dụng trợ lý ảo để tham khảo thông tin" },
+      {
+        label: "HỒ SƠ KHẨN CẤP",
+        desc: "Lưu hồ sơ khẩn cấp của bản thân hoặc người thân",
+      },
+    ],
+  },
+  {
+    number: "06",
+    title: "QUYỀN TRUY CẬP THÔNG TIN CẦN THIẾT",
+    content: [
+      "Để ứng dụng hoạt động đúng mục đích, người dùng đồng ý cho RESQ sử dụng các thông tin cần thiết phù hợp với tính năng đang dùng.",
+      "Người dùng hiểu rằng một số tính năng của ứng dụng sẽ không hoạt động đầy đủ nếu người dùng không cho phép sử dụng những thông tin cần thiết nói trên.",
+    ],
+    list: [
+      {
+        label: "VỊ TRÍ",
+        desc: "Vị trí hiện tại hoặc vị trí do người dùng chọn",
+      },
+      { label: "THỜI ĐIỂM", desc: "Thời điểm gửi thông tin" },
+      { label: "KẾT NỐI", desc: "Tình trạng kết nối và mức pin của thiết bị" },
+      { label: "LIÊN HỆ", desc: "Thông tin liên hệ của người dùng" },
+      { label: "HỒ SƠ", desc: "Thông tin trong hồ sơ khẩn cấp" },
+      {
+        label: "MEDIA",
+        desc: "Hình ảnh, âm thanh nếu người dùng chủ động cung cấp",
+      },
+    ],
+  },
   {
     number: "07",
-    title: "QUYỀN SỞ HỮU TRÍ TUỆ",
-    content:
-      "Tất cả nội dung, thiết kế, logo, mã nguồn thuộc quyền sở hữu của ResQ SOS và được bảo vệ bởi luật sở hữu trí tuệ.",
+    title: "GỬI YÊU CẦU KHẨN CẤP",
+    isEmergency: true,
+    content: [
+      "Người dùng chỉ được gửi yêu cầu khẩn cấp khi thực sự có nhu cầu hỗ trợ hoặc có căn cứ hợp lý để tin rằng một người hoặc một nhóm người đang cần được giúp đỡ.",
+      "Người dùng phải cung cấp thông tin trung thực, rõ ràng và trong phạm vi cần thiết, bao gồm:",
+      "Người dùng phải tự chịu trách nhiệm về nội dung mình cung cấp. Nếu người dùng cố ý báo tin giả, báo sai sự thật hoặc cung cấp thông tin gây hiểu nhầm làm ảnh hưởng đến hoạt động hỗ trợ, người dùng phải chịu trách nhiệm theo quy định của ứng dụng và theo pháp luật.",
+      "Việc một yêu cầu được ghi nhận trên ứng dụng không có nghĩa là yêu cầu đó chắc chắn sẽ được xử lý ngay hoặc được hỗ trợ trong một thời hạn nhất định.",
+    ],
+    warnings: [
+      "Người đang cần hỗ trợ",
+      "Vị trí xảy ra sự việc",
+      "Số lượng người liên quan",
+      "Tình trạng nguy hiểm, bị thương, mắc kẹt hoặc thiếu nhu yếu phẩm",
+      "Thông tin liên hệ",
+      "Ghi chú quan trọng khác nếu có",
+    ],
   },
   {
     number: "08",
-    title: "CHẤM DỨT DỊCH VỤ",
-    content:
-      "Chúng tôi có quyền tạm ngưng hoặc chấm dứt quyền truy cập nếu bạn vi phạm điều khoản hoặc gây hại cho cộng đồng.",
+    title: "NỘI DUNG DO NGƯỜI DÙNG CUNG CẤP",
+    content: [
+      "Mọi thông tin, hình ảnh, âm thanh, tin nhắn, hồ sơ, tài liệu hoặc dữ liệu do người dùng cung cấp qua RESQ đều thuộc trách nhiệm của người dùng.",
+      "Người dùng đồng ý cho đơn vị vận hành được lưu giữ, sắp xếp, xem xét, hiển thị, chuyển tiếp, giới hạn hoặc gỡ bỏ các nội dung đó trong phạm vi cần thiết để vận hành ứng dụng, kiểm tra tính xác thực, hỗ trợ điều phối, xử lý vi phạm và thực hiện yêu cầu hợp pháp của cơ quan có thẩm quyền.",
+      "Đơn vị vận hành có quyền từ chối hiển thị, gỡ bỏ hoặc hạn chế bất kỳ nội dung nào nếu có căn cứ cho rằng nội dung đó sai sự thật, không phù hợp, gây hại, xâm phạm quyền riêng tư hoặc vi phạm Điều khoản này.",
+    ],
   },
   {
     number: "09",
-    title: "LUẬT ÁP DỤNG",
-    content:
-      "Các điều khoản được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền.",
+    title: "HỒ SƠ KHẨN CẤP",
+    content: [
+      "Ứng dụng có thể cho phép người dùng lưu hồ sơ khẩn cấp của bản thân hoặc của người thân để phục vụ việc hỗ trợ trong tình huống nguy cấp.",
+      "Người dùng chỉ được lưu thông tin của người khác khi có căn cứ hợp pháp và phù hợp với mục đích hỗ trợ khẩn cấp. Người dùng không được lợi dụng tính năng này để thu thập, lưu giữ hoặc phát tán trái phép thông tin riêng tư của người khác.",
+    ],
+    list: [
+      { label: "HỌ TÊN", desc: "Tên đầy đủ của người cần hỗ trợ" },
+      { label: "SỐ ĐIỆN THOẠI", desc: "Thông tin liên hệ khẩn cấp" },
+      { label: "MỐI QUAN HỆ", desc: "Quan hệ với người đăng ký hồ sơ" },
+      { label: "SỨC KHỎE", desc: "Tình trạng sức khỏe và nhu cầu đặc biệt" },
+      { label: "ĐI LẠI", desc: "Khả năng di chuyển" },
+      {
+        label: "GHI CHÚ",
+        desc: "Ghi chú quan trọng liên quan đến việc hỗ trợ",
+      },
+    ],
   },
   {
     number: "10",
-    title: "ĐIỀU KHOẢN RIÊNG BIỆT",
-    content:
-      "Nếu bất kỳ điều khoản nào bị tuyên bố vô hiệu, các điều khoản còn lại vẫn có hiệu lực đầy đủ.",
+    title: "NHẮN TIN VÀ TRỢ LÝ ẢO",
+    content: [
+      "Ứng dụng có thể cung cấp tính năng nhắn tin để người dùng trao đổi với bộ phận điều phối hoặc người hỗ trợ.",
+      "Trợ lý ảo trong ứng dụng chỉ có tính chất tham khảo. Nội dung do trợ lý ảo đưa ra có thể chưa đầy đủ, chưa chính xác hoặc không phù hợp với mọi trường hợp cụ thể. Người dùng không được xem đó là căn cứ duy nhất để đưa ra quyết định ảnh hưởng đến tính mạng, sức khỏe, tài sản hoặc an toàn.",
+      "Người dùng không được dùng tính năng nhắn tin để:",
+    ],
+    warnings: [
+      "Gửi nội dung quấy rối, xúc phạm, đe dọa hoặc vu khống",
+      "Phát tán tin sai sự thật",
+      "Gửi nội dung phản cảm, độc hại hoặc trái pháp luật",
+      "Làm phiền, gây nghẽn hoặc cản trở quá trình hỗ trợ",
+    ],
+  },
+  {
+    number: "11",
+    title: "CHUYỂN TÀI KHOẢN VÀ MÃ KHẨN CẤP",
+    content: [
+      "Ứng dụng có thể cho phép người dùng chuyển quyền sử dụng tài khoản từ thiết bị cũ sang thiết bị mới hoặc dùng mã khẩn cấp trong một số trường hợp cần thiết.",
+      "Người dùng chỉ được sử dụng tính năng này đối với tài khoản của chính mình. Người dùng không được:",
+    ],
+    warnings: [
+      "Chiếm đoạt tài khoản của người khác",
+      "Sao chép hoặc sử dụng trái phép mã khẩn cấp",
+      "Dùng tính năng này để vượt qua các biện pháp bảo vệ của ứng dụng",
+    ],
+    footer:
+      "Đơn vị vận hành có quyền áp dụng các biện pháp cần thiết để bảo đảm một tài khoản không bị sử dụng trái phép trên nhiều thiết bị theo cách gây mất an toàn.",
+  },
+  {
+    number: "12",
+    title: "HÀNH VI BỊ CẤM",
+    isDark: true,
+    content: ["Người dùng không được thực hiện các hành vi sau:"],
+    warnings: [
+      "Báo tin giả hoặc cung cấp thông tin sai sự thật",
+      "Mạo danh người khác",
+      "Cản trở, gây rối hoặc làm chậm hoạt động tiếp nhận và xử lý thông tin khẩn cấp",
+      "Phá hoại, làm hỏng hoặc làm sai lệch hoạt động của ứng dụng",
+      "Thu thập, công khai, chia sẻ hoặc sử dụng trái phép thông tin cá nhân của người khác",
+      "Lợi dụng thiên tai, tai nạn hoặc hoàn cảnh nguy cấp để trục lợi",
+      "Sử dụng ứng dụng vào mục đích trái pháp luật hoặc trái đạo đức xã hội",
+      "Né tránh việc bị xử lý bằng cách tạo tài khoản mới hoặc dùng cách thức khác để tiếp tục vi phạm",
+    ],
+    footer:
+      "Vi phạm có thể dẫn đến khóa tài khoản vĩnh viễn và chịu trách nhiệm pháp lý.",
+  },
+  {
+    number: "13",
+    title: "QUYỀN CỦA ĐƠN VỊ VẬN HÀNH",
+    isEmergency: true,
+    content: [
+      "Để bảo đảm an toàn cho người dùng và cho hoạt động của ứng dụng, đơn vị vận hành có quyền:",
+      "Trong trường hợp có nguy cơ gây hại ngay lập tức cho con người, cho dữ liệu hoặc cho hoạt động hỗ trợ, đơn vị vận hành có thể áp dụng biện pháp ngăn chặn ngay mà không cần chờ người dùng giải trình trước.",
+    ],
+    warnings: [
+      "Yêu cầu người dùng cung cấp thêm thông tin để xác minh",
+      "Đánh dấu thông tin chưa được kiểm tra hoặc có dấu hiệu rủi ro",
+      "Hạn chế một phần quyền sử dụng của người dùng",
+      "Ẩn hoặc gỡ nội dung",
+      "Tạm khóa hoặc khóa vĩnh viễn tài khoản",
+      "Lưu giữ thông tin cần thiết để phục vụ việc kiểm tra, xử lý vi phạm hoặc đáp ứng yêu cầu của cơ quan có thẩm quyền",
+    ],
+  },
+  {
+    number: "14",
+    title: "DỮ LIỆU CÁ NHÂN VÀ CHIA SẺ THÔNG TIN",
+    content: [
+      "Đơn vị vận hành thu thập và sử dụng dữ liệu cá nhân trong phạm vi cần thiết để: vận hành ứng dụng; tiếp nhận và xử lý thông tin hỗ trợ; xác minh, điều phối và liên lạc khi cần; bảo đảm an toàn cho người dùng; xử lý vi phạm; thực hiện nghĩa vụ theo quy định của pháp luật.",
+      "Trong trường hợp khẩn cấp, đơn vị vận hành có thể chia sẻ những thông tin thật sự cần thiết với lực lượng hỗ trợ, cơ quan có thẩm quyền hoặc bên liên quan phù hợp để phục vụ việc cứu trợ, cứu nạn, cứu hộ hoặc bảo vệ tính mạng, sức khỏe và an toàn của con người.",
+      "Việc thu thập, sử dụng, lưu giữ và chia sẻ dữ liệu cá nhân còn được thực hiện theo Chính sách bảo mật dữ liệu của ứng dụng và theo quy định của pháp luật hiện hành.",
+    ],
+  },
+  {
+    number: "15",
+    title: "GIỚI HẠN TRÁCH NHIỆM",
+    content: [
+      "Người dùng hiểu và đồng ý rằng thông tin vị trí có thể sai lệch do thiết bị, tín hiệu hoặc điều kiện thực tế; kết nối mạng có thể chậm, gián đoạn hoặc mất hoàn toàn; ứng dụng có thể bị lỗi, quá tải, ngừng hoạt động tạm thời trong một số hoàn cảnh bất khả kháng.",
+      "Trong phạm vi pháp luật cho phép, đơn vị vận hành không chịu trách nhiệm đối với thiệt hại phát sinh từ:",
+    ],
+    warnings: [
+      "Thông tin sai do người dùng cung cấp",
+      "Sự cố thiết bị, mất mạng, mất điện hoặc thiên tai",
+      "Sai lệch của dữ liệu vị trí",
+      "Việc người dùng chậm liên hệ cơ quan chức năng trong tình huống nguy cấp",
+      "Quyết định của người dùng dựa hoàn toàn vào thông tin tham khảo trên ứng dụng",
+    ],
+  },
+  {
+    number: "16",
+    title: "TẠM NGỪNG HOẶC CHẤM DỨT QUYỀN SỬ DỤNG",
+    content: [
+      "Đơn vị vận hành có quyền tạm ngừng hoặc chấm dứt quyền sử dụng ứng dụng của người dùng nếu:",
+    ],
+    warnings: [
+      "Người dùng vi phạm Điều khoản này",
+      "Người dùng gây nguy cơ mất an toàn cho ứng dụng hoặc cho người khác",
+      "Có yêu cầu từ cơ quan có thẩm quyền",
+      "Việc tiếp tục cho sử dụng không còn phù hợp với yêu cầu pháp luật hoặc yêu cầu vận hành an toàn",
+    ],
+    footer:
+      "Người dùng cũng có thể ngừng sử dụng ứng dụng bất cứ lúc nào bằng cách ngừng truy cập hoặc thực hiện việc xóa tài khoản theo hướng dẫn của ứng dụng.",
+  },
+  {
+    number: "17",
+    title: "THAY ĐỔI ĐIỀU KHOẢN",
+    content: [
+      "Đơn vị vận hành có quyền sửa đổi, bổ sung hoặc cập nhật Điều khoản này khi cần thiết.",
+      "Phiên bản mới sẽ được thông báo trên ứng dụng hoặc bằng hình thức phù hợp khác. Nếu người dùng tiếp tục sử dụng ứng dụng sau thời điểm điều khoản mới có hiệu lực, người dùng được xem là đã đồng ý với nội dung đã được cập nhật.",
+    ],
+  },
+  {
+    number: "18",
+    title: "ĐIỀU KHOẢN RIÊNG CHO MỘT SỐ TÍNH NĂNG",
+    content: [
+      "Đối với một số tính năng đặc biệt như trợ lý ảo, hồ sơ khẩn cấp, chuyển tài khoản, mã khẩn cấp, quyên góp hoặc các tính năng cộng đồng nếu được bổ sung trong tương lai, đơn vị vận hành có thể ban hành quy định riêng để áp dụng bổ sung.",
+      "Trong trường hợp có sự khác nhau giữa Điều khoản này và quy định riêng của từng tính năng, quy định riêng của tính năng đó sẽ được ưu tiên áp dụng trong phạm vi liên quan.",
+    ],
+  },
+  {
+    number: "19",
+    title: "LIÊN HỆ",
+    isDark: true,
+    content: [
+      "Nếu có câu hỏi, phản ánh, khiếu nại hoặc yêu cầu liên quan đến việc sử dụng ứng dụng, người dùng có thể liên hệ với đơn vị vận hành qua các kênh chính thức được công bố trong ứng dụng.",
+      "Phiên bản: 1.0 — Ngày có hiệu lực: 25/04/2026",
+    ],
+    list: [
+      { label: "EMAIL HỖ TRỢ", desc: "support@resq.vn" },
+      { label: "HOTLINE", desc: "1900 1234 (24/7)" },
+      { label: "ĐỊA CHỈ", desc: "FPT University HCMC, TP. Hồ Chí Minh" },
+    ],
   },
 ];
+
+export const termsOfServiceAdditionalTerms: never[] = [];
 
 // Privacy Policy Page Constants
 export const privacyPolicySections = [
