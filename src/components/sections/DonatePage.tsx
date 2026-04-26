@@ -222,6 +222,8 @@ const DonatePage = () => {
       {
         onSuccess: (data) => {
           if (data.checkoutUrl) {
+            // Redirect to payment gateway (ZaloPay or PayOS)
+            // Backend handles IPN/callback and redirects back to /success or /fail
             window.location.href = data.checkoutUrl;
           }
         },
