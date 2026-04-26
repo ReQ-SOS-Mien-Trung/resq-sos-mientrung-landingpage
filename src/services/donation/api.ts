@@ -5,8 +5,6 @@ import type {
   PaymentMethod,
   PublicDonationsParams,
   PublicDonationsResponse,
-  ZaloPayVerifyParams,
-  ZaloPayVerifyResponse,
 } from "./type";
 
 export const createDonation = async (
@@ -29,16 +27,6 @@ export const getPublicDonations = async (
 export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
   const response = await api.get<PaymentMethod[]>(
     "/finance/donations/payment-methods",
-  );
-  return response.data;
-};
-
-export const verifyZaloPay = async (
-  params: ZaloPayVerifyParams,
-): Promise<ZaloPayVerifyResponse> => {
-  const response = await api.get<ZaloPayVerifyResponse>(
-    "/finance/donations/zalopay-verify",
-    { params },
   );
   return response.data;
 };

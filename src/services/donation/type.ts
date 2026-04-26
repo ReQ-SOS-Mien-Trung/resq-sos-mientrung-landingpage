@@ -14,6 +14,8 @@ export interface DonationResponse {
   donationId: number;
   checkoutUrl: string;
   qrCode: string;
+  paymentMethod: string;
+  orderId: string; // apptransid for ZaloPay
 }
 
 export interface PublicDonation {
@@ -45,14 +47,4 @@ export interface PublicDonationsResponse {
 export interface PaymentMethod {
   key: string;
   value: string;
-}
-
-export interface ZaloPayVerifyParams {
-  apptransid: string;
-}
-
-export interface ZaloPayVerifyResponse {
-  success: boolean;
-  message?: string;
-  [key: string]: unknown;
 }

@@ -245,7 +245,7 @@ const DonationFeedPage = () => {
 
         {/* Toolbar */}
         <div className="mb-5 flex flex-col sm:flex-row gap-3 items-start sm:items-center flex-wrap">
-          <div className="relative flex-1 min-w-0 sm:max-w-sm">
+          <div className="relative flex-1 min-w-0">
             <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30 pointer-events-none" />
             <input
               type="text"
@@ -482,11 +482,11 @@ const DonationFeedPage = () => {
                       Số tiền <SortIcon field="amount" />
                     </span>
                   </th>
-                  <th className="text-left px-4 py-3 text-[10px] font-mono tracking-widest font-normal uppercase hidden md:table-cell">
+                  <th className="text-left px-4 py-3 text-xs font-mono tracking-widest font-normal uppercase hidden md:table-cell">
                     Lời nhắn
                   </th>
                   <th
-                    className="text-left px-4 py-3 text-[10px] font-mono tracking-widest font-normal uppercase cursor-pointer hover:text-[#FF5722] transition-colors select-none"
+                    className="text-left px-4 py-3 text-xs font-mono tracking-widest font-normal uppercase cursor-pointer hover:text-[#FF5722] transition-colors select-none"
                     onClick={() => toggleSort("createdAt")}
                   >
                     <span className="inline-flex items-center gap-1">

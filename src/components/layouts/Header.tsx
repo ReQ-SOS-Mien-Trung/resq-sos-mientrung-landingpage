@@ -193,7 +193,7 @@ const Header = () => {
           className="flex-1 flex items-center justify-center hover:bg-white/10 transition-colors group"
         >
           <span
-            className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
+            className="text-[11px] lg:text-xs font-bold uppercase tracking-wide text-white/60 group-hover:text-white transition-colors"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
             Tìm kiếm
@@ -211,7 +211,7 @@ const Header = () => {
           className="flex-1 flex items-center justify-center hover:bg-white/10 transition-colors group border-t border-white/10"
         >
           <span
-            className="text-[9px] lg:text-[10px] font-bold uppercase tracking-[0.15em] lg:tracking-[0.2em] text-white/60 group-hover:text-white transition-colors"
+            className="text-[11px] lg:text-xs font-bold uppercase tracking-wide text-white/60 group-hover:text-white transition-colors"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
             {isAuthenticated && isOnboardingComplete
@@ -325,13 +325,13 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-4 xl:gap-8">
             <button
               onClick={handleHomeClick}
-              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-tight"
+              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wide"
             >
               Trang chủ
             </button>
             <button
               onClick={() => handleNavigate("/donate")}
-              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-tight"
+              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wide"
             >
               Ủng hộ đồng bào
             </button>
@@ -343,7 +343,7 @@ const Header = () => {
                   handleNavigate(getNextOnboardingPath());
                 else handleNavigate("/register");
               }}
-              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-tight"
+              className="text-xs xl:text-sm font-medium text-black/70 hover:text-black transition-colors uppercase tracking-wide"
             >
               {isAuthenticated && isOnboardingComplete
                 ? "Hồ sơ của tôi"
@@ -527,7 +527,7 @@ const Header = () => {
           <div className="p-4 sm:p-6 flex flex-col gap-3">
             <button
               onClick={() => handleNavigate("/donate")}
-              className="w-full py-3 sm:py-4 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-black transition-colors"
+              className="w-full py-3 sm:py-4 bg-[#FF5722] text-white text-xs sm:text-sm font-bold uppercase tracking-wide hover:bg-black transition-colors"
             >
               Ủng hộ đồng bào
             </button>
@@ -539,7 +539,7 @@ const Header = () => {
                   handleNavigate(getNextOnboardingPath());
                 else handleNavigate("/register");
               }}
-              className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#FF5722] transition-colors"
+              className="w-full py-3 sm:py-4 bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wide hover:bg-[#FF5722] transition-colors"
             >
               {isAuthenticated && isOnboardingComplete
                 ? "Hồ sơ của tôi"
