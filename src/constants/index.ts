@@ -1068,12 +1068,12 @@ export const prerequisiteQuestions: PrerequisiteQuestion[] = [
 
 // ==================== DONATE PAGE ====================
 export const donatePresetAmounts = [
-  { value: 50_000, label: "50K", desc: "1 suất cơm" },
-  { value: 200_000, label: "200K", desc: "1 túi cứu trợ" },
-  { value: 500_000, label: "500K", desc: "1 gia đình / tuần" },
-  { value: 1_000_000, label: "1 TRIỆU", desc: "Nhà tạm 1 tháng" },
+  { value: 50_000, label: "50K", desc: "Cứu đói khẩn cấp" },
+  { value: 200_000, label: "200K", desc: "Thuốc men & Đồ ăn" },
+  { value: 500_000, label: "500K", desc: "Hỗ trợ 1 gia đình" },
+  { value: 1_000_000, label: "1 TRIỆU", desc: "Chăn ấm & Bạt che" },
   { value: 5_000_000, label: "5 TRIỆU", desc: "Trang bị cứu hộ" },
-  { value: 0, label: "TỰ NHẬP", desc: "Số tiền khác" },
+  { value: 0, label: "TỰ NHẬP", desc: "Tùy tâm đóng góp" },
 ];
 
 export const donateImpactStats = [

@@ -1,5 +1,4 @@
 import api from "@/config/axios";
-import authEmailApi from "@/config/authEmailAxios";
 import type {
   RegisterRequest,
   RegisterResponse,
@@ -19,7 +18,7 @@ import type {
 export const registerRescuer = async (
   data: RegisterRequest,
 ): Promise<RegisterResponse> => {
-  const response = await authEmailApi.post<RegisterResponse>(
+  const response = await api.post<RegisterResponse>(
     "/identity/auth/register-rescuer",
     data,
   );
@@ -50,7 +49,7 @@ export const googleAuth = async (
 export const resendVerificationEmail = async (
   data: ResendVerificationRequest,
 ): Promise<ResendVerificationResponse> => {
-  const response = await authEmailApi.post<ResendVerificationResponse>(
+  const response = await api.post<ResendVerificationResponse>(
     "/identity/auth/resend-verification-email",
     data,
   );

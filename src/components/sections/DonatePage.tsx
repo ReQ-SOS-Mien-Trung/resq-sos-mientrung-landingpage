@@ -302,7 +302,7 @@ const DonatePage = () => {
           {/* RIGHT — dark counter panel */}
           <div className="hero-panel bg-black text-white px-8 sm:px-12 py-14 sm:py-20 lg:py-28 flex flex-col justify-between">
             <div>
-              <p className="text-[9px] font-mono tracking-[0.35em] text-white/50 mb-6">
+              <p className="text-xs font-mono tracking-[0.35em] text-white/50 mb-6">
                 TỔNG QUYÊN GÓP / 2024
               </p>
               <div className="text-[5.5rem] sm:text-[6.5rem] xl:text-[7.5rem] font-black text-[#FF5722] leading-none">
@@ -314,7 +314,7 @@ const DonatePage = () => {
 
               {/* Progress */}
               <div>
-                <div className="flex justify-between text-[9px] font-mono tracking-widest text-white/50 mb-2">
+                <div className="flex justify-between text-xs font-mono tracking-widest text-white/50 mb-2">
                   <span>ĐÃ ĐẠT</span>
                   <span>MỤC TIÊU 5 TỶ</span>
                 </div>
@@ -324,7 +324,7 @@ const DonatePage = () => {
                     style={{ width: "50%" }}
                   />
                 </div>
-                <p className="mt-2 text-[9px] font-mono tracking-widest text-white/40">
+                <p className="mt-2 text-xs font-mono tracking-widest text-white/40">
                   50% mục tiêu đã hoàn thành
                 </p>
               </div>
@@ -410,7 +410,7 @@ const DonatePage = () => {
         ref={donateRef}
         className="border-b-2 border-black bg-black text-white"
       >
-        <div className="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-20">
+        <div className="max-w-4xl mx-auto px-6 sm:px-10 py-16 sm:py-20">
           <div className="donate-anim text-center mb-12">
             <p className="text-[10px] font-mono tracking-[0.35em] text-white/50 mb-3">
               ĐÓNG GÓP
