@@ -125,9 +125,9 @@ export const contactMethods = [
   {
     icon: Envelope,
     title: "EMAIL",
-    value: "contact@resq.vn",
+    value: "huynhkimcuong@resq.vn",
     desc: "Phản hồi trong vòng 24 giờ làm việc",
-    action: "mailto:contact@resq.vn",
+    action: "mailto:huynhkimcuong@resq.vn",
     color: "bg-black",
   },
   {

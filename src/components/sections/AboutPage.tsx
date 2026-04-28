@@ -381,7 +381,8 @@ const AboutPage = () => {
           <h3 className="text-2xl sm:text-3xl font-black mb-4">LIÊN HỆ</h3>
           <div className="space-y-3 text-sm">
             <p>
-              <span className="text-black/50">Email:</span> contact@resq.vn
+              <span className="text-black/50">Email:</span>{" "}
+              huynhkimcuong@resq.vn
             </p>
             <p>
               <span className="text-black/50">Hotline:</span> 1900 1234
