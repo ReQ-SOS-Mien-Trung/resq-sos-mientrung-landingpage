@@ -20,20 +20,40 @@ export interface DonationResponse {
 
 export interface PublicDonation {
   id: number;
+  receiptCode?: string;
   fundCampaignId: number;
   fundCampaignName: string;
   donorName: string;
-  donorEmail: string;
+  donorEmail?: string;
   amount: number;
-  note: string;
+  note?: string | null;
   createdAt: string;
+  paidAt?: string | null;
   isPrivate: boolean;
+  displayText?: string | null;
+  changedAt?: string | null;
+}
+
+export interface PublicDonationHubPayload {
+  donationId: number;
+  receiptCode?: string;
+  fundCampaignId: number;
+  fundCampaignName: string;
+  donorName: string;
+  amount: number;
+  note?: string | null;
+  createdAt: string;
+  paidAt?: string | null;
+  isPrivate: boolean;
+  displayText?: string | null;
+  changedAt?: string | null;
 }
 
 export interface PublicDonationsParams {
   PageNumber?: number;
   PageSize?: number;
   FundCampaignId?: number;
+  Search?: string;
 }
 
 export interface PublicDonationsResponse {

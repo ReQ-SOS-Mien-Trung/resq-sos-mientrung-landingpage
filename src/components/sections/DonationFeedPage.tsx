@@ -21,6 +21,7 @@ import {
 } from "@/services/campaign/hooks";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { subscribePublicDonationHub } from "@/services/donation/publicDonationHub";
 
 /* ── helpers ──────────────────────────────────────────── */
 const formatVND = (n: number) => {
@@ -45,17 +46,18 @@ const formatDate = (iso: string) => {
   });
 };
 
-const maskEmail = (email: string) => {
+const maskEmail = (email?: string) => {
+  if (!email) return "";
   const [local, domain] = email.split("@");
   if (!domain) return email;
   return `${local.slice(0, 2)}***@${domain}`;
 };
 
-const POLL_INTERVAL = 4000;
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
 type SortField = "createdAt" | "amount";
 type SortDir = "desc" | "asc";
+type HubStatus = "connected" | "connecting" | "disconnected";
 
 /* ════════════════════════════════════════════════════════ */
 const DonationFeedPage = () => {
@@ -72,9 +74,9 @@ const DonationFeedPage = () => {
   const [filterCampaign, setFilterCampaign] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [hubStatus, setHubStatus] = useState<HubStatus>("connecting");
 
-  const latestIdRef = useRef<number>(-1);
-  const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const knownDonationIdsRef = useRef<Set<number>>(new Set());
 
   const { data: campaigns } = useGetCampaignsMetadata();
   const {
@@ -97,6 +99,31 @@ const DonationFeedPage = () => {
     setPage(1);
   }, [sortField, sortDir, filterCampaign, debouncedSearch, pageSize]);
 
+  const markNewDonations = useCallback((fresh: PublicDonation[]) => {
+    if (fresh.length === 0) return;
+
+    setNewIds((prev) => {
+      const next = new Set(prev);
+      fresh.forEach((d) => next.add(d.id));
+      return next;
+    });
+
+    setTimeout(() => {
+      setNewIds((prev) => {
+        const cleaned = new Set(prev);
+        fresh.forEach((d) => cleaned.delete(d.id));
+        return cleaned;
+      });
+    }, 8000);
+  }, []);
+
+  const rememberDonation = useCallback((donation: PublicDonation) => {
+    if (knownDonationIdsRef.current.has(donation.id)) return false;
+
+    knownDonationIdsRef.current.add(donation.id);
+    return true;
+  }, []);
+
   /* ── fetch ── */
   const fetchDonations = useCallback(async () => {
     setIsLoading(true);
@@ -105,6 +132,7 @@ const DonationFeedPage = () => {
         PageNumber: page,
         PageSize: pageSize,
         ...(filterCampaign ? { FundCampaignId: filterCampaign } : {}),
+        ...(debouncedSearch.trim() ? { Search: debouncedSearch.trim() } : {}),
       });
       const incoming: PublicDonation[] = res.items ?? [];
       setTotalCount(res.totalCount ?? incoming.length);
@@ -113,75 +141,80 @@ const DonationFeedPage = () => {
           Math.ceil((res.totalCount ?? incoming.length) / pageSize),
       );
       setDonations(incoming);
-      if (incoming.length > 0 && latestIdRef.current === -1) {
-        latestIdRef.current = incoming[0].id;
-      }
+      incoming.forEach((d) => knownDonationIdsRef.current.add(d.id));
     } catch (err) {
       console.error("Failed to fetch donations:", err);
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, filterCampaign]);
+  }, [page, pageSize, filterCampaign, debouncedSearch]);
 
   useEffect(() => {
     fetchDonations();
   }, [fetchDonations]);
 
-  /* ── smart polling (always page 1 to detect new donations) ── */
-  useEffect(() => {
-    if (pollTimerRef.current) clearInterval(pollTimerRef.current);
-    pollTimerRef.current = setInterval(() => {
-      getPublicDonations({
-        PageNumber: 1,
-        PageSize: pageSize,
-        ...(filterCampaign ? { FundCampaignId: filterCampaign } : {}),
-      })
-        .then((res) => {
-          const incoming = res.items ?? [];
-          const fresh = incoming.filter((d) => d.id > latestIdRef.current);
-          if (fresh.length > 0) {
-            latestIdRef.current = fresh[0].id;
-            setNewIds((prev) => {
-              const next = new Set(prev);
-              fresh.forEach((d) => next.add(d.id));
-              setTimeout(() => {
-                setNewIds((s) => {
-                  const cleaned = new Set(s);
-                  fresh.forEach((d) => cleaned.delete(d.id));
-                  return cleaned;
-                });
-              }, 8000);
-              return next;
-            });
-            if (page === 1) {
-              setDonations((prev) => {
-                const existingIds = new Set(prev.map((d) => d.id));
-                const toAdd = fresh.filter((d) => !existingIds.has(d.id));
-                return [...toAdd, ...prev].slice(0, pageSize);
-              });
-              setTotalCount((n) => n + fresh.length);
-            }
-          }
-        })
-        .catch(() => {});
-    }, POLL_INTERVAL);
-    return () => {
-      if (pollTimerRef.current) clearInterval(pollTimerRef.current);
-    };
-  }, [filterCampaign, page, pageSize]);
+  const matchesCurrentSearch = useCallback(
+    (donation: PublicDonation) => {
+      const query = debouncedSearch.trim().toLowerCase();
+      if (!query) return true;
 
-  /* ── client-side sort & search ── */
+      return [
+        donation.receiptCode,
+        donation.donorName,
+        String(donation.amount),
+        donation.displayText,
+      ].some((value) => value?.toLowerCase().includes(query));
+    },
+    [debouncedSearch],
+  );
+
+  /* ── realtime donations via public SignalR hub ── */
+  useEffect(() => {
+    return subscribePublicDonationHub({
+      campaignId: filterCampaign,
+      onStatusChange: setHubStatus,
+      onDonation: (donation) => {
+        if (
+          typeof filterCampaign === "number" &&
+          donation.fundCampaignId !== filterCampaign
+        ) {
+          return;
+        }
+
+        const isFresh = rememberDonation(donation);
+        if (!isFresh) return;
+        if (!matchesCurrentSearch(donation)) return;
+
+        markNewDonations([donation]);
+        setTotalCount((n) => n + 1);
+
+        if (page === 1) {
+          setDonations((prev) =>
+            [donation, ...prev.filter((d) => d.id !== donation.id)].slice(
+              0,
+              pageSize,
+            ),
+          );
+        }
+
+        if (filterCampaign) {
+          void refetchCampaignSpending();
+        }
+      },
+    });
+  }, [
+    filterCampaign,
+    markNewDonations,
+    matchesCurrentSearch,
+    page,
+    pageSize,
+    refetchCampaignSpending,
+    rememberDonation,
+  ]);
+
+  /* ── client-side sort ── */
   const displayList = (() => {
-    let list = [...donations];
-    if (debouncedSearch.trim()) {
-      const q = debouncedSearch.toLowerCase();
-      list = list.filter(
-        (d) =>
-          (!d.isPrivate && d.donorName.toLowerCase().includes(q)) ||
-          d.fundCampaignName.toLowerCase().includes(q) ||
-          (d.note && d.note.toLowerCase().includes(q)),
-      );
-    }
+    const list = [...donations];
     list.sort((a, b) => {
       if (sortField === "amount") {
         return sortDir === "desc" ? b.amount - a.amount : a.amount - b.amount;
@@ -222,21 +255,43 @@ const DonationFeedPage = () => {
     return [1, -1, cur - 1, cur, cur + 1, -1, total];
   })();
 
+  const getDonationSubtitle = (donation: PublicDonation) => {
+    if (donation.donorEmail) {
+      return donation.isPrivate
+        ? maskEmail(donation.donorEmail)
+        : donation.donorEmail;
+    }
+
+    if (donation.displayText) return donation.displayText;
+    if (donation.paidAt) return `Thanh toán: ${formatDate(donation.paidAt)}`;
+    return "Đóng góp công khai";
+  };
+
   /* ══════════════════════════════════════════════════════ */
   return (
     <div className="min-h-screen bg-white text-black">
-      <div className="max-w-348 mx-auto px-4 sm:px-8 py-8 sm:py-12">
+      <div className="max-w-348 mx-auto px-4 sm:px-8 py-4 sm:py-8">
         {/* Page header */}
         <div className="mb-8 border-b-2 border-black pb-6">
           <Link
             to="/donate"
-            className="inline-flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Quay lại
           </Link>
-          <p className="text-xs font-mono tracking-[0.35em] text-[#FF5722] uppercase mb-2">
-            Cập nhật tự động
+          <p className="flex w-fit items-center gap-2 text-xs font-mono tracking-[0.35em] text-[#FF5722] uppercase mb-2">
+            <span>Cập nhật tự động</span>
+            <span
+              title={`Realtime ${hubStatus}`}
+              className={`h-2 w-2 rounded-full ${
+                hubStatus === "connected"
+                  ? "bg-emerald-500"
+                  : hubStatus === "connecting"
+                    ? "bg-amber-500"
+                    : "bg-black/25"
+              }`}
+            />
           </p>
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
             DANH SÁCH ĐÓNG GÓP
@@ -251,7 +306,7 @@ const DonationFeedPage = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm tên, chiến dịch, lời nhắn..."
+              placeholder="Tìm mã biên nhận, tên, số tiền..."
               className="w-full pl-9 pr-4 py-2.5 border-2 border-black/15 text-sm focus:outline-none focus:border-[#FF5722] transition-colors"
             />
           </div>
@@ -533,10 +588,10 @@ const DonationFeedPage = () => {
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 bg-[#FF5722]/10 border border-[#FF5722]/20 flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 bg-[#FF5722]/10 border border-[#FF5722]/20 flex items-center justify-center shrink-0">
                             {d.isPrivate ? (
                               <EyeSlash
-                                className="w-3.5 h-3.5 text-[#FF5722]/50"
+                                className="w-4 h-4 text-[#FF5722]/50"
                                 weight="bold"
                               />
                             ) : (
@@ -549,10 +604,8 @@ const DonationFeedPage = () => {
                             <p className="font-bold text-sm">
                               {d.isPrivate ? "Ẩn danh" : d.donorName}
                             </p>
-                            <p className="text-[11px] text-black/35">
-                              {d.isPrivate
-                                ? maskEmail(d.donorEmail)
-                                : d.donorEmail}
+                            <p className="text-xs text-black/75">
+                              {getDonationSubtitle(d)}
                             </p>
                           </div>
                           {newIds.has(d.id) && (

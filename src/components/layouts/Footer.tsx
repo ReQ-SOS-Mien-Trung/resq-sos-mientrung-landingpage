@@ -51,7 +51,7 @@ const Footer = () => {
             <div className="flex items-center gap-3">
               <Envelope className="w-4 h-4 text-black/40" />
               <p className="text-xs sm:text-sm text-black/60">
-                contact@resq.vn
+                huynhkimcuong@resq.vn
               </p>
             </div>
           </div>
