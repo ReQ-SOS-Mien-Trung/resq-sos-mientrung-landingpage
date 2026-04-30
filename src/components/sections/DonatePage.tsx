@@ -15,7 +15,7 @@ import {
   EyeSlash,
   LockSimple,
 } from "@phosphor-icons/react";
-import { useGetCampaignsMetadata } from "@/services/campaign/hooks";
+import { useGetActiveCampaigns } from "@/services/campaign/hooks";
 import {
   useCreateDonation,
   usePaymentMethods,
@@ -58,7 +58,7 @@ const DonatePage = () => {
   }>({});
 
   const { data: campaigns, isLoading: campaignsLoading } =
-    useGetCampaignsMetadata();
+    useGetActiveCampaigns();
   const { data: userProfile } = useUserMe(isAuthenticated);
   const { data: paymentMethods } = usePaymentMethods();
   const donateMutation = useCreateDonation();
