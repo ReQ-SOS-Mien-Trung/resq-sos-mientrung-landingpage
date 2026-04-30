@@ -324,8 +324,8 @@ const DonationFeedPage = () => {
             >
               <option value="">Tất cả chiến dịch</option>
               {campaigns?.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
+                <option key={c.key} value={Number(c.key)}>
+                  {c.value}
                 </option>
               ))}
             </select>

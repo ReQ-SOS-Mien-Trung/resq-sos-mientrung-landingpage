@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCampaignsMetadata, getPublicCampaignSpending } from "./api";
+import {
+  getActiveCampaigns,
+  getCampaignsMetadata,
+  getPublicCampaignSpending,
+} from "./api";
 import type {
+  ActiveCampaign,
   CampaignMetadata,
   PublicCampaignSpendingParams,
   PublicCampaignSpendingResponse,
@@ -10,6 +15,13 @@ export const useGetCampaignsMetadata = () => {
   return useQuery<CampaignMetadata[]>({
     queryKey: ["campaigns", "metadata"],
     queryFn: getCampaignsMetadata,
+  });
+};
+
+export const useGetActiveCampaigns = () => {
+  return useQuery<ActiveCampaign[]>({
+    queryKey: ["campaigns", "active"],
+    queryFn: getActiveCampaigns,
   });
 };
 

@@ -1,5 +1,6 @@
 import api from "@/config/axios";
 import type {
+  ActiveCampaign,
   CampaignMetadata,
   PublicCampaignSpendingParams,
   PublicCampaignSpendingResponse,
@@ -7,8 +8,13 @@ import type {
 
 export const getCampaignsMetadata = async (): Promise<CampaignMetadata[]> => {
   const response = await api.get<CampaignMetadata[]>(
-    "/finance/campaigns/active",
+    "/finance/campaigns/metadata",
   );
+  return response.data;
+};
+
+export const getActiveCampaigns = async (): Promise<ActiveCampaign[]> => {
+  const response = await api.get<ActiveCampaign[]>("/finance/campaigns/active");
   return response.data;
 };
 

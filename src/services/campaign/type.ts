@@ -1,4 +1,9 @@
 export interface CampaignMetadata {
+  key: string;
+  value: string;
+}
+
+export interface ActiveCampaign {
   id: number;
   code: string;
   name: string;
