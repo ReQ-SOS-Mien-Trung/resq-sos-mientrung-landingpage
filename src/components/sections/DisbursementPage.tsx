@@ -385,7 +385,7 @@ const DisbursementPage = () => {
                                                   <thead>
                                                     <tr className="border-b border-black/8">
                                                       <th className="text-left px-3 py-2 font-mono tracking-wider font-normal text-black/40 uppercase">
-                                                        Tên hàng
+                                                        Tên vật phẩm
                                                       </th>
                                                       <th className="text-center px-3 py-2 font-mono tracking-wider font-normal text-black/40 uppercase">
                                                         Đơn vị
@@ -464,8 +464,8 @@ const DisbursementPage = () => {
               {spending.totalCount > PAGE_SIZE && (
                 <div className="px-4 py-3 border-t border-black/10 flex items-center justify-between gap-4 flex-wrap">
                   <p className="text-xs text-black/40 font-mono">
-                    Trang {page} / {totalPages} — {spending.totalCount} kho
-                    nhận quỹ
+                    Trang {page} / {totalPages} — {spending.totalCount} kho nhận
+                    quỹ
                   </p>
                   <div className="flex items-center gap-1">
                     <button
