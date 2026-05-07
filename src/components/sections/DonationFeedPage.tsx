@@ -15,10 +15,7 @@ import {
 } from "@phosphor-icons/react";
 import { getPublicDonations } from "@/services/donation/api";
 import type { PublicDonation } from "@/services/donation/type";
-import {
-  useGetCampaignsMetadata,
-  useGetPublicCampaignSpending,
-} from "@/services/campaign/hooks";
+import { useGetCampaignsMetadata } from "@/services/campaign/hooks";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { subscribePublicDonationHub } from "@/services/donation/publicDonationHub";
@@ -32,8 +29,6 @@ const formatVND = (n: number) => {
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
   return n.toLocaleString("vi-VN");
 };
-
-const formatVNDLong = (n: number) => `${n.toLocaleString("vi-VN")} VNĐ`;
 
 const formatDate = (iso: string) => {
   const d = new Date(iso);
@@ -79,14 +74,6 @@ const DonationFeedPage = () => {
   const knownDonationIdsRef = useRef<Set<number>>(new Set());
 
   const { data: campaigns } = useGetCampaignsMetadata();
-  const {
-    data: campaignSpending,
-    isLoading: spendingLoading,
-    refetch: refetchCampaignSpending,
-  } = useGetPublicCampaignSpending(filterCampaign, {
-    pageNumber: 1,
-    pageSize: 10,
-  });
 
   /* ── debounce search ── */
   useEffect(() => {
@@ -197,9 +184,6 @@ const DonationFeedPage = () => {
           );
         }
 
-        if (filterCampaign) {
-          void refetchCampaignSpending();
-        }
       },
     });
   }, [
@@ -208,7 +192,6 @@ const DonationFeedPage = () => {
     matchesCurrentSearch,
     page,
     pageSize,
-    refetchCampaignSpending,
     rememberDonation,
   ]);
 
@@ -379,9 +362,6 @@ const DonationFeedPage = () => {
           <button
             onClick={() => {
               void fetchDonations();
-              if (filterCampaign) {
-                void refetchCampaignSpending();
-              }
             }}
             disabled={isLoading}
             title="Làm mới"
@@ -393,126 +373,21 @@ const DonationFeedPage = () => {
             />
           </button>
 
+          <Link
+            to={
+              filterCampaign
+                ? `/disbursements?campaignId=${filterCampaign}`
+                : "/disbursements"
+            }
+            className="px-3 py-2.5 border-2 border-black bg-black text-white hover:bg-[#FF5722] hover:border-[#FF5722] transition-colors text-xs font-black uppercase tracking-wide"
+          >
+            Xem giải ngân
+          </Link>
+
           {/* <span className="ml-auto text-xs text-black/35 font-mono hidden sm:block">
             {totalCount.toLocaleString()} lượt đóng góp
           </span> */}
         </div>
-
-        {/* Campaign spending summary */}
-        {filterCampaign && (
-          <div className="mb-5 border-2 border-black overflow-hidden">
-            <div className="bg-black text-white px-4 py-3 flex items-center justify-between gap-3">
-              <p className="text-xs font-mono tracking-widest uppercase">
-                Tổng quan giải ngân chiến dịch
-              </p>
-              {spendingLoading && (
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-widest uppercase text-white/70">
-                  <Spinner className="w-3.5 h-3.5 animate-spin" /> Đang tải...
-                </span>
-              )}
-            </div>
-
-            {campaignSpending ? (
-              <>
-                <div className="px-4 py-4 border-b border-black/10">
-                  <h3 className="text-lg sm:text-xl font-black tracking-tight">
-                    {campaignSpending.campaignName}
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 border-b border-black/10">
-                  {[
-                    {
-                      label: "Tổng quyên góp",
-                      value: formatVNDLong(campaignSpending.totalRaised),
-                    },
-                    {
-                      label: "Đã giải ngân",
-                      value: formatVNDLong(campaignSpending.totalDisbursed),
-                    },
-                    {
-                      label: "Số dư còn lại",
-                      value: formatVNDLong(campaignSpending.remainingBalance),
-                    },
-                  ].map((item, idx) => (
-                    <div
-                      key={item.label}
-                      className={`px-4 py-3 ${idx < 2 ? "sm:border-r border-black/10" : ""}`}
-                    >
-                      <p className="text-xs font-mono tracking-widest uppercase text-black/45 mb-1">
-                        {item.label}
-                      </p>
-                      <p className="text-sm sm:text-base font-black text-[#FF5722]">
-                        {item.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
-                    <thead>
-                      <tr className="bg-black/3">
-                        <th className="text-left px-4 py-3 text-xs font-mono tracking-widest font-normal uppercase">
-                          Kho nhận
-                        </th>
-                        <th className="text-right px-4 py-3 text-xs font-mono tracking-widest font-normal uppercase">
-                          Số tiền
-                        </th>
-                        <th className="text-left px-4 py-3 text-xs font-mono tracking-widest font-normal uppercase hidden md:table-cell">
-                          Mục đích
-                        </th>
-                        <th className="text-left px-4 py-3 text-xs font-mono tracking-widest font-normal uppercase">
-                          Thời gian
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {campaignSpending.disbursements.length === 0 ? (
-                        <tr>
-                          <td
-                            colSpan={4}
-                            className="px-4 py-8 text-center text-sm text-black/35"
-                          >
-                            Chưa có dữ liệu giải ngân.
-                          </td>
-                        </tr>
-                      ) : (
-                        campaignSpending.disbursements.map((row) => (
-                          <tr key={row.id} className="border-t border-black/8">
-                            <td className="px-4 py-3.5">
-                              <p className="font-bold text-sm">
-                                {row.depotName}
-                              </p>
-                              <p className="text-[11px] text-black/40">
-                                {row.type}
-                              </p>
-                            </td>
-                            <td className="px-4 py-3.5 text-right whitespace-nowrap font-black text-[#FF5722]">
-                              {formatVNDLong(row.amount)}
-                            </td>
-                            <td className="px-4 py-3.5 text-xs text-black/60 hidden md:table-cell">
-                              {row.purpose || "—"}
-                            </td>
-                            <td className="px-4 py-3.5 text-xs text-black/45 font-mono whitespace-nowrap">
-                              {formatDate(row.createdAt)}
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            ) : (
-              !spendingLoading && (
-                <div className="px-4 py-8 text-center text-sm text-black/35">
-                  Không tải được dữ liệu giải ngân chiến dịch.
-                </div>
-              )
-            )}
-          </div>
-        )}
 
         {/* Table */}
         <div className="border-2 border-black overflow-hidden">

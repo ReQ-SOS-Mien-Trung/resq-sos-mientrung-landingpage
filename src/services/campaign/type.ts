@@ -21,18 +21,40 @@ export interface PublicCampaignSpendingItem {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  receivedDate: string;
+  expiredDate: string;
+  itemType: string;
 }
 
-export interface PublicCampaignDisbursement {
+export interface PublicCampaignAllocation {
   id: number;
-  depotId: number;
-  depotName: string;
   amount: number;
   purpose: string;
   type: string;
-  createdAt: string;
-  depotFundBalance: number;
+  fundingRequestId: number | null;
+  allocatedAt: string;
+}
+
+export interface PublicCampaignImport {
+  vatInvoiceId: number;
+  depotFundId: number;
+  invoiceSerial: string;
+  invoiceNumber: string;
+  supplierName: string;
+  invoiceDate: string;
+  invoiceTotalAmount: number;
+  importedAt: string;
+  totalSpent: number;
   items: PublicCampaignSpendingItem[];
+}
+
+export interface PublicCampaignDepotSpending {
+  depotId: number;
+  depotName: string;
+  totalAllocated: number;
+  allocations: PublicCampaignAllocation[];
+  totalSpent: number;
+  imports: PublicCampaignImport[];
 }
 
 export interface PublicCampaignSpendingResponse {
@@ -41,7 +63,7 @@ export interface PublicCampaignSpendingResponse {
   totalRaised: number;
   totalDisbursed: number;
   remainingBalance: number;
-  disbursements: PublicCampaignDisbursement[];
+  depots: PublicCampaignDepotSpending[];
   totalCount: number;
   pageNumber: number;
   pageSize: number;
