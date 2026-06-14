@@ -277,9 +277,24 @@ const AuthLoginPage = () => {
               <form onSubmit={handleEmailSignIn} className="space-y-5">
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-2">
-                    Email
-                  </label>
+                  <div className="flex items-center gap-2 mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-black/60">
+                      Email
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData((prev) => ({ ...prev, email: "rescuer109@resq.vn" }));
+                        setEmailError(null);
+                        setEmailTouched(true);
+                        toast.success("Đã điền email demo");
+                      }}
+                      className="text-[11px] font-medium text-black/50 hover:text-[#FF5722] bg-black/5 hover:bg-black/10 px-2 py-0.5 rounded-md transition-all active:scale-95 flex items-center gap-1 cursor-pointer font-mono"
+                      title="Nhấp để điền nhanh"
+                    >
+                      khoalmdse182689@fpt.edu.vn
+                    </button>
+                  </div>
                   <div className="relative">
                     <EnvelopeSimple className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black/40" />
                     <input
@@ -290,13 +305,12 @@ const AuthLoginPage = () => {
                       onBlur={handleEmailBlur}
                       placeholder="email@example.com"
                       required
-                      className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${
-                        emailError && emailTouched
-                          ? "border-red-500 focus:border-red-500"
-                          : formData.email && !emailError && emailTouched
-                            ? "border-green-500"
-                            : "border-black/20"
-                      }`}
+                      className={`w-full pl-12 pr-12 py-4 border-2 focus:border-black outline-none text-sm transition-all rounded-lg ${emailError && emailTouched
+                        ? "border-red-500 focus:border-red-500"
+                        : formData.email && !emailError && emailTouched
+                          ? "border-green-500"
+                          : "border-black/20"
+                        }`}
                     />
                     <AnimatePresence>
                       {formData.email && (
@@ -339,9 +353,22 @@ const AuthLoginPage = () => {
                 {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-black/60">
-                      Mật khẩu
-                    </label>
+                    <div className="flex items-center gap-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60">
+                        Mật khẩu
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData((prev) => ({ ...prev, password: "Rescuer@123" }));
+                          toast.success("Đã điền mật khẩu demo");
+                        }}
+                        className="text-[11px] font-medium text-black/50 hover:text-[#FF5722] bg-black/5 hover:bg-black/10 px-2 py-0.5 rounded-md transition-all active:scale-95 flex items-center gap-1 cursor-pointer font-mono"
+                        title="Nhấp để điền nhanh"
+                      >
+                        Thao@123
+                      </button>
+                    </div>
                     <Link
                       to="/auth/forgot-password"
                       className="text-xs text-[#FF5722] hover:underline"
