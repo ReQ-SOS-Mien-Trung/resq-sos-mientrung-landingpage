@@ -284,7 +284,7 @@ const AuthLoginPage = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        setFormData((prev) => ({ ...prev, email: "rescuer109@resq.vn" }));
+                        setFormData((prev) => ({ ...prev, email: "khoalmdse182689@fpt.edu.vn" }));
                         setEmailError(null);
                         setEmailTouched(true);
                         toast.success("Đã điền email demo");
